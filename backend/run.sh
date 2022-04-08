@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./backend/manage.py makemigrations
-./backend/manage.py migrate
-./backend/manage.py runserver
+./manage.py makemigrations
+./manage.py migrate
+./manage.py runserver
