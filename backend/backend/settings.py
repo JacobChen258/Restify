@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'blogs',
     'menu_items',
     'notifications',
+    'comments',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -142,4 +143,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = 'media/'
 
-#AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "accounts.User"
