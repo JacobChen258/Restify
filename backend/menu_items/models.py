@@ -1,3 +1,12 @@
 from django.db import models
-
+from django.db.models.deletion import CASCADE
+from restaurants.models import Restaurant
 # Create your models here.
+class MenuItem(models.Model):
+    name = models.CharField(max_length=20,null=False, blank=False)
+    description = models.TextField(max_length=200)
+    price = models.DecimalField(max_digits=8, decimal_places=2,null=False, blank=False)
+    restaurant = models.ForeignKey(to=Restaurant, on_delete=CASCADE,null=False, blank=False)
+
+    def __str__(self):
+        return self.name
