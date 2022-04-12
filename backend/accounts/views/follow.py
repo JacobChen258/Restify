@@ -55,7 +55,7 @@ class Follow(CreateAPIView,DestroyAPIView):
 
     def notify_owner(self):
         content = f"User {self.request.user.first_name} {self.request.user.last_name} just followed your restaurant."
-        data = {'viewer':self.object.owner,'content':content}
+        data = {'viewer':self.object.owner.id,'content':content}
         notif_serializer = NotificationsSerializer(data=data)
         notif_serializer.is_valid(raise_exception=True)
         notif_serializer.save()

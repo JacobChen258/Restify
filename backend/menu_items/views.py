@@ -36,19 +36,26 @@ class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
         return item
 
     def update(self, request, *args, **kwargs):
-        serializer = self.get_serializer(request.user, data=request.data)
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data,partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        return Response(HTTP_200_OK)
-
-    def post(self, request, *args, **kwargs):
         restaurant = get_object_or_404(Restaurant, owner=request.user.id)
-        self.object = restaurant
-        return self.create(request, args, kwargs)
+        self.restaurant = restaurant
+        self.notify_users()
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         data = self.request.data.copy()
-        data['restaurant'] = self.object.id
+        self.restaurant = get_object_or_404(Restaurant,owner=self.request.user.id)
+        data['restaurant'] = get_object_or_404(Restaurant,owner=self.request.user.id).id
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -57,8 +64,8 @@ class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def notify_users(self):
-        records = FollowedRestaurant.objects.filter(restaurant=self.object.id)
-        content = f"The restaurant {self.object.name} you followed just added a new item."
+        records = FollowedRestaurant.objects.filter(restaurant=self.restaurant.id)
+        content = f"The restaurant {self.restaurant.name} you followed just added a new item."
         data_lst = [{'viewer':record.user.id,'content':content} for record in records]
         notif_serializer = NotificationsSerializer(data=data_lst,many=True)
         notif_serializer.is_valid(raise_exception=True)

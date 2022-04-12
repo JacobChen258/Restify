@@ -11,10 +11,6 @@ class EditRestaurantSerializer(ModelSerializer):
         model = Restaurant
         fields = ['name', 'address', 'logo', 'email', 'postal_code', 'phone_num']
 
-    def validate(self, request):
-        if request.data['owner'] != request.user.id:
-            raise ValidationError({"Only restaurant owners can edit the restaurant's information"})
-        return request
 
 class RestaurantInfoSerializer(ModelSerializer):
 

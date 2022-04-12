@@ -13,12 +13,7 @@ from notifications.serializers import NotificationsSerializer
 def liked_restaurant(request):
     if request.method=="POST":
         data = request.data.copy()
-        
-        try:
-            data['restaurant'] = request.restaurant.id
-        except Restaurant_Like.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
+        data['user'] = request.user.id
         serializer = LikedRestaurantSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
