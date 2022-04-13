@@ -7,38 +7,36 @@ import { useFormik } from "formik";
 const validate = (values) => {
   const errors = {};
   if (values.password != values.confirmPassword) {
-    errors.confirmPassword = "paswords to not match";
+    errors.confirmPassword = "passwords do not match";
   }
 
-  if (!values.firstName) {
-    errors.firstName = "Required";
-  } else if (values.firstName.length > 15) {
-    errors.firstName = "Must be 15 characters or less";
+  if (values.firstName) {
+    if (values.firstName.length > 15) {
+      errors.firstName = "Must be 15 characters or less";
+    }
   }
 
-  if (!values.lastName) {
-    errors.lastName = "Required";
-  } else if (values.lastName.length > 20) {
-    errors.lastName = "Must be 20 characters or less";
+  if (values.lastName) {
+    if (values.lastName.length > 20) {
+      errors.lastName = "Must be 20 characters or less";
+    }
   }
 
-  if (!values.email) {
-    errors.email = "Required";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = "Invalid email address";
+  if (values.email) {
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+      errors.email = "Invalid email address";
+    }
   }
 
   if (!values.password) {
-    errors.password = "Required";
+    errors.password = "Password is required";
   }
   if (!values.confirmPassword) {
-    errors.confirmPassword = "Required";
+    errors.confirmPassword = "You must confirm your password";
   }
-  if (!values.avatar) {
-    errors.confirmPassword = "Required";
-  }
+
   if (!values.username) {
-    errors.confirmPassword = "Required";
+    errors.username = "Username is required";
   }
 
   return errors;
@@ -74,78 +72,106 @@ const Signup = () => {
             height="150"
           />
           <h1 className="h3 mb-3 font-weight-normal">Please Sign Up</h1>
-          {formik.errors.username ? (
-            <div className="signup-error">{formik.errors.username}</div>
+          {formik.errors.username && formik.touched.username ? (
+            <div class="alert alert-danger" role="alert">
+              {formik.errors.username}
+            </div>
           ) : null}
           <input
             type="text"
-            id="username"
+            name="username"
+            id="signup-username"
             className="form-control"
-            placeholder="Username"
+            placeholder="Username *"
             required=""
+            {...formik.getFieldProps("username")}
           />
-          {formik.errors.firstName ? (
-            <div className="signup-error">{formik.errors.firstName}</div>
+          {formik.errors.firstName && formik.touched.firstName ? (
+            <div class="alert alert-danger mt-3" role="alert">
+              {formik.errors.firstName}
+            </div>
           ) : null}
           <input
             type="text"
             id="firstName"
+            name="firstName"
             className="form-control"
             placeholder="First Name"
             required=""
+            {...formik.getFieldProps("firstname")}
           />
-          {formik.errors.lastName ? (
-            <div className="signup-error">{formik.errors.lastName}</div>
+          {formik.errors.lastName && formik.touched.lastName ? (
+            <div class="alert alert-danger mt-3" role="alert">
+              {formik.errors.lastName}
+            </div>
           ) : null}
           <input
             type="text"
             id="lastName"
+            name="lastName"
             className="form-control"
             placeholder="Last Name"
             required=""
+            {...formik.getFieldProps("lastName")}
           />
-          {formik.errors.email ? (
-            <div className="signup-error">{formik.errors.email}</div>
+          {formik.errors.email && formik.touched.email ? (
+            <div class="alert alert-danger mt-3" role="alert">
+              {formik.errors.email}
+            </div>
           ) : null}
           <input
             type="email"
             id="inputEmail"
+            name="email"
             className="form-control"
             placeholder="Email address"
             required=""
             autoFocus=""
+            {...formik.getFieldProps("email")}
           />
-          {formik.errors.avater ? (
-            <div className="signup-error">{formik.errors.avatar}</div>
+          {formik.errors.avater && formik.touched.avatar ? (
+            <div class="alert alert-danger mt-3" role="alert">
+              {formik.errors.avater}
+            </div>
           ) : null}
           <input
             type="file"
             id="avatar"
+            name="avatar"
             className="form-control"
             placeholder="Avatar"
             required=""
             autoFocus=""
             accept="image/png, image/jpeg, image/jpg"
+            {...formik.getFieldProps("avatar")}
           />
-          {formik.errors.password ? (
-            <div className="signup-error">{formik.errors.password}</div>
+          {formik.errors.password && formik.touched.password ? (
+            <div class="alert alert-danger mt-3" role="alert">
+              {formik.errors.password}
+            </div>
           ) : null}
           <input
             type="password"
             id="signup-pass"
+            name="password"
             className="form-control"
-            placeholder="Password"
+            placeholder="Password *"
             required=""
+            {...formik.getFieldProps("password")}
           />
-          {formik.errors.confirmPassword ? (
-            <div className="signup-error">{formik.errors.confirmPassword}</div>
+          {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
+            <div class="alert alert-danger mt-3" role="alert">
+              {formik.errors.confirmPassword}
+            </div>
           ) : null}
           <input
             type="password"
             id="signup-confirm-pass"
+            name="confirmPassword"
             className="form-control"
-            placeholder="Confirm Password"
+            placeholder="Confirm Password *"
             required=""
+            {...formik.getFieldProps("confirmPassword")}
           />
           <span className="mb-3">
             <Link to="/login" className="account">
