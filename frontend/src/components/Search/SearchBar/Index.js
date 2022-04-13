@@ -47,7 +47,7 @@ const SearchBar = ()=>{
                 <Dropdown.Item id="item" onClick={handleSelect} active={active.item}>Menu Item</Dropdown.Item>
             </DropdownButton>
             <Form className = "justify-content-center">
-                    <Form.Control id="field" type="field" placeholder="Search Restaurant" className = "form_border form_width"
+                    <Form.Control id="field" type="field" placeholder="Search Restaurant" className = "form_border form_width h-100"
                         value = {searchInfo.field} onChange={handleTextInput}
                     />
             </Form>

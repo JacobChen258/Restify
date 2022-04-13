@@ -34,3 +34,7 @@
 .dropdown-menu{
     margin-left:2rem;
 }
+
+#method > span{
+    display: inline-block;
+}
