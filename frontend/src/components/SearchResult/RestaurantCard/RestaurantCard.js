@@ -1,19 +1,19 @@
 import React from "react";
 import './RestaurantCard.css';
-import { Card } from "react-bootstrap";
+import { Card, Nav} from "react-bootstrap";
 
-const RestaurantCard = (restaurant)=>{
+const RestaurantCard = (props)=>{
     return (
-        <Card className="p-2">
-            <Card.Img variant="top" src="#" />
-            <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of
-                the card's content.
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
-            </Card.Body>
+        <Card id="res_card" className="p-2 m-3 card_width">
+            <Nav.Link href={`/restaurant/${props.Restaurant.id}`}>
+                <Card.Img variant="top res_logo" src={props.Restaurant.logo} />
+                <Card.Body>
+                    <h4 className="res_title">{props.Restaurant.name}</h4>
+                    <Card.Text>
+                    Likes: {props.Restaurant.num_likes}
+                    </Card.Text>
+                </Card.Body>
+            </Nav.Link>
         </Card>
     )
 }

@@ -6,14 +6,16 @@ import SearchResult from "./components/SearchResult/Index";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
-    <div>
+    <div className="main_container">
       <RestifyNavbar />
-      <Router>
-        <Routes>
-          <Route index element={<SearchPage/>}></Route>
-          <Route path="search/:method/:field/" element={<SearchResult/>}></Route>
-        </Routes>
-      </Router>
+      <div>
+        <Router>
+          <Routes>
+            <Route index element={<SearchPage/>}></Route>
+            <Route path="search/:method/:field/" element={<SearchResult/>}></Route>
+          </Routes>
+        </Router>
+      </div>
     </div>
   );
 }
