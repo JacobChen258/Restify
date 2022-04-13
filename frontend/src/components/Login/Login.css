@@ -3,12 +3,16 @@
   min-height: 100vh;
 }
 
+label {
+  left: 0 !important;
+}
+
 .form-login {
   width: 100%;
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
-  margin-top: 60px;
+  padding-top: 100px;
 }
 .form-login .checkbox {
   font-weight: 400;
@@ -32,4 +36,9 @@ span {
 }
 .account {
   color: rgb(131, 130, 130);
+}
+
+.login-req::after {
+  content: " *";
+  color: red;
 }

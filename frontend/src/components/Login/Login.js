@@ -57,16 +57,16 @@ const Login = () => {
 
   return (
     <div className="vh-100">
-      <div className="login-form text-center pt-5">
+      <div className="login-form">
         <form className="form-login">
-          <img
-            className="mb-4"
-            src={restify_logo}
-            alt=""
-            width="150"
-            height="150"
-          />
-          <h1 className="h3 mb-3 font-weight-normal">Please Log In</h1>
+          <div className="text-center">
+            <img src={restify_logo} alt="" width="150" height="150" />
+          </div>
+          <h1 className="h3 mb-3 font-weight-normal text-center">
+            Please Log In
+          </h1>
+
+          <label className="login-req">Username</label>
           <input
             type="text"
             name="username"
@@ -77,6 +77,8 @@ const Login = () => {
             autoFocus=""
             {...formik.getFieldProps("username")}
           />
+
+          <label className="signup-req mt-2 ">Password</label>
           <input
             name="password"
             type="password"
@@ -86,6 +88,8 @@ const Login = () => {
             required=""
             {...formik.getFieldProps("password")}
           />
+
+          <label className="signup-req mt-2">Confirm Password</label>
           <input
             name="confirmPassword"
             type="password"
@@ -95,15 +99,18 @@ const Login = () => {
             required=""
             {...formik.getFieldProps("confirmPassword")}
           />
-          <span className="mb-3">
+          <span className="mb-3 text-center">
             <Link to="/signup" className="account">
               Dont Have an Account?
             </Link>
           </span>
-          <button className="btn btn-lg btn-dark btn-block" type="submit">
-            Log In
-          </button>
-          <p className="mt-5 mb-3 text-muted">© 2022</p>
+
+          <div className="text-center">
+            <button className="btn btn-lg btn-dark btn-block" type="submit">
+              Log In
+            </button>
+            <p className="mt-5 mb-3 text-muted">© 2022</p>
+          </div>
         </form>
       </div>
     </div>

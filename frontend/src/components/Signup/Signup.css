@@ -1,6 +1,10 @@
 .signup-form {
   background-color: antiquewhite;
   min-height: 100vh;
+  top: 0;
+}
+label {
+  left: 0 !important;
 }
 
 .form-signin {
@@ -51,17 +55,7 @@ span {
   color: rgb(131, 130, 130);
 }
 
-.form-control::before {
-  content: " rejbrek*";
+.signup-req::after {
+  content: " *";
   color: red;
-  display: inline;
-}
-
-::placeholder::after {
-  content: " rejbrek*";
-  color: red;
-}
-#signup-username::-webkit-input-placeholder::before {
-  color: #666;
-  content: "Line 1\A Line 2\A Line 3\A";
 }

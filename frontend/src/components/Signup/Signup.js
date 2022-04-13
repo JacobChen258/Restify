@@ -3,7 +3,7 @@ import "./Signup.css";
 import restify_logo from "../../images/restify_logo.png";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-
+import { Form } from "react-bootstrap";
 const validate = (values) => {
   const errors = {};
   if (values.password != values.confirmPassword) {
@@ -62,27 +62,26 @@ const Signup = () => {
 
   return (
     <div className="vh-100">
-      <div className="signup-form text-center pt-5">
+      <div className="signup-form">
         <form className="form-signin" onSubmit={formik.handleSubmit}>
-          <img
-            className="mb-4"
-            src={restify_logo}
-            alt=""
-            width="150"
-            height="150"
-          />
-          <h1 className="h3 mb-3 font-weight-normal">Please Sign Up</h1>
+          <div className="text-center">
+            <img src={restify_logo} alt="" width="150" height="150" />
+          </div>
+          <h1 className="h3 mb-3 font-weight-normal text-center">
+            Please Sign Up
+          </h1>
           {formik.errors.username && formik.touched.username ? (
             <div class="alert alert-danger" role="alert">
               {formik.errors.username}
             </div>
           ) : null}
+          <label className="signup-req">Username</label>
           <input
             type="text"
             name="username"
             id="signup-username"
-            className="form-control"
-            placeholder="Username *"
+            className="form-control "
+            placeholder="Username"
             required=""
             {...formik.getFieldProps("username")}
           />
@@ -91,6 +90,8 @@ const Signup = () => {
               {formik.errors.firstName}
             </div>
           ) : null}
+
+          <label className="mt-2">First Name</label>
           <input
             type="text"
             id="firstName"
@@ -105,6 +106,8 @@ const Signup = () => {
               {formik.errors.lastName}
             </div>
           ) : null}
+
+          <label className="mt-2">Last Name</label>
           <input
             type="text"
             id="lastName"
@@ -119,6 +122,8 @@ const Signup = () => {
               {formik.errors.email}
             </div>
           ) : null}
+
+          <label className="mt-2">Email</label>
           <input
             type="email"
             id="inputEmail"
@@ -134,6 +139,8 @@ const Signup = () => {
               {formik.errors.avater}
             </div>
           ) : null}
+
+          <label className="mt-2">Avatar</label>
           <input
             type="file"
             id="avatar"
@@ -150,12 +157,14 @@ const Signup = () => {
               {formik.errors.password}
             </div>
           ) : null}
+
+          <label className="mt-2 signup-req">Password</label>
           <input
             type="password"
             id="signup-pass"
             name="password"
             className="form-control"
-            placeholder="Password *"
+            placeholder="Password"
             required=""
             {...formik.getFieldProps("password")}
           />
@@ -164,24 +173,31 @@ const Signup = () => {
               {formik.errors.confirmPassword}
             </div>
           ) : null}
+
+          <label className="mt-2 signup-req">Confirm Password</label>
           <input
             type="password"
             id="signup-confirm-pass"
             name="confirmPassword"
             className="form-control"
-            placeholder="Confirm Password *"
+            placeholder="Confirm Password"
             required=""
             {...formik.getFieldProps("confirmPassword")}
           />
-          <span className="mb-3">
+          <span className="mb-3 text-center">
             <Link to="/login" className="account">
               Have an Account?
             </Link>
           </span>
-          <button className="btn btn-lg btn-dark btn-block" type="submit">
-            Sign up
-          </button>
-          <p className="mt-5 mb-3 text-muted">© 2022</p>
+          <div className="text-center">
+            <button
+              className="btn btn-lg btn-dark btn-block text-center"
+              type="submit"
+            >
+              Sign up
+            </button>
+            <p className="mt-5 mb-3 text-muted">© 2022</p>
+          </div>
         </form>
       </div>
     </div>
