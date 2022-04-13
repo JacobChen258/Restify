@@ -31,7 +31,7 @@ class GetImageSerializer(ModelSerializer):
 class RestaurantSearchSerializer(ModelSerializer):
     class Meta:
         model = Restaurant
-        fields = ['id','name']
+        fields = ['id','name','logo','num_likes']
 
 class LikedRestaurantSerializer(ModelSerializer):
     class Meta:
