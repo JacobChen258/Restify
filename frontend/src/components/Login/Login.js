@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Signup = () => {
   return (
     <div className="vh-100">
-      <div className="form text-center pt-5">
+      <div className="login-form text-center pt-5">
         <form className="form-login">
           <img
             className="mb-4"
