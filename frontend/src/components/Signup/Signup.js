@@ -17,6 +17,27 @@ const Signup = () => {
           />
           <h1 className="h3 mb-3 font-weight-normal">Please Sign Up</h1>
           <input
+            type="text"
+            id="username"
+            className="form-control"
+            placeholder="Username"
+            required=""
+          />
+          <input
+            type="text"
+            id="firstName"
+            className="form-control"
+            placeholder="First Name"
+            required=""
+          />
+          <input
+            type="text"
+            id="lastName"
+            className="form-control"
+            placeholder="Last Name"
+            required=""
+          />
+          <input
             type="email"
             id="inputEmail"
             className="form-control"
@@ -25,15 +46,25 @@ const Signup = () => {
             autoFocus=""
           />
           <input
+            type="file"
+            id="avatar"
+            className="form-control"
+            placeholder="Avatar"
+            required=""
+            autoFocus=""
+            accept="image/png, image/jpeg, image/jpg"
+          />
+
+          <input
             type="password"
-            id="inputPassword"
+            id="signup-pass"
             className="form-control"
             placeholder="Password"
             required=""
           />
           <input
-            type="confirmPassword"
-            id="confirmPassword"
+            type="password"
+            id="signup-confirm-pass"
             className="form-control"
             placeholder="Confirm Password"
             required=""

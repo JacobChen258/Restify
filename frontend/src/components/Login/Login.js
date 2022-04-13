@@ -1,5 +1,5 @@
 import React from "react";
-import "../Signup/Signup.css";
+import "./Login.css";
 import restify_logo from "../../images/restify_logo.png";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,7 @@ const Signup = () => {
   return (
     <div className="vh-100">
       <div className="form text-center pt-5">
-        <form className="form-signin">
+        <form className="form-login">
           <img
             className="mb-4"
             src={restify_logo}
@@ -26,14 +26,14 @@ const Signup = () => {
           />
           <input
             type="password"
-            id="inputPassword"
+            id="login-pass"
             className="form-control"
             placeholder="Password"
             required=""
           />
           <input
-            type="confirmPassword"
-            id="confirmPassword"
+            type="password"
+            id="login-confirm-pass"
             className="form-control"
             placeholder="Confirm Password"
             required=""
