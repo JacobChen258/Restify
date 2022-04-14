@@ -4,7 +4,7 @@ import { Card, Nav} from "react-bootstrap";
 
 const RestaurantCard = (props)=>{
     return (
-        <Card id="res_card" className="p-2 m-3 card_width">
+        <Card id="res_card" className="p-1 m-3 card_width">
             <Nav.Link href={`/restaurant/${props.Restaurant.id}`}>
                 <Card.Img variant="top res_logo" src={props.Restaurant.logo} />
                 <Card.Body>

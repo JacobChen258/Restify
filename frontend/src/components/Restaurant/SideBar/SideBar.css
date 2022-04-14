@@ -1,0 +1,33 @@
+#sidebar > a:link, #sidebar > a:active, #sidebar > a:focus, #sidebar > a:visited{
+    color: whitesmoke !important;
+}
+#sidebar > a:hover{
+    color:darkgrey !important;
+}
+#sidebar > a{
+    text-decoration: none;
+    font-size: 1.6em;
+    background-color: black;
+    padding-right: 1rem;
+    width: 12rem;
+    border: 1px solid whitesmoke;
+    border-left: 0;
+}
+
+#sidebar > a:first-child{
+    border-top-right-radius: 0.5rem !important;
+}
+
+#sidebar > a:last-child{
+    border-bottom-right-radius: 0.5rem !important;
+}
+
+.sidebar_pos{
+    position: fixed;
+    left: 0;
+    top: 30%;
+}
+
+#sidebar{
+    max-width: fit-content;
+}

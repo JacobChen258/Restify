@@ -4,62 +4,27 @@ import SearchBar from "../Search/SearchBar/Index";
 import axios from "axios";
 import "./Index.css";
 import RestaurantResult from "./RestaurantResult/RestaurantResult";
-import logo from "../../images/test_logo_2.png";
 
-const sample = [
-    {
-        'id' : 1,
-        'name': "restaurant",
-        'logo': logo,
-        'num_likes': 200
-    },
-    {
-        'id' : 2,
-        'name': "restaurant",
-        'logo': logo,
-        'num_likes': 200
-    },
-    {
-        'id' : 3,
-        'name': "restaurant",
-        'logo': logo,
-        'num_likes': 200
-    },
-    {
-        'id' : 4,
-        'name': "restaurant",
-        'logo': logo,
-        'num_likes': 200
-    },
-    {
-        'id' : 5,
-        'name': "restaurant",
-        'logo': logo,
-        'num_likes': 200
-    }
-]
 const SearchResult = ()=>{
     const params= useParams();
-    const [hasResult,setHasResult] = useState(true);
-    const [restaurants,setRestaurants] = useState(sample);
+    const [hasResult,setHasResult] = useState(false);
+    const [restaurants,setRestaurants] = useState({});
     useEffect(()=>{
-        /**
-        axios.get(`/search/${params.method}/${params.field}/`)
+        axios.get(`/restaurant/search/${params.method}/${params.field}/`)
         .then((res)=>{
             console.log(res);
-            if (res.count > 0){
+            if (res.data.count > 0){
                 setHasResult(true);
-                setRestaurants(res.results);
+                setRestaurants(res.data.results);
             }
         })
         .catch((e)=>{
             alert(e);
         })
-        */
-    },[])
+    },[params.method,params.field])
     return (
-        <div className="justify-content-center index_container">
-            <div className = "mt-5 mb-5">
+        <div className="justify-content-center index_container bg_color">
+            <div className = "pt-5 mb-5">
             <SearchBar/>
             </div>
             <hr/>
