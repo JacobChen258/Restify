@@ -18,22 +18,28 @@ const Login = () => {
       password: "",
     },
     validationSchema: validation,
-    onSubmit: performLogin,
+    onSubmit: (values) => {
+      console.log(values);
+
+      console.log(values);
+      axios
+        .post("/user/login/", values)
+        .then((res) => {
+          alert("you loggin in!");
+        })
+        .catch((err) => {
+          if (err.response.status == 401) {
+            formik.setErrors({ username: "Invalid username or password" });
+          } else {
+            formik.setErrors({ username: "An unexpected error occurred" });
+          }
+          formik.setFieldValue("password", "", false);
+          formik.setFieldTouched("password", false);
+        });
+    },
   });
 
-  const performLogin = (values) => {
-    console.log(values);
-    axios
-      .post("/user/login/", {
-        data: JSON.stringify(values, null, 2),
-      })
-      .then((res) => {
-        alert("you loggin in!");
-      })
-      .catch((err) => {
-        formik.setErrors({ username: "Invalid username or password" });
-      });
-  };
+  // const performLogin = (values) => {};
 
   return (
     <div className="vh-100">

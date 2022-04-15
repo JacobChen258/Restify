@@ -9,8 +9,8 @@ import axios from "axios";
 
 const Signup = () => {
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
-  const usernameRegex = /^[a-zA-Z0-9_@+.-]$/;
-  const nameRegex = /^[a-zA-Z\s-]$/;
+  const usernameRegex = /^[a-zA-Z0-9_@+.-]*$/;
+  const nameRegex = /^[a-zA-Z\s-]*$/;
   const validation = Yup.object({
     username: Yup.string()
       .required("Username is required")
@@ -28,20 +28,21 @@ const Signup = () => {
     ),
     email: Yup.string().email("Invalid email address"),
     phone: Yup.string().matches(phoneRegex, "Invalid phone format"),
-    avatar: Yup.mixed()
-      .test(
-        "fileSize",
-        "File Size is too large",
-        (value) => !value || (value && value.size <= 10000)
-      )
-      .test("fileType", "Unsupported File Format", (value) => {
-        return (
-          !value ||
-          ((value) =>
-            value &&
-            ["image/jpg", "image/jpeg", "image/png"].includes(value.type))
-        );
-      }),
+    avatar: Yup.mixed(),
+    // .test("fileSize", "File Size is too large", (value) => {
+    //   console.log(value.size);
+    //   return !value || (value && value.size <= 1000000);
+    // })
+    // .test("fileType", "Unsupported File Format", (value) => {
+    //   console.log(value.type);
+    //   return (
+    //     !value ||
+    //     ((value) =>
+    //       !value ||
+    //       (value &&
+    //         ["image/jpg", "image/jpeg", "image/png"].includes(value.type)))
+    //   );
+    // }),
     password: Yup.string()
       .required("Password is required")
       .min(5, "Password must be atleast 5 characters"),
@@ -62,22 +63,47 @@ const Signup = () => {
       confirmPassword: "",
     },
     validationSchema: validation,
-    onSubmit: (values) => performSignup,
-  });
 
-  const performSignup = (values) => {
-    console.log(values);
-    axios
-      .post("/user/register/", {
-        data: JSON.stringify(values, null, 2),
-      })
-      .then((res) => {
-        alert("you signed up!");
-      })
-      .catch((err) => {
-        formik.setErrors({ username: "Invalid username or password" });
-      });
-  };
+    onSubmit: (values) => {
+      var bodyFormData = new FormData();
+      bodyFormData.append("username", values.username);
+      bodyFormData.append("password", values.password);
+      bodyFormData.append("password2", values.confirmPassword);
+      bodyFormData.append("first_name", values.firstName);
+      bodyFormData.append("last_name", values.lastName);
+      bodyFormData.append("email", values.email);
+      bodyFormData.append("phone_num", values.phone);
+
+      if (values.avatar) {
+        bodyFormData.append("avatar", values.avatar);
+      }
+
+      const options = {
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+      for (var pair of bodyFormData.entries()) {
+        console.log(pair[0] + ", " + pair[1]);
+      }
+      axios
+        .post("/user/register/", bodyFormData, options)
+        .then((res) => {
+          alert("you signed up!");
+        })
+        .catch((err) => {
+          console.log(err.response.status);
+          if (err.response.status == 400) {
+            console.log("here");
+            formik.setErrors({ username: "This username is already in use" });
+          } else {
+            formik.setErrors({ username: "An unexpected error occurred" });
+          }
+          formik.setFieldValue("password", "", false);
+          formik.setFieldValue("confirmPassword", "", false);
+          formik.setFieldTouched("password", false, false);
+          formik.setFieldTouched("confirmPassword", false, false);
+        });
+    },
+  });
 
   return (
     <div className="vh-100">
@@ -199,7 +225,10 @@ const Signup = () => {
               required=""
               autoFocus=""
               accept="image/png, image/jpeg, image/jpg"
-              {...formik.getFieldProps("avatar")}
+              onChange={(e) =>
+                formik.setFieldValue("avatar", e.currentTarget.files[0])
+              }
+              // {...formik.getFieldProps("avatar")}
             />
           </Form.Group>
 
