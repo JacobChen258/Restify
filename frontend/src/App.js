@@ -1,5 +1,5 @@
 import "./App.css";
-import RestifyNavbar from "./components/Navbar/Navbar";
+import RestifyNavbar from "./components/Navbar/UserNav/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchPage from "./components/Search/Index";
 import SearchResult from "./components/SearchResult/Index";
@@ -12,6 +12,7 @@ import Blogs from "./components/Restaurant/Blog/Blogs";
 import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
+import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
 function App() {
   return (
     <div>
@@ -20,6 +21,8 @@ function App() {
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route index element={<SearchPage />}></Route>
+
           <Route path="/signup/test" element={<RestifyNavbar />}>
             {/* Components that need navbar go here */}
             <Route path="/signup/test/2" element={<Signup />} />

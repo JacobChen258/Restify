@@ -1,12 +1,13 @@
 import React from "react";
 import "./Login.css";
 import restify_logo from "../../images/restify_logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
 const Login = () => {
+  const nav = useNavigate();
   const validation = Yup.object({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
@@ -27,7 +28,8 @@ const Login = () => {
         .then((res) => {
           alert("you loggin in!");
           console.log(res.data.access);
-          localStorage.setItem("token", res.data.access);
+          localStorage.setItem("access_token", res.data.access);
+          nav("/");
         })
         .catch((err) => {
           if (err.response.status == 401) {
