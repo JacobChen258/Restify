@@ -62,10 +62,22 @@ const Signup = () => {
       confirmPassword: "",
     },
     validationSchema: validation,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit: (values) => performSignup,
   });
+
+  const performSignup = (values) => {
+    console.log(values);
+    axios
+      .post("/user/register/", {
+        data: JSON.stringify(values, null, 2),
+      })
+      .then((res) => {
+        alert("you signed up!");
+      })
+      .catch((err) => {
+        formik.setErrors({ username: "Invalid username or password" });
+      });
+  };
 
   return (
     <div className="vh-100">

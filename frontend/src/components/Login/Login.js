@@ -4,6 +4,7 @@ import restify_logo from "../../images/restify_logo.png";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 const Login = () => {
   const validation = Yup.object({
@@ -17,10 +18,22 @@ const Login = () => {
       password: "",
     },
     validationSchema: validation,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit: performLogin,
   });
+
+  const performLogin = (values) => {
+    console.log(values);
+    axios
+      .post("/user/login/", {
+        data: JSON.stringify(values, null, 2),
+      })
+      .then((res) => {
+        alert("you loggin in!");
+      })
+      .catch((err) => {
+        formik.setErrors({ username: "Invalid username or password" });
+      });
+  };
 
   return (
     <div className="vh-100">
