@@ -17,6 +17,11 @@ label {
 .form-login .checkbox {
   font-weight: 400;
 }
+
+.alert {
+  text-align: center;
+}
+
 .form-login .form-control {
   position: relative;
   box-sizing: border-box;

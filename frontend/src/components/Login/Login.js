@@ -3,53 +3,20 @@ import "./Login.css";
 import restify_logo from "../../images/restify_logo.png";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
-
-const validate = (values) => {
-  const errors = {};
-  if (values.password != values.confirmPassword) {
-    errors.confirmPassword = "passwords do not match";
-  }
-
-  if (values.firstName) {
-    if (values.firstName.length > 15) {
-      errors.firstName = "Must be 15 characters or less";
-    }
-  }
-
-  if (values.lastName) {
-    if (values.lastName.length > 20) {
-      errors.lastName = "Must be 20 characters or less";
-    }
-  }
-
-  if (values.email) {
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = "Invalid email address";
-    }
-  }
-
-  if (!values.password) {
-    errors.password = "Password is required";
-  }
-  if (!values.confirmPassword) {
-    errors.confirmPassword = "You must confirm your password";
-  }
-
-  if (!values.username) {
-    errors.username = "Username is required";
-  }
-
-  return errors;
-};
+import * as Yup from "yup";
 
 const Login = () => {
+  const validation = Yup.object({
+    username: Yup.string().required("Username is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
-      confirmPassword: "",
     },
-    validate,
+    validationSchema: validation,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -58,7 +25,7 @@ const Login = () => {
   return (
     <div className="vh-100">
       <div className="login-form">
-        <form className="form-login">
+        <form className="form-login" onSubmit={formik.handleSubmit}>
           <div className="text-center">
             <img src={restify_logo} alt="" width="150" height="150" />
           </div>
@@ -66,39 +33,45 @@ const Login = () => {
             Please Log In
           </h1>
 
+          {formik.errors.username && formik.touched.username ? (
+            <div class="alert alert-danger" role="alert">
+              {formik.errors.username}
+            </div>
+          ) : null}
           <label className="login-req">Username</label>
           <input
             type="text"
             name="username"
             id="login-username"
             className="form-control"
-            placeholder="Username *"
+            placeholder="Username"
             required=""
             autoFocus=""
             {...formik.getFieldProps("username")}
           />
 
+          {formik.errors.password && formik.touched.password ? (
+            <div class="alert alert-danger mt-3" role="alert">
+              {formik.errors.password}
+            </div>
+          ) : null}
           <label className="signup-req mt-2 ">Password</label>
           <input
             name="password"
             type="password"
             id="login-pass"
-            className="form-control"
-            placeholder="Password *"
+            className="form-control mb-3"
+            placeholder="Password"
             required=""
             {...formik.getFieldProps("password")}
           />
 
-          <label className="signup-req mt-2">Confirm Password</label>
-          <input
-            name="confirmPassword"
-            type="password"
-            id="login-confirm-pass"
-            className="form-control"
-            placeholder="Confirm Password *"
-            required=""
-            {...formik.getFieldProps("confirmPassword")}
-          />
+          {formik.errors.lastName && formik.touched.lastName ? (
+            <div class="alert alert-danger" role="alert">
+              {formik.errors.lastName}
+            </div>
+          ) : null}
+
           <span className="mb-3 text-center">
             <Link to="/signup" className="account">
               Dont Have an Account?

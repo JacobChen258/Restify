@@ -14,14 +14,14 @@ label {
   margin: 0 auto;
 }
 
-input[type="file"] {
+/* input[type="file"] {
   color: transparent !important;
-}
-input[type="file"]::before {
-  content: "Your Avatar: ";
+} */
+/* input[type="file"]::before {
+  content: " ";
   color: #636c72;
   margin-right: 10px;
-}
+} */
 .form-signin {
   font-weight: 400;
 }
@@ -38,6 +38,10 @@ input[type="file"]::before {
 
 .signup-error {
   color: red;
+}
+
+.alert {
+  text-align: center;
 }
 
 #signup-confirm-pass {

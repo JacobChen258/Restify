@@ -3,58 +3,65 @@ import "./Signup.css";
 import restify_logo from "../../images/restify_logo.png";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import { Form } from "react-bootstrap";
-const validate = (values) => {
-  const errors = {};
-  if (values.password != values.confirmPassword) {
-    errors.confirmPassword = "passwords do not match";
-  }
-
-  if (values.firstName) {
-    if (values.firstName.length > 15) {
-      errors.firstName = "Must be 15 characters or less";
-    }
-  }
-
-  if (values.lastName) {
-    if (values.lastName.length > 20) {
-      errors.lastName = "Must be 20 characters or less";
-    }
-  }
-
-  if (values.email) {
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = "Invalid email address";
-    }
-  }
-
-  if (!values.password) {
-    errors.password = "Password is required";
-  }
-  if (!values.confirmPassword) {
-    errors.confirmPassword = "You must confirm your password";
-  }
-
-  if (!values.username) {
-    errors.username = "Username is required";
-  }
-
-  return errors;
-};
+import axios from "axios";
 
 const Signup = () => {
+  const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+  const usernameRegex = /^[a-zA-Z0-9_@+.-]$/;
+  const nameRegex = /^[a-zA-Z\s-]$/;
+  const validation = Yup.object({
+    username: Yup.string()
+      .required("Username is required")
+      .matches(
+        usernameRegex,
+        "Username may only contain alphanumeric and _@+.- characters"
+      ),
+    firstName: Yup.string().matches(
+      nameRegex,
+      "Name can only contain spaces, hyphens and alphabetical"
+    ),
+    lastName: Yup.string().matches(
+      nameRegex,
+      "Name can only contain spaces, hyphens and alphabetical"
+    ),
+    email: Yup.string().email("Invalid email address"),
+    phone: Yup.string().matches(phoneRegex, "Invalid phone format"),
+    avatar: Yup.mixed()
+      .test(
+        "fileSize",
+        "File Size is too large",
+        (value) => !value || (value && value.size <= 10000)
+      )
+      .test("fileType", "Unsupported File Format", (value) => {
+        return (
+          !value ||
+          ((value) =>
+            value &&
+            ["image/jpg", "image/jpeg", "image/png"].includes(value.type))
+        );
+      }),
+    password: Yup.string()
+      .required("Password is required")
+      .min(5, "Password must be atleast 5 characters"),
+    confirmPassword: Yup.string()
+      .required("Must confirm your password")
+      .oneOf([Yup.ref("password"), null], "Passwords don't match!"),
+  });
+
   const formik = useFormik({
     initialValues: {
       username: "",
       firstName: "",
       lastName: "",
       email: "",
+      phone: "",
       avatar: "",
-      username: "",
       password: "",
       confirmPassword: "",
     },
-    validate,
+    validationSchema: validation,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -71,110 +78,146 @@ const Signup = () => {
             Please Sign Up
           </h1>
           {formik.errors.username && formik.touched.username ? (
-            <div class="alert alert-danger" role="alert">
+            <div className="alert alert-danger " role="alert">
               {formik.errors.username}
             </div>
           ) : null}
-          <label className="signup-req">Username</label>
+          <label htmlFor="signup-username" className="signup-req">
+            Username
+          </label>
           <input
             type="text"
             name="username"
             id="signup-username"
-            className="form-control "
+            className="form-control mb-3"
             placeholder="Username"
             required=""
             {...formik.getFieldProps("username")}
           />
           {formik.errors.firstName && formik.touched.firstName ? (
-            <div class="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.firstName}
             </div>
           ) : null}
 
-          <label className="mt-2">First Name</label>
+          <label htmlFor="firstName" className="">
+            First Name
+          </label>
           <input
             type="text"
             id="firstName"
             name="firstName"
-            className="form-control"
+            className="form-control mb-3"
             placeholder="First Name"
             required=""
-            {...formik.getFieldProps("firstname")}
+            {...formik.getFieldProps("firstName")}
           />
           {formik.errors.lastName && formik.touched.lastName ? (
-            <div class="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.lastName}
             </div>
           ) : null}
 
-          <label className="mt-2">Last Name</label>
+          <label htmlFor="firstName" className="">
+            Last Name
+          </label>
           <input
             type="text"
             id="lastName"
             name="lastName"
-            className="form-control"
+            className="form-control mb-3"
             placeholder="Last Name"
             required=""
             {...formik.getFieldProps("lastName")}
           />
           {formik.errors.email && formik.touched.email ? (
-            <div class="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.email}
             </div>
           ) : null}
 
-          <label className="mt-2">Email</label>
+          <label htmlFor="signup-email" className="">
+            Email
+          </label>
           <input
             type="email"
-            id="inputEmail"
+            id="signup-email"
             name="email"
-            className="form-control"
+            className="form-control mb-3"
             placeholder="Email address"
             required=""
             autoFocus=""
             {...formik.getFieldProps("email")}
           />
+          {formik.errors.phone && formik.touched.phone ? (
+            <div className="alert alert-danger" role="alert">
+              {formik.errors.phone}
+            </div>
+          ) : null}
+
+          <label htmlFor="signup-phone" className="">
+            Phone (XXX-XXX-XXXX)
+          </label>
+          <input
+            type="tel"
+            id="signup-phone"
+            name="phone"
+            className="form-control mb-3"
+            placeholder="Phone"
+            required=""
+            autoFocus=""
+            {...formik.getFieldProps("phone")}
+          />
           {formik.errors.avater && formik.touched.avatar ? (
-            <div class="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.avater}
             </div>
           ) : null}
 
-          <label className="mt-2">Avatar</label>
-          <input
-            type="file"
-            id="avatar"
-            name="avatar"
-            className="form-control"
-            placeholder="Avatar"
-            required=""
-            autoFocus=""
-            accept="image/png, image/jpeg, image/jpg"
-            {...formik.getFieldProps("avatar")}
-          />
+          {/* <label className=""></label> */}
+          <Form.Group className="">
+            <Form.Label style={{ marginBottom: "0" }}>Avatar</Form.Label>
+            <Form.Control
+              style={{ padding: "10" }}
+              type="file"
+              size="lg"
+              id="avatar"
+              name="avatar"
+              className="form-control mb-3"
+              required=""
+              autoFocus=""
+              accept="image/png, image/jpeg, image/jpg"
+              {...formik.getFieldProps("avatar")}
+            />
+          </Form.Group>
+
           {formik.errors.password && formik.touched.password ? (
-            <div class="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.password}
             </div>
           ) : null}
 
-          <label className="mt-2 signup-req">Password</label>
+          <label htmlFor="signup-pass" className="signup-req">
+            Password
+          </label>
           <input
             type="password"
             id="signup-pass"
             name="password"
-            className="form-control"
+            className="form-control mb-3"
             placeholder="Password"
             required=""
             {...formik.getFieldProps("password")}
           />
           {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
-            <div class="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.confirmPassword}
             </div>
           ) : null}
 
-          <label className="mt-2 signup-req">Confirm Password</label>
+          <label htmlFor="signup-confirm-pass" className="signup-req">
+            Confirm Password
+          </label>
           <input
             type="password"
             id="signup-confirm-pass"
