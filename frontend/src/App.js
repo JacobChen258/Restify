@@ -13,6 +13,8 @@ import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
 import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
+import AddBlog from "./components/AddBlog/AddBlog";
+
 function App() {
   return (
     <div>
@@ -22,7 +24,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route index element={<SearchPage />}></Route>
-
+          <Route path="/addblog" element={<AddBlog />}></Route>
           <Route path="/signup/test" element={<RestifyNavbar />}>
             {/* Components that need navbar go here */}
             <Route path="/signup/test/2" element={<Signup />} />
@@ -35,6 +37,7 @@ function App() {
           <Route path="/restaurant/:id/" element={<Restaurant />}>
             <Route index element={<Menu />}></Route>
             <Route path="/restaurant/:id/blog/" element={<Blogs />}></Route>
+
             <Route
               path="/restaurant/:id/comment/"
               element={<Comments />}
