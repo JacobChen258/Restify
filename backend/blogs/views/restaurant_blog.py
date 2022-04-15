@@ -11,7 +11,6 @@ from restaurants.models import Restaurant
 
 class RestaurantBlogs(ListAPIView):
     serializer_class = BlogSerializer
-    permission_classes = [IsAuthenticated,]
     pagination_class = SmallResultsSetPagination
 
     def get_queryset(self):

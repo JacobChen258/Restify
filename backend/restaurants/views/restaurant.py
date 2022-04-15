@@ -48,5 +48,10 @@ class RestaurantView(CreateAPIView,UpdateAPIView,RetrieveAPIView):
         self.serializer_class = RestaurantInfoSerializer
         return super().get(request, *args, **kwargs)
     
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+        
     def get_object(self):
         return get_object_or_404(Restaurant,id=self.kwargs['res_id'])

@@ -9,8 +9,8 @@ import Signup from "./components/Signup/Signup";
 import Login from "./components/Login/Login";
 import Restaurant from "./components/Restaurant/Restaurant";
 import Blogs from "./components/Restaurant/Blog/Blogs";
-import Image from "./components/Restaurant/Image/Image";
-import Comment from "./components/Restaurant/Comment/Comment";
+import Images from "./components/Restaurant/ImagesComponent/Images";
+import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
 function App() {
   return (
@@ -29,9 +29,9 @@ function App() {
           <Route path="/restaurant/:id/" element={<Restaurant/>}>
             <Route index element={<Menu/>}></Route>
             <Route path="/restaurant/:id/blog/" element={<Blogs/>}></Route>
-            <Route path="/restaurant/:id/comment/" element={<Comment/>}></Route>
+            <Route path="/restaurant/:id/comment/" element={<Comments/>}></Route>
             <Route path="/restaurant/:id/menu/" element={<Menu/>}></Route>
-            <Route path="/restaurant/:id/image/" element={<Image/>}></Route>
+            <Route path="/restaurant/:id/image/" element={<Images/>}></Route>
             <Route path="/restaurant/:id/*" element={<PageNotFound />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />

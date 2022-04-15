@@ -11,18 +11,31 @@ from notifications.serializers import NotificationsSerializer
 from accounts.models import User
 
 class CommentView(ListAPIView,CreateAPIView):
-    permission_classes = [IsAuthenticated,]
     pagination_class = SmallResultsSetPagination
     
     def get(self, request, *args, **kwargs):
+        self.permission_classes = []
         self.serializer_class = RestaurantCommentSerializer
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         restaurant = get_object_or_404(Restaurant, id=self.kwargs['res_id'])
-        return Comment.objects.filter(restaurant=restaurant).order_by('creation_time')
+        return Comment.objects.filter(restaurant=restaurant).order_by('-creation_time')
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            data = self.get_user_name(serializer_data=serializer.data)
+            return self.get_paginated_response(data)
+        serializer = self.get_serializer(queryset, many=True)
+        data = self.get_user_name(serializer_data=serializer.data)
+        return Response(data)
 
     def post(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated,]
         self.serializer_class = AddCommentSerializer
         return self.create(request, *args, **kwargs)
 
@@ -47,3 +60,14 @@ class CommentView(ListAPIView,CreateAPIView):
         notify_serializer = NotificationsSerializer(data=data)
         notify_serializer.is_valid(raise_exception=True)
         notify_serializer.save()
+
+    def get_user_name(self,serializer_data):
+        dataset = serializer_data
+        for data in dataset:
+            user = get_object_or_404(User,id=data['user'])
+            data['full_name'] = user.first_name + " "+ user.last_name
+            data.pop('user')
+        return dataset
+        
+
+            

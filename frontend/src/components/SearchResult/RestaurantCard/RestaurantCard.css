@@ -3,6 +3,7 @@
     height: 12rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    object-fit: contain;
 }
 
 #res_card > a:link, #res_card > a:hover, #res_card > a:active, #res_card > a:focus, #res_card > a:visited{

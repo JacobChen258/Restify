@@ -1,14 +1,15 @@
 import React,{useState,useEffect} from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Item from "./Item/Item";
-const Menu = (props) =>{
+import Image from "./ImageComponent/image";
+
+const Images = (props) =>{
     const params = useParams();
-    const [items,setItems] = useState([]);
+    const [images,setImages] = useState([]);
     useEffect(()=>{
-        axios.get(`/menu_item/restaurant/${params.id}/`)
+        axios.get(`/restaurant/${params.id}/images`)
         .then((res)=>{
-            setItems(res.data.results);
+            setImages(res.data.results);
         })
         .catch((e)=>{
             alert(e);
@@ -16,15 +17,15 @@ const Menu = (props) =>{
     },[params.id])
     return (
         <div>
-            <h1>Menu</h1>
+            <h1>Image</h1>
             <div className="d-flex flex-wrap w-100 ps-5">
                 {
-                    items.map((item)=>(
-                        <Item key={item.id} Item={item}></Item>
+                    images.map((image)=>(
+                        <Image key={image.id} Image={image.image}></Image>
                     ))
                 }
             </div>
         </div>
     )
 }
-export default Menu;
+export default Images;

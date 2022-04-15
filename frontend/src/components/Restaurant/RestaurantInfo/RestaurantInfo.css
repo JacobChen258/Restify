@@ -1,0 +1,27 @@
+.img_size{
+    width: 20rem;
+    height: 20rem;
+}
+
+.img_border{
+    border-radius: 2rem;
+    border: 2px solid black;
+}
+
+.img_fit{
+    background-color: white;
+    object-fit: contain;
+}
+
+.btn_bg{
+    background-color: inherit;
+}
+
+.btn_border{
+    border: 1px solid white;
+    border-radius: 2rem;
+}
+
+.folower_container{
+    vertical-align: middle;
+}

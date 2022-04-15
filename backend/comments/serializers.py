@@ -11,4 +11,4 @@ class AddCommentSerializer(ModelSerializer):
 class RestaurantCommentSerializer(ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id','content']
+        fields = ['id','content','user','creation_time']
