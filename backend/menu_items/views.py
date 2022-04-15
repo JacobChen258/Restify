@@ -15,11 +15,11 @@ from accounts.models import FollowedRestaurant
 from rest_framework.status import HTTP_200_OK
 
 class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
-    permission_classes = [IsAuthenticated,]
     serializer_class = MenuItemSerializer
     pagination_class = SmallResultsSetPagination
 
     def get_queryset(self):
+        self.permission_classes = []
         res = get_object_or_404(Restaurant,id=self.kwargs['res_id'])
         menu = MenuItem.objects.filter(restaurant=res.id).order_by('id')
 
