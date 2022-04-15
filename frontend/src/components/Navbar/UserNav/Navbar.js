@@ -7,9 +7,9 @@ import {
   Card,
   Button,
 } from "react-bootstrap";
-import logo from "../../images/logo.svg";
+import logo from "../../../images/logo.svg";
 import "./Navbar.css";
-import profilePicture from "../../images/profile-picture.png";
+import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 
 const RestifyNavbar = () => {
@@ -64,7 +64,7 @@ const RestifyNavbar = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
-            <Nav style={{ color: "red" }}>
+            <Nav>
               <Nav.Link href="/logout">Logout</Nav.Link>
             </Nav>
           </Navbar.Collapse>
