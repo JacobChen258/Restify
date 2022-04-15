@@ -26,6 +26,8 @@ const Login = () => {
         .post("/user/login/", values)
         .then((res) => {
           alert("you loggin in!");
+          console.log(res.data.access);
+          localStorage.setItem("token", res.data.access);
         })
         .catch((err) => {
           if (err.response.status == 401) {
@@ -34,7 +36,7 @@ const Login = () => {
             formik.setErrors({ username: "An unexpected error occurred" });
           }
           formik.setFieldValue("password", "", false);
-          formik.setFieldTouched("password", false);
+          formik.setFieldTouched("password", false, false);
         });
     },
   });

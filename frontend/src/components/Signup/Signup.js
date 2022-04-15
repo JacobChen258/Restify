@@ -1,13 +1,14 @@
 import React from "react";
 import "./Signup.css";
 import restify_logo from "../../images/restify_logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Form } from "react-bootstrap";
 import axios from "axios";
 
 const Signup = () => {
+  const nav = useNavigate();
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
   const usernameRegex = /^[a-zA-Z0-9_@+.-]*$/;
   const nameRegex = /^[a-zA-Z\s-]*$/;
@@ -84,10 +85,13 @@ const Signup = () => {
       for (var pair of bodyFormData.entries()) {
         console.log(pair[0] + ", " + pair[1]);
       }
+
       axios
         .post("/user/register/", bodyFormData, options)
         .then((res) => {
           alert("you signed up!");
+
+          nav("/login");
         })
         .catch((err) => {
           console.log(err.response.status);
