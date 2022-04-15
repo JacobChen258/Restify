@@ -49,7 +49,7 @@ const UserNavbar = () => {
 
               <NavDropdown title="Account" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">
-                  <Card className="card">
+                  <Card className="card p-2">
                     <Card.Img variant="top" src={profilePicture} />
                     <Card.Body className="dropdown-text">
                       <Card.Title>FirstName LastName</Card.Title>
