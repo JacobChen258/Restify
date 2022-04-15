@@ -10,5 +10,5 @@ urlpatterns = [
     path("like/", liked_blog, name="liked_blog"),
     path("<int:blog_id>/",Blogs.as_view(),name="blog"),
     path("create/",AddBlog.as_view(),name='add_blog'),
-    path("restaurant/<int:res_id>",RestaurantBlogs.as_view(),name="res_blogs")
+    path("restaurant/<int:res_id>/",RestaurantBlogs.as_view(),name="res_blogs")
 ]

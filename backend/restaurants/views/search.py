@@ -9,7 +9,6 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 
 class RestaurantSearch(ListAPIView):
     serializer_class = RestaurantSearchSerializer
-    permission_classes = [IsAuthenticated,]
     pagination_class = SmallResultsSetPagination
     
     def get(self, request, *args, **kwargs):

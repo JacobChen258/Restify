@@ -10,10 +10,10 @@ from rest_framework import status
 from rest_framework.response import Response
 
 class ImageView(ListAPIView, DestroyAPIView,CreateAPIView):
-    permission_classes = [IsAuthenticated,]
     pagination_class = SmallResultsSetPagination
 
     def get(self, request, *args, **kwargs):
+        self.permission_classes = []
         self.serializer_class = GetImageSerializer
         return super().get(request, *args, **kwargs)
 
@@ -29,6 +29,7 @@ class ImageView(ListAPIView, DestroyAPIView,CreateAPIView):
         raise PermissionDenied
 
     def post(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated,]
         self.serializer_class = AddImageSerializer
         user = request.user
         restaurant = get_object_or_404(Restaurant,owner = user.id)
@@ -36,6 +37,7 @@ class ImageView(ListAPIView, DestroyAPIView,CreateAPIView):
         return self.create(request, *args, **kwargs)
     
     def create(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated,]
         data = request.data.copy()
         data["restaurant"] = self.object.id
         serializer = self.get_serializer(data=data)

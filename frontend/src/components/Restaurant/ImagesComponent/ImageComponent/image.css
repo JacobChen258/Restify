@@ -1,0 +1,13 @@
+.res_img_size{
+    height: 15rem;
+    width:15rem;
+}
+
+.res_img_border{
+    border: 1px solid black;
+    background-color: white;
+}
+
+.res_img_fit{
+    object-fit: contain;
+}

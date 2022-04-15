@@ -11,13 +11,14 @@ from rest_framework.generics import RetrieveAPIView
 
 class RestaurantView(CreateAPIView,UpdateAPIView,RetrieveAPIView):
     serializer_class = CreateRestaurantSerializer
-    permission_classes = [IsAuthenticated,]
 
     def post(self, request, *args, **kwargs):
         self.serializer_class = CreateRestaurantSerializer
+        self.permission_classes = [IsAuthenticated,]
         return self.create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated,]
         partial = kwargs.pop('partial', False)
         self.serializer_class = EditRestaurantSerializer
         instance = get_object_or_404(Restaurant,owner = request.user)
@@ -43,8 +44,14 @@ class RestaurantView(CreateAPIView,UpdateAPIView,RetrieveAPIView):
         return Response({"id":restaurant[0].id}, status=status.HTTP_201_CREATED, headers=headers)
     
     def get(self, request, *args, **kwargs):
+        self.permission_classes = []
         self.serializer_class = RestaurantInfoSerializer
         return super().get(request, *args, **kwargs)
     
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+        
     def get_object(self):
         return get_object_or_404(Restaurant,id=self.kwargs['res_id'])

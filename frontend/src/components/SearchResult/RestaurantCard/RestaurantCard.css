@@ -1,8 +1,9 @@
 .res_logo{
-    height: 10rem;
-    min-width: 8rem;
+    width: 12rem;
+    height: 12rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    object-fit: contain;
 }
 
 #res_card > a:link, #res_card > a:hover, #res_card > a:active, #res_card > a:focus, #res_card > a:visited{
@@ -11,8 +12,12 @@
 
 .res_title{
     min-width: 8rem;
-    max-width: 15rem;
+    max-width: 12rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.card-body{
+    padding: 0;
 }
