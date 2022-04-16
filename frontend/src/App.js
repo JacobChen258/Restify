@@ -15,6 +15,7 @@ import Menu from "./components/Restaurant/Menu/Menu";
 import AnonNavbar from "./components/Navbar/AnonNav/AnonNav";
 import AddBlog from "./components/AddBlog/AddBlog";
 import Feed from "./components/Feed/Feed";
+import CreateRestaurant from "./components/CreateRestaurant/CreateRestaurant";
 import { AuthProvider } from "./components/Context/AuthContext";
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
               path="/search/:method/"
               element={<SearchResult />}
             ></Route>
+            <Route path="/restaurant/create/" element={<CreateRestaurant/>}></Route>
             <Route path="/restaurant/:id/" element={<Restaurant />}>
               <Route index element={<Menu />}></Route>
               <Route path="/restaurant/:id/blog/" element={<Blogs />}></Route>
@@ -52,7 +54,7 @@ function App() {
               ></Route>
               <Route path="/restaurant/:id/menu/" element={<Menu />}></Route>
               <Route path="/restaurant/:id/image/" element={<Images />}></Route>
-              <Route path="/restaurant/:id/*" element={<PageNotFound />} />
+              <Route path="/restaurant/:id/*" element={<PageNotFound />}/>
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>
