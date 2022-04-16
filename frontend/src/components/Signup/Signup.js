@@ -6,8 +6,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Form } from "react-bootstrap";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../Context/AuthContext";
 
 const Signup = () => {
+  const { user, logoutUser } = useContext(AuthContext);
+
   const nav = useNavigate();
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
   const usernameRegex = /^[a-zA-Z0-9_@+.-]*$/;
@@ -109,7 +113,7 @@ const Signup = () => {
     },
   });
 
-  return (
+  return !user ? (
     <div className="vh-100">
       <div className="signup-form">
         <form className="form-signin" onSubmit={formik.handleSubmit}>
@@ -289,6 +293,8 @@ const Signup = () => {
         </form>
       </div>
     </div>
+  ) : (
+    logoutUser()
   );
 };
 

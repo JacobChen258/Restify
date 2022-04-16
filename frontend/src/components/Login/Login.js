@@ -9,7 +9,7 @@ import AuthContext from "../Context/AuthContext";
 import jwt_decode from "jwt-decode";
 
 const Login = () => {
-  const { setUser, user, setAuthTokens } = useContext(AuthContext);
+  const { setUser, user, setAuthTokens, logoutUser } = useContext(AuthContext);
   console.log(setUser);
   const nav = useNavigate();
   const validation = Yup.object({
@@ -53,7 +53,7 @@ const Login = () => {
 
   // const performLogin = (values) => {};
 
-  return (
+  return !user ? (
     <div className="vh-100">
       <div className="login-form">
         <form className="form-login" onSubmit={formik.handleSubmit}>
@@ -118,6 +118,8 @@ const Login = () => {
         </form>
       </div>
     </div>
+  ) : (
+    logoutUser()
   );
 };
 
