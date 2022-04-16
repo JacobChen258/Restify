@@ -1,0 +1,9 @@
+.form-control {
+    padding: 1 rem;
+}
+
+.bg_color{
+    background-image: linear-gradient(rgb(170, 167, 167), rgb(152, 226, 220));
+    min-height: 100vh !important;
+    height: 100% !important;
+}

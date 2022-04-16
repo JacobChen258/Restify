@@ -15,6 +15,7 @@ import Menu from "./components/Restaurant/Menu/Menu";
 import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
 import AddBlog from "./components/AddBlog/AddBlog";
 import Feed from "./components/Feed/Feed";
+import EditProfile from "./components/EditProfile/EditProfile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
           <Route index element={<SearchPage />}></Route>
           <Route path="/addblog" element={<AddBlog />}></Route>
           <Route path="/signup/test" element={<RestifyNavbar />}>
