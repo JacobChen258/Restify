@@ -14,6 +14,7 @@ import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
 import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
 import AddBlog from "./components/AddBlog/AddBlog";
+import Feed from "./components/Feed/Feed";
 import { AuthProvider } from "./components/Context/AuthContext";
 
 function App() {
@@ -32,8 +33,8 @@ function App() {
             {/* Components that need navbar go here */}
             {/* <Route path="/signup/test/2" element={<Signup />} /> */}
             {/* </Route> */}
-
-
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/addblog" element={<AddBlog />}></Route>
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}
