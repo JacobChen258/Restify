@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  Nav,
-  Navbar,
-  Container,
-  NavDropdown,
-  Card,
-  Button,
-} from "react-bootstrap";
+import { Nav, Navbar, Container } from "react-bootstrap";
 import logo from "../../../images/logo.svg";
 import "./AnonNav.css";
-import profilePicture from "../../../images/profile-picture.png";
+
 import { Outlet } from "react-router-dom";
 
 const AnonNavbar = () => {
