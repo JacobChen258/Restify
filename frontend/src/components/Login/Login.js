@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Login.css";
 import restify_logo from "../../images/restify_logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import AuthContext from "../Context/AuthContext";
+import jwt_decode from "jwt-decode";
 
 const Login = () => {
+  const { setUser, user, setAuthTokens } = useContext(AuthContext);
+  console.log(setUser);
   const nav = useNavigate();
   const validation = Yup.object({
     username: Yup.string().required("Username is required"),
@@ -26,9 +30,13 @@ const Login = () => {
       axios
         .post("/user/login/", values)
         .then((res) => {
-          alert("you loggin in!");
           console.log(res.data.access);
-          localStorage.setItem("access_token", res.data.access);
+          localStorage.setItem("authTokens", JSON.stringify(res.data.access));
+          setAuthTokens(res.data);
+          console.log(jwt_decode(res.data.access));
+          setUser(jwt_decode(res.data.access));
+          console.log(user);
+
           nav("/");
         })
         .catch((err) => {
@@ -57,7 +65,7 @@ const Login = () => {
           </h1>
 
           {formik.errors.username && formik.touched.username ? (
-            <div class="alert alert-danger" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.username}
             </div>
           ) : null}
@@ -74,7 +82,7 @@ const Login = () => {
           />
 
           {formik.errors.password && formik.touched.password ? (
-            <div class="alert alert-danger mt-3" role="alert">
+            <div className="alert alert-danger mt-3" role="alert">
               {formik.errors.password}
             </div>
           ) : null}
@@ -90,7 +98,7 @@ const Login = () => {
           />
 
           {formik.errors.lastName && formik.touched.lastName ? (
-            <div class="alert alert-danger" role="alert">
+            <div className="alert alert-danger" role="alert">
               {formik.errors.lastName}
             </div>
           ) : null}
