@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Nav,
   Navbar,
@@ -8,11 +8,14 @@ import {
   Button,
 } from "react-bootstrap";
 import logo from "../../../images/logo.svg";
-import "./Navbar.css";
+import "./UserNav.css";
 import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
+import AuthContext from "../../Context/AuthContext";
 
-const RestifyNavbar = () => {
+const UserNav = () => {
+  const { logoutUser } = useContext(AuthContext);
+
   return (
     <>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" top="fixed">
@@ -49,7 +52,7 @@ const RestifyNavbar = () => {
 
               <NavDropdown title="Account" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">
-                  <Card className="card">
+                  <Card className="card p-2">
                     <Card.Img variant="top" src={profilePicture} />
                     <Card.Body className="dropdown-text">
                       <Card.Title>FirstName LastName</Card.Title>
@@ -65,7 +68,9 @@ const RestifyNavbar = () => {
               </NavDropdown>
             </Nav>
             <Nav>
-              <Nav.Link href="/logout">Logout</Nav.Link>
+              <Nav.Link href="/login" onClick={logoutUser}>
+                Logout
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -75,4 +80,4 @@ const RestifyNavbar = () => {
   );
 };
 
-export default RestifyNavbar;
+export default UserNav;
