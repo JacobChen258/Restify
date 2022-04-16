@@ -12,7 +12,7 @@ import Blogs from "./components/Restaurant/Blog/Blogs";
 import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
-import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
+import AnonNavbar from "./components/Navbar/AnonNav/AnonNav";
 import AddBlog from "./components/AddBlog/AddBlog";
 import Feed from "./components/Feed/Feed";
 import { AuthProvider } from "./components/Context/AuthContext";
@@ -37,6 +37,10 @@ function App() {
             <Route path="/addblog" element={<AddBlog />}></Route>
             <Route
               path="/search/:method/:field/"
+              element={<SearchResult />}
+            ></Route>
+            <Route
+              path="/search/:method/"
               element={<SearchResult />}
             ></Route>
             <Route path="/restaurant/:id/" element={<Restaurant />}>
