@@ -68,7 +68,7 @@ const UserNav = () => {
               </NavDropdown>
             </Nav>
             <Nav>
-              <Nav.Link href="/user/login" onClick={logoutUser}>
+              <Nav.Link href="/login" onClick={logoutUser}>
                 Logout
               </Nav.Link>
             </Nav>
