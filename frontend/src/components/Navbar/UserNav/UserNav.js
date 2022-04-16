@@ -8,11 +8,11 @@ import {
   Button,
 } from "react-bootstrap";
 import logo from "../../../images/logo.svg";
-import "./Navbar.css";
+import "./UserNav.css";
 import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 
-const UserNavbar = () => {
+const UserNav = () => {
   return (
     <>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" top="fixed">
@@ -75,4 +75,4 @@ const UserNavbar = () => {
   );
 };
 
-export default UserNavbar;
+export default UserNav;

@@ -8,7 +8,7 @@ import {
   Button,
 } from "react-bootstrap";
 import logo from "../../../images/logo.svg";
-import "./Navbar.css";
+import "./AnonNav.css";
 import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 

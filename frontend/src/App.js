@@ -1,5 +1,5 @@
 import "./App.css";
-import RestifyNavbar from "./components/Navbar/UserNav/Navbar";
+import RestifyNavbar from "./components/Navbar/UserNav/UserNav";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchPage from "./components/Search/Index";
 import SearchResult from "./components/SearchResult/Index";
@@ -12,7 +12,7 @@ import Blogs from "./components/Restaurant/Blog/Blogs";
 import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
-import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
+import AnonNavbar from "./components/Navbar/AnonNav/AnonNav";
 function App() {
   return (
     <div>
