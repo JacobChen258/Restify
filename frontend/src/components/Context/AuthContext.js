@@ -24,11 +24,12 @@ export const AuthProvider = ({ children }) => {
     axios
       .post("/user/token/refresh", { refresh: authTokens?.refresh })
       .then((res) => {
-        localStorage.setItem("authTokens", JSON.stringify(res.data.access));
+        localStorage.setItem("authTokens", JSON.stringify(res.data));
         setAuthTokens(res.data);
         setUser(jwt_decode(res.data.access));
       })
       .catch((err) => {
+        console.log("hello");
         logoutUser();
       });
 

@@ -31,7 +31,7 @@ const Login = () => {
         .post("/user/login/", values)
         .then((res) => {
           console.log(res.data.access);
-          localStorage.setItem("authTokens", JSON.stringify(res.data.access));
+          localStorage.setItem("authTokens", JSON.stringify(res.data));
           setAuthTokens(res.data);
           console.log(jwt_decode(res.data.access));
           setUser(jwt_decode(res.data.access));
