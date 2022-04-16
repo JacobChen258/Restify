@@ -36,6 +36,7 @@ function App() {
             {/* </Route> */}
             <Route path="/feed" element={<Feed />} />
             <Route path="/addblog" element={<AddBlog />}></Route>
+            <Route path="/create" element={<CreateRestaurant/>}></Route>
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}
@@ -44,9 +45,7 @@ function App() {
               path="/search/:method/"
               element={<SearchResult />}
             ></Route>
-            <Route path="/restaurant/create/" element={<CreateRestaurant/>}></Route>
             <Route path="/restaurant/:id/" element={<Restaurant />}>
-              <Route index element={<Menu />}></Route>
               <Route path="/restaurant/:id/blog/" element={<Blogs />}></Route>
               <Route
                 path="/restaurant/:id/comment/"

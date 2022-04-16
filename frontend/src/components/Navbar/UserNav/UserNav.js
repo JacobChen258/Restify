@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useState,useEffect } from "react";
 import {
   Nav,
   Navbar,
@@ -12,10 +12,27 @@ import "./UserNav.css";
 import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
-
 const UserNav = () => {
-  const { logoutUser } = useContext(AuthContext);
-
+  const { logoutUser,user } = useContext(AuthContext);
+  const [res,setRes] = useState(null)
+  useEffect(()=>{
+    if (user){
+      if (user.restaurant !== null){
+        setRes(user.restaurant)
+      }
+    }
+  },[user])
+  
+  const NavMyRestaurant = ()=>{
+      if (user.restaurant){
+        return (
+            <Nav.Link href={`/restaurant/${res}/`}>My Restaruant</Nav.Link>
+        )
+      }
+      else{
+        return (<Nav.Link href={`/create/`}>Create Restaurant</Nav.Link>)
+      }
+  }
   return (
     <>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" top="fixed">
@@ -27,7 +44,7 @@ const UserNav = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto navbar">
               <Nav.Link href="/feed">Feed</Nav.Link>
-              <Nav.Link href="/restaruant">My Restaruant</Nav.Link>
+              <NavMyRestaurant/>
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
                   <NavDropdown.Item href="#action/3.1">

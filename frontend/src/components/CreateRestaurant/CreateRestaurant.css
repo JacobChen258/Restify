@@ -3,3 +3,8 @@
     grid-template-columns: 5fr 7fr;
     grid-row: auto;
 }
+
+.logo_container{
+    width: 20rem;
+    height: 20rem;
+}
