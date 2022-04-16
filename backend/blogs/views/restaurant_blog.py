@@ -17,7 +17,4 @@ class RestaurantBlogs(ListAPIView):
         res = get_object_or_404(Restaurant,id=self.kwargs['res_id'])
         blogs = Blog.objects.filter(restaurant=res.id).order_by('id')
         
-        if blogs.exists():
-            return blogs
-
-        return Http404
+        return blogs
