@@ -12,7 +12,10 @@ import Blogs from "./components/Restaurant/Blog/Blogs";
 import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
+import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
+import AddBlog from "./components/AddBlog/AddBlog";
 import { AuthProvider } from "./components/Context/AuthContext";
+
 function App() {
   return (
     <div>
@@ -29,6 +32,7 @@ function App() {
             {/* Components that need navbar go here */}
             {/* <Route path="/signup/test/2" element={<Signup />} /> */}
             {/* </Route> */}
+
 
             <Route
               path="/search/:method/:field/"
