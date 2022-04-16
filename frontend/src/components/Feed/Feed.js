@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import "./Blogs.css";
+import "./Feed.css";
 import axios from "axios";
 import { Col, Row, Container } from "react-bootstrap";
 
