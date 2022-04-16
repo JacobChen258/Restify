@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
-import "./Feed.css";
+import "./Blogs.css";
+import axios from "axios";
 import { Col, Row, Container } from "react-bootstrap";
 
 const Feed = () => {
@@ -7,9 +8,10 @@ const Feed = () => {
     const [feed, setFeed] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8000/user/feed/')
-            .then(res => res.json())
-            .then(json => setFeed(json.data))
+        axios.get(`account/feed/`)
+            .then(response => {
+                setFeed(response.data.results);
+            })
     }, [])
 
     return (
@@ -27,7 +29,7 @@ const Feed = () => {
             </section>  
             <section className="text-dark p-5">
                 <div className="container">
-                    <div id="blogposts" className="col text-center">
+                    <div id="user_feed" className="col text-center">
                         {feed.map(post => (
                             <div key={post.id} className="row">
                                 <p className="lead">{post.title}</p>
