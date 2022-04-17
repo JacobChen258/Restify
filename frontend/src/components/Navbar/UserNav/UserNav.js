@@ -14,14 +14,19 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 
 const UserNav = () => {
-  const { logoutUser, user } = useContext(AuthContext);
-  const [resInfo, setResInfo] = useState({});
+  const { logoutUser, user, authTokens } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
+    const headers = {
+      headers: {
+        Authorization: "Bearer " + authTokens?.access,
+      },
+    };
     axios
-      .get(`/restaurant/${user.restaurant}`)
+      .get(`/user/profile/`, headers)
       .then((res) => {
-        setResInfo(res.data);
+        setUserInfo(res.data);
       })
       .catch((e) => {
         alert(e);
@@ -71,24 +76,24 @@ const UserNav = () => {
                   <Card className="card p-2">
                     <Card.Img
                       variant="top"
-                      src={resInfo.logo}
+                      src={userInfo.avatar}
                       className="img_fit"
                     />
                     <Card.Body className="dropdown-text">
                       <Card.Title>
-                        {resInfo.first_name} {resInfo.last_name}
+                        {userInfo.first_name} {userInfo.last_name}
                       </Card.Title>
                       <Card.Text className="card-text">
-                        {resInfo.phone_num && (
+                        {userInfo.phone_num && (
                           <>
-                            <b>Phone Number:</b> {resInfo.phone_num}
+                            <b>Phone Number:</b> {userInfo.phone_num}
                             <br />
                           </>
                         )}
-                        {resInfo.email && (
+                        {userInfo.email && (
                           <>
                             <b>Email: </b>
-                            {resInfo.email}
+                            {userInfo.email}
                           </>
                         )}
                       </Card.Text>

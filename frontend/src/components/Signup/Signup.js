@@ -25,11 +25,11 @@ const Signup = () => {
       ),
     firstName: Yup.string().matches(
       nameRegex,
-      "Name can only contain spaces, hyphens and alphabetical"
+      "Name can only contain spaces, hyphens and alphabetical characters"
     ),
     lastName: Yup.string().matches(
       nameRegex,
-      "Name can only contain spaces, hyphens and alphabetical"
+      "Name can only contain spaces, hyphens and alphabetical characters"
     ),
     email: Yup.string().email("Invalid email address"),
     phone: Yup.string().matches(phoneRegex, "Invalid phone format"),
