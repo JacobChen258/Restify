@@ -35,11 +35,17 @@ function App() {
             {/* <Route path="/signup/test/2" element={<Signup />} /> */}
             {/* </Route> */}
 
-            <Route path="/:id/menu" element={<AddEditMenu />} />
-            <Route path="/restaurant/:id/blog/add" element={<AddBlog />} />
+            <Route
+              path="/:id/menu"
+              element={
+                <PrivateRoute>
+                  <AddEditMenu />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/blog" element={<AddBlog />} />
 
             <Route path="/feed" element={<Feed />} />
-            <Route path="/addblog" element={<AddBlog />}></Route>
 
             <Route
               path="/search/:method/:field/"
