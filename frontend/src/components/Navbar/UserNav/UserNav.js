@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-
 import {
   Nav,
   Navbar,
@@ -15,9 +14,23 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 
 const UserNav = () => {
-  const { logoutUser,user } = useContext(AuthContext);
+
+  const { logoutUser, user, authTokens } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState({});
+  const getUserInfo = () => {
+    const headers = {
+      headers: {
+        Authorization: "Bearer " + authTokens?.access,
+      },
+    axios
+      .get(`/user/profile/`, headers)
+      .then((res) => {
+        setUserInfo(res.data);
+  }
+  
   const [res,setRes] = useState(null)
   useEffect(()=>{
+    
     if (user){
       if (user.restaurant !== null){
         setRes(user.restaurant)
@@ -39,6 +52,7 @@ const UserNav = () => {
   const [resInfo, setResInfo] = useState({});
 
   useEffect(() => {
+    getUserInfo()
     axios
       .get(`/restaurant/${user.restaurant}`)
       .then((res) => {
@@ -63,6 +77,7 @@ const UserNav = () => {
                 Feed
               </Nav.Link>
               <NavMyRestaurant/>
+
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
                   <NavDropdown.Item href="#action/3.1">
@@ -90,24 +105,27 @@ const UserNav = () => {
                   <Card className="card p-2">
                     <Card.Img
                       variant="top"
-                      src={resInfo.logo}
+
+                      src={userInfo.avatar}
+
                       className="img_fit"
                     />
                     <Card.Body className="dropdown-text">
                       <Card.Title>
-                        {resInfo.first_name} {resInfo.last_name}
+                        {userInfo.first_name} {userInfo.last_name}
                       </Card.Title>
                       <Card.Text className="card-text">
-                        {resInfo.phone_num && (
+                        {userInfo.phone_num && (
                           <>
-                            <b>Phone Number:</b> {resInfo.phone_num}
+                            <b>Phone Number:</b> {userInfo.phone_num}
                             <br />
                           </>
                         )}
-                        {resInfo.email && (
+                        {userInfo.email && (
                           <>
                             <b>Email: </b>
-                            {resInfo.email}
+                            {userInfo.email}
+
                           </>
                         )}
                       </Card.Text>

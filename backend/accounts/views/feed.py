@@ -15,4 +15,7 @@ class Feed(ListAPIView):
     def get_queryset(self):
         feed = Blog.objects.filter(restaurant__in=FollowedRestaurant.objects.filter(user=self.request.user).values_list('restaurant', flat=True)).order_by('creation_time').values('title', 'id')
 
+
         return feed
+
+
