@@ -29,7 +29,9 @@ const UserNav = () => {
               <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
                 Feed
               </Nav.Link>
-              <Nav.Link href="/restaruant">My Restaruant</Nav.Link>
+              <Nav.Link href={`/restaurant/${user.restaurant}/`}>
+                My Restaruant
+              </Nav.Link>
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
                   <NavDropdown.Item href="#action/3.1">
@@ -64,7 +66,9 @@ const UserNav = () => {
                         <b>Email:</b> myemailmyemailmyemail@gmail.com
                       </Card.Text>
                     </Card.Body>
-                    <Button variant="primary" href="/profile/edit">Edit Profile</Button>
+                    <Button variant="primary" href="/profile/edit">
+                      Edit Profile
+                    </Button>
                   </Card>
                 </NavDropdown.Item>
               </NavDropdown>
