@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Nav,
   Navbar,
@@ -9,12 +9,24 @@ import {
 } from "react-bootstrap";
 import logo from "../../../images/logo.svg";
 import "./UserNav.css";
-import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
+import axios from "axios";
 
 const UserNav = () => {
   const { logoutUser, user } = useContext(AuthContext);
+  const [resInfo, setResInfo] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(`/restaurant/${user.restaurant}`)
+      .then((res) => {
+        setResInfo(res.data);
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  }, []);
 
   return (
     <>
@@ -29,7 +41,9 @@ const UserNav = () => {
               <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
                 Feed
               </Nav.Link>
-              <Nav.Link href="/restaruant">My Restaruant</Nav.Link>
+              <Nav.Link href={`/restaurant/${user.restaurant}/`}>
+                My Restaruant
+              </Nav.Link>
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
                   <NavDropdown.Item href="#action/3.1">
@@ -55,16 +69,37 @@ const UserNav = () => {
               <NavDropdown title="Account" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">
                   <Card className="card p-2">
-                    <Card.Img variant="top" src={profilePicture} />
+                    <Card.Img
+                      variant="top"
+                      src={resInfo.logo}
+                      className="img_fit"
+                    />
                     <Card.Body className="dropdown-text">
-                      <Card.Title>FirstName LastName</Card.Title>
+                      <Card.Title>
+                        {resInfo.first_name} {resInfo.last_name}
+                      </Card.Title>
                       <Card.Text className="card-text">
-                        <b>Phone Number:</b> 647-123-4567
-                        <br />
-                        <b>Email:</b> myemailmyemailmyemail@gmail.com
+                        {resInfo.phone_num && (
+                          <>
+                            <b>Phone Number:</b> {resInfo.phone_num}
+                            <br />
+                          </>
+                        )}
+                        {resInfo.email && (
+                          <>
+                            <b>Email: </b>
+                            {resInfo.email}
+                          </>
+                        )}
                       </Card.Text>
                     </Card.Body>
-                    <Button variant="primary" href="/profile/edit">Edit Profile</Button>
+                    <Button
+                      variant="primary"
+                      href={`/profile/${user.user_id}/edit`}
+                      className="edit-profile mt-2"
+                    >
+                      Edit Profile
+                    </Button>
                   </Card>
                 </NavDropdown.Item>
               </NavDropdown>

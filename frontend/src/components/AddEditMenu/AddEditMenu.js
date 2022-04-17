@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./AddEditMenu.css";
 import { Card, Button } from "react-bootstrap";
@@ -7,27 +13,32 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import AuthContext from "../Context/AuthContext";
 import showSuccessModal from "../../utils/SuccessModal";
+var pages = 1;
 
 const AddEditMenu = () => {
   const nav = useNavigate();
   const params = useParams();
+  var next = `/menu_item/restaurant/${params.id}`;
+
   const addMenuRef = useRef(null);
+
   const { authTokens } = useContext(AuthContext);
   const [menuItems, setMenuItems] = useState([]);
   const [toggleMenu, setToggleMenu] = useState([]);
+  const [changed, setChanged] = useState(false);
   const [success, setSuccess] = useState("");
 
   const priceRegex = /^(\d{1,8}|\d{0,5}\.\d{1,2})$/;
   const validation = Yup.object({
     itemName: Yup.string()
       .required("Item name is required")
-      .max(50, "Item name is too long"),
+      .max(100, "Item name is too long"),
     price: Yup.string()
       .matches(priceRegex, "Please enter a valid price")
       .required("Price is required"),
 
     description: Yup.string()
-      .max(100, "description is too long")
+      .max(500, "description is too long")
       .required("Description is required"),
   });
 
@@ -53,9 +64,13 @@ const AddEditMenu = () => {
       const editIds = getIdFromName(values.itemName);
 
       if (editIds.length > 0) {
-        axios
-          .patch(`/menu_item/${editIds[0]}/`, body, headers)
-          .then(() => showSuccessModal("Menu item Edited!", setSuccess));
+        editIds.forEach((id) => {
+          axios
+            .patch(`/menu_item/${id}/`, body, headers)
+            .then(() => showSuccessModal("Menu item Edited!", setSuccess));
+        });
+
+        resetForm();
 
         setToggleMenu((prev) => !prev);
       } else {
@@ -66,24 +81,30 @@ const AddEditMenu = () => {
             // setTempMenuItems((prev) => [...prev, res.data]);
             setToggleMenu((prev) => !prev);
             showSuccessModal("Menu item added!", setSuccess);
-            formik.setFieldValue("itemName", "", false);
-            formik.setFieldValue("description", "", false);
-            formik.setFieldValue("price", "", false);
-            formik.setFieldTouched("itemName", false, false);
-            formik.setFieldTouched("description", false, false);
-            formik.setFieldTouched("price", false, false);
+            resetForm();
           })
           .catch((err) => {
-            if (err.response.status === 401) {
+            if (err.response.status === 401 || err.response.status === 403) {
               nav("/login");
             } else if (err.response.status === 404) {
               console.log("hi");
               formik.setErrors({ itemName: "You do not own a restaurant" });
             }
           });
+
+        setChanged(true);
       }
     },
   });
+
+  const resetForm = () => {
+    formik.setFieldValue("itemName", "", false);
+    formik.setFieldValue("description", "", false);
+    formik.setFieldValue("price", "", false);
+    formik.setFieldTouched("itemName", false, false);
+    formik.setFieldTouched("description", false, false);
+    formik.setFieldTouched("price", false, false);
+  };
 
   const getIdFromName = (name) => {
     return menuItems
@@ -100,6 +121,12 @@ const AddEditMenu = () => {
 
     // eslint-disable-next-line
   }, [toggleMenu]);
+
+  // useEffect(() => {
+  //   getMenuItems();
+
+  //   // eslint-disable-next-line
+  // }, []);
 
   // const addMenuItem = () => {};
 
@@ -120,6 +147,7 @@ const AddEditMenu = () => {
       .then((res) => {
         console.log(res);
         console.log(res.data.id);
+        showSuccessModal("Menu item deleted!", setSuccess);
       })
       .catch((err) => {
         console.log(err);
@@ -129,12 +157,63 @@ const AddEditMenu = () => {
     // filterMenu(deleteID);
 
     setToggleMenu((prev) => !prev);
-    // setTempMenuItems((prev) =>
+    // setMenuItems((prev) =>
     //   prev.filter((mi) => {
     //     return mi.id !== deleteID;
     //   })
     // );
     console.log(menuItems);
+  };
+
+  const getInitItems = `/menu_item/restaurant/${params.id}`;
+  const getMenuItems = async () => {
+    setMenuItems([]);
+    next = getInitItems;
+
+    console.log("pages");
+    console.log(pages);
+
+    if (menuItems.length % 10 === 0 && changed) {
+      while (next) {
+        console.log("next");
+        console.log(next);
+        let res;
+        try {
+          res = await axios.get(next);
+        } catch (err) {
+          if (err.response.status === 401) {
+            nav("/login");
+          }
+        }
+        setMenuItems((prev) => [...prev, ...res.data.results]);
+        next = res.data.next ? res.data.next.replace("8000", "3000") : null;
+        console.log("test");
+        console.log(menuItems);
+        console.log(next);
+      }
+    } else {
+      let i = 0;
+      while (i < pages) {
+        console.log("PAGINATE");
+        console.log(next);
+        let res;
+        try {
+          res = await axios.get(next);
+        } catch (err) {
+          if (err.response.status === 401) {
+            nav("/login");
+          }
+        }
+        setMenuItems((prev) => [...prev, ...res.data.results]);
+        next = res.data.next ? res.data.next.replace("8000", "3000") : null;
+        console.log("test");
+        console.log(menuItems);
+        console.log(next);
+
+        i += 1;
+      }
+    }
+    // next = getInitItems;
   };
 
   // const filterMenu = (deleteID) => {
@@ -147,18 +226,39 @@ const AddEditMenu = () => {
 
   // };
 
-  const getMenuItems = async () => {
-    axios
-      .get(`/menu_item/restaurant/${params.id}`)
-      .then((res) => {
-        console.log(res.data.results);
-        setMenuItems(res.data.results);
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          nav("/login");
-        }
-      });
+  // const [next, setNext] = useState(`/menu_item/restaurant/${params.id}`);
+  // const [pages, setPages] = useState(1);
+
+  const getMenuItemsPaginate = async () => {
+    let i = 0;
+
+    setLoading(true);
+    if (next) {
+      axios
+        .get(next)
+        .then((res) => {
+          // console.log(next);
+          console.log(res.data.results);
+
+          setMenuItems((prev) => [...prev, ...res.data.results]);
+
+          next = res.data.next ? res.data.next.replace("8000", "3000") : null;
+          console.log("test");
+          console.log(menuItems);
+          console.log(next);
+          pages += 1;
+          // setPages((prev) => prev + 1);
+          console.log("P");
+          console.log(pages);
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            nav("/login");
+          }
+        });
+    }
+
+    setLoading(false);
   };
 
   const popEdit = (e) => {
@@ -175,129 +275,25 @@ const AddEditMenu = () => {
     addMenuRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const [loading, setLoading] = useState(false);
+
+  const observer = useRef();
+  const infScrollRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          getMenuItemsPaginate();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading]
+  );
+
   return (
     <>
-      <h1 className="text-left">Your Menu</h1>
-      <hr />
-
-      <div className="container text-center">
-        <div className="row">
-          {menuItems.map((mi) => {
-            return (
-              <div className="col" key={mi.id}>
-                <Card className="menu-item shadow" style={{ width: "18rem" }}>
-                  <Card.Body>
-                    <Card.Title>{mi.name}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      ${mi.price}
-                    </Card.Subtitle>
-                    <Card.Text>{mi.description}</Card.Text>
-                    <Button
-                      className="ms-1"
-                      onClick={popEdit}
-                      variant="outline-secondary"
-                      item-name={mi.name}
-                      price={mi.price}
-                      description={mi.description}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      className="ms-1"
-                      onClick={deleteMenuItem}
-                      variant="outline-danger"
-                      item-id={mi.id}
-                    >
-                      Delete
-                    </Button>
-
-                    {/* <Card.Link href="#">Another Link</Card.Link> */}
-                  </Card.Body>
-                </Card>
-              </div>
-            );
-          })}
-
-          <div className="col">
-            <Card className="menu-item shadow" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  Card Subtitle
-                </Card.Subtitle>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-                <Button
-                  className="ms-1"
-                  onClick={popEdit}
-                  variant="outline-secondary"
-                  item-name="hi"
-                  price="1.39"
-                  description="fi"
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="ms-1"
-                  onClick={deleteMenuItem}
-                  variant="outline-danger"
-                  item-id="1"
-                >
-                  Delete
-                </Button>
-
-                {/* <Card.Link href="#">Another Link</Card.Link> */}
-              </Card.Body>
-            </Card>
-          </div>
-          <div className="col">
-            <Card className="menu-item shadow" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  Card Subtitle
-                </Card.Subtitle>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-                <Button className="ms-1" variant="outline-secondary">
-                  Edit
-                </Button>
-                <Button className="ms-1" variant="outline-danger">
-                  Delete
-                </Button>
-
-                {/* <Card.Link href="#">Another Link</Card.Link> */}
-              </Card.Body>
-            </Card>
-          </div>
-          <div className="col">
-            <Card className="menu-item shadow" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  Card Subtitle
-                </Card.Subtitle>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-                <Button className="ms-1" variant="outline-secondary">
-                  Edit
-                </Button>
-                <Button className="ms-1" variant="outline-danger">
-                  Delete
-                </Button>
-
-                {/* <Card.Link href="#">Another Link</Card.Link> */}
-              </Card.Body>
-            </Card>
-          </div>
-        </div>
-      </div>
       <h1 className="text-left" ref={addMenuRef}>
         Add/Edit Menu Item
       </h1>
@@ -371,6 +367,89 @@ const AddEditMenu = () => {
           </button>
         </div>
       </form>
+      <h1 className="text-left">Your Menu</h1>
+      <hr />
+
+      <div className="container text-center">
+        <div className="row">
+          {menuItems.map((mi, index) => {
+            // console.log(menuItems);
+            return index == menuItems.length - 1 ? (
+              <div className="col" key={mi.id}>
+                <Card
+                  className="menu-item shadow"
+                  style={{ width: "18rem" }}
+                  ref={infScrollRef}
+                >
+                  <Card.Body>
+                    <Card.Title>{mi.name}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      ${mi.price}
+                    </Card.Subtitle>
+                    <Card.Text>{mi.description}</Card.Text>
+                    <Button
+                      className="ms-1"
+                      onClick={popEdit}
+                      variant="outline-secondary"
+                      item-name={mi.name}
+                      price={mi.price}
+                      description={mi.description}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      className="ms-1"
+                      onClick={deleteMenuItem}
+                      variant="outline-danger"
+                      item-id={mi.id}
+                    >
+                      Delete
+                    </Button>
+
+                    {/* <Card.Link href="#">Another Link</Card.Link> */}
+                  </Card.Body>
+                </Card>
+              </div>
+            ) : (
+              <div className="col" key={mi.id}>
+                <Card
+                  className="menu-item shadow"
+                  style={{ width: "18rem" }}
+                  ref={infScrollRef}
+                >
+                  <Card.Body>
+                    <Card.Title>{mi.name}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      ${mi.price}
+                    </Card.Subtitle>
+                    <Card.Text>{mi.description}</Card.Text>
+                    <Button
+                      className="ms-1"
+                      onClick={popEdit}
+                      variant="outline-secondary"
+                      item-name={mi.name}
+                      price={mi.price}
+                      description={mi.description}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      className="ms-1"
+                      onClick={deleteMenuItem}
+                      variant="outline-danger"
+                      item-id={mi.id}
+                    >
+                      Delete
+                    </Button>
+
+                    {/* <Card.Link href="#">Another Link</Card.Link> */}
+                  </Card.Body>
+                </Card>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 };
