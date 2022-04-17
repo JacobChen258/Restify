@@ -1,10 +1,14 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect,useContext} from 'react';
 import "./RestaurantInfo.css";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai';
+import AuthContext from '../../Context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 const RestaurantInfo = ()=>{
     const params = useParams();
+    const nav = useNavigate()
+    const {user,authTokens} = useContext(AuthContext);
     const [resInfo,setResInfo] = useState({});
     const [liked, setLiked] = useState(false);
     const [following,setFollowing] = useState(false);
@@ -14,33 +18,126 @@ const RestaurantInfo = ()=>{
             setResInfo(res.data)
         })
         .catch((e)=>{
-            alert(e)
+            alert('Restaurant does not exist');
+            nav("/");
         })
+        if (user !== null){
+            console.log(authTokens)
+            let header = {Authorization: "Bearer " + String(authTokens.access)}
+            axios.get(`/restaurant/liked/${params.id}/`,{headers:header})
+            .then((res)=>{
+                setLiked(res.data.liked);
+            })
+            .catch((e)=>{
+                alert(e);
+                nav('/');
+            })
+            axios.get(`/user/followed/${params.id}`,{headers:header})
+            .then((res)=>{
+                setFollowing(res.data.followed);
+            })
+            .catch((e)=>{
+                alert(e);
+                nav('/');
+            })
+        }
+        console.log(liked)
+        console.log(following)
     },[params.id])
 
     const LikeIcon = ()=>{
+        useEffect(()=>{
+
+        },[liked])
         if (liked){
-            return <AiFillHeart/>
+            return <button className='btn_bg btn_border me-5 d-flex p-1' onClick={handleUnlike}><div><AiFillHeart/></div> <span className='ms-2 text-center me-1'>{resInfo.num_likes}</span></button>
         }
-        return <AiOutlineHeart/>
+        return <button className='btn_bg btn_border me-5 d-flex p-1' onClick={handleLike}><div><AiOutlineHeart/></div> <span className='ms-2 text-center me-1'>{resInfo.num_likes}</span></button>
     }
     const handleLike = ()=>{
-
+        if (user !== null){
+            let header = {Authorization: "Bearer " + String(authTokens.access)};
+            axios.post("/restaurant/like/",{'restaurant':params.id},{headers:header})
+            .then((res)=>{
+                setLiked(true);
+                setResInfo({...resInfo,num_likes:resInfo.num_likes+1})
+            })
+            .catch((e)=>{
+                if (e.status == 409){
+                    alert("You already liked this restaurant");
+                    setLiked(true);
+                }else{
+                    alert(e);
+                }
+            })
+        }else{
+            alert("Please log in")
+        }
+        
     }
     const handleUnlike = ()=>{
-        
+        if (user !== null){
+            let header = {Authorization: "Bearer " + String(authTokens.access)}
+            axios.delete("/restaurant/like/",{headers:header,data:{'restaurant':params.id}})
+            .then((res)=>{
+                setLiked(false);
+                setResInfo({...resInfo,num_likes:resInfo.num_likes-1})
+            })
+            .catch((e)=>{
+                if (e.status == 404){
+                    setLiked(false);
+                }else{
+                    alert(e);
+                }
+            })
+        }else{
+            alert("please log in")
+        }
     }
     const handleFollow = ()=>{
-
+        if (user !== null){
+            let header = {Authorization: "Bearer " + String(authTokens.access)}
+            axios.post("/user/follow/",{'restaurant':params.id},{headers:header})
+            .then((res)=>{
+                setFollowing(true);
+                setResInfo({...resInfo,num_followers:resInfo.num_followers+1})
+            })
+            .catch((e)=>{
+                if (e.status == 409){
+                    alert("You already followed this restaurant");
+                    setFollowing(true);
+                }else{
+                    alert(e);
+                }
+            })
+        }else{
+            alert("please log in")
+        }
     }
     const handleUnfollow = ()=>{
-        
+        if (user !== null){
+            let header = {Authorization: "Bearer " + String(authTokens.access)};
+            axios.delete("/user/follow/",{headers:header,data:{'restaurant':params.id}})
+            .then((res)=>{
+                setFollowing(false);
+                setResInfo({...resInfo,num_followers:resInfo.num_followers-1})
+            })
+            .catch((e)=>{
+                if (e.status == 404){
+                    setFollowing(false);
+                }else{
+                    alert(e);
+                }
+            })
+        }else{
+            alert("please log in")
+        }
     }
     const FollowBtn = ()=>{
         if (following){
-            return (<button className='btn_bg btn_border p-1'> Unfollow </button>)
+            return (<button className='btn_bg btn_border p-1' onClick={handleUnfollow}> Unfollow </button>)
         }
-        return (<button className='btn_bg btn_border p-1'> Follow </button>)
+        return (<button className='btn_bg btn_border p-1' onClick={handleFollow}> Follow </button>)
     }
     //['id','name', 'address', 'logo', 'email', 'postal_code', 'phone_num', 'num_followers', 'num_likes']
     return (
@@ -60,7 +157,7 @@ const RestaurantInfo = ()=>{
                     </div>
                 </div>
                 <div className='mt-auto d-flex flex-row text-center'>
-                    <button className='btn_bg btn_border me-5 d-flex p-1'><div><LikeIcon/></div> <span className='ms-2 text-center me-1'>{resInfo.num_likes}</span></button>
+                    <LikeIcon/>
                     <div className='mt-auto mb-auto pe-2'> Followers {resInfo.num_followers} </div>
                     <FollowBtn/>
                 </div>

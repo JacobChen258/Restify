@@ -30,7 +30,7 @@ const UserNav = () => {
         )
       }
       else{
-        return (<Nav.Link href={`/create/`}>Create Restaurant</Nav.Link>)
+        return (<Nav.Link href={`/create/restaurant/`}>Create Restaurant</Nav.Link>)
       }
   }
   return (

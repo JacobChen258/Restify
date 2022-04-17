@@ -1,3 +1,4 @@
+from re import S
 from django.shortcuts import get_object_or_404
 
 from ..serializers.follow import FollowedRestaurantSerializer
@@ -5,13 +6,12 @@ from ..models import FollowedRestaurant
 from restaurants.models import Restaurant
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.generics import CreateAPIView
-from rest_framework.generics import DestroyAPIView
+from rest_framework.generics import CreateAPIView,DestroyAPIView,RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT,HTTP_200_OK
 from notifications.serializers import NotificationsSerializer
-class Follow(CreateAPIView,DestroyAPIView):
+class Follow(CreateAPIView,DestroyAPIView,RetrieveAPIView):
     serializer_class = FollowedRestaurantSerializer
     permission_classes = [IsAuthenticated,]
 
@@ -59,3 +59,9 @@ class Follow(CreateAPIView,DestroyAPIView):
         notif_serializer = NotificationsSerializer(data=data)
         notif_serializer.is_valid(raise_exception=True)
         notif_serializer.save()
+
+    def get(self, request, *args, **kwargs):
+        if "res_id" not in kwargs:
+            return Response(status=HTTP_400_BAD_REQUEST)
+        followed = len(FollowedRestaurant.objects.filter(user=request.user.id,restaurant=kwargs['res_id']))
+        return Response(status=HTTP_200_OK,data={"followed":followed>0})

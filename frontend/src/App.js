@@ -36,7 +36,7 @@ function App() {
             {/* </Route> */}
             <Route path="/feed" element={<Feed />} />
             <Route path="/addblog" element={<AddBlog />}></Route>
-            <Route path="/create" element={<CreateRestaurant/>}></Route>
+            <Route path="/create/restaurant/" element={<CreateRestaurant/>}></Route>
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}

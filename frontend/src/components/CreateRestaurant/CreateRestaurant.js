@@ -1,4 +1,4 @@
-import React, {useContext, useEffect,useRef} from "react";
+import React, {useContext, useEffect,useRef, useState} from "react";
 import './CreateRestaurant.css'
 import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ const CreateRestaurant = ()=>{
     const {user,authTokens,setUser} = useContext(AuthContext);
     const nav = useNavigate();
     const logo = useRef()
+    const [img,setImg] = useState(null);
     useEffect(()=>{
         console.log(user)
         if (user === null){
@@ -22,6 +23,9 @@ const CreateRestaurant = ()=>{
     const addressRegex = /^[0-9a-zA-Z \-\n]{1,100}$/
     const postalRegex = /^[A-Z]\d[A-Z][ ]\d[A-Z]\d$/
     const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+    const handleUploadImage = (e)=>{
+        setImg(URL.createObjectURL(e.target.files[0]))
+    }
     const validation = Yup.object({
         name: Yup.string()
           .required("Username is required")
@@ -100,7 +104,7 @@ const CreateRestaurant = ()=>{
             <h1 className="mt-5 mb-5 text-center">Create Your Restauraunt</h1>
             <form className="d-flex flex-column justify-content-center align-content-center" onSubmit={formik.handleSubmit}>
             <div className="align-self-center d-flex flex-column">
-                <img ref={logo} className = "rounded-3 border border-2 border-dark align-self-center logo_container" alt="" ></img>
+                <img src={img} className = "rounded-3 border border-2 border-dark align-self-center logo_container" alt="" ></img>
                 {formik.errors.logo && formik.touched.logo ? (
                     <div className="alert alert-danger " role="alert">
                     {formik.errors.logo}
@@ -109,8 +113,10 @@ const CreateRestaurant = ()=>{
                 <div className="align-self-center mt-2 mb-2">
                     <label htmlFor ="imageFile">Upload logo: </label>
                     <input type="file" id="imageFile" accept="image/png, image/jpeg, image/jpg"
-              onChange={(e) =>
+              onChange={(e) =>{
+                handleUploadImage(e);
                 formik.setFieldValue("logo", e.currentTarget.files[0])
+              }
               }></input>
                 </div>
                 {formik.errors.name && formik.touched.name ? (
