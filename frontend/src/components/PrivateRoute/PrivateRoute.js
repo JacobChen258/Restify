@@ -1,15 +1,19 @@
 import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import AuthContext from "../Context/AuthContext";
 
-// const useAuth = () => {
-//   return authenticated;
-// };
 export default function PrivateRoute({ children }) {
-  console.log("hello");
-  console.log(useContext(AuthContext));
+  const params = useParams();
   const { user } = useContext(AuthContext);
 
-  return user ? [ children ] : <Navigate to="/login" />;
+  if (user) {
+    return !params.id || params.id == user.restaurant ? (
+      children
+    ) : (
+      <Navigate to="/" />
+    );
+  } else {
+    return <Navigate to="/login" />;
+  }
 }
 

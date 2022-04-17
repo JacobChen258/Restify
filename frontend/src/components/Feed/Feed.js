@@ -1,14 +1,22 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import "./Feed.css";
 import axios from "axios";
-import { Col, Row, Container } from "react-bootstrap";
+import AuthContext from "../Context/AuthContext";
 
 const Feed = () => {
 
+    const { authTokens } = useContext(AuthContext);
     const [feed, setFeed] = useState([]);
 
     useEffect(() => {
-        axios.get(`account/feed/`)
+
+        const headers = {
+            headers: {
+              Authorization: "Bearer " + authTokens?.access,
+            },
+          };
+
+        axios.get('/user/feed/', headers)
             .then(response => {
                 setFeed(response.data.results);
             })

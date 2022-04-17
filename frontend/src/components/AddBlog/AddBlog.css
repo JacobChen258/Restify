@@ -12,7 +12,12 @@ hr {
   margin: 20px 10px 10px 20px;
 }
 body {
-  background-color: rgb(231, 230, 229);
+  background-color: antiquewhite;
+}
+
+.add-blog-req::after {
+  content: " *";
+  color: red;
 }
 
 .row > * {
