@@ -66,7 +66,7 @@ function App() {
             />
 
             <Route
-              path="/restaurant/:id/feed"
+              path="/user/feed"
               element={
                 <PrivateRoute>
                   <Feed />

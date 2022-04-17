@@ -12,6 +12,7 @@ import "./UserNav.css";
 import { Outlet } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
+import Notifications from "./Notification/Notification";
 
 const UserNav = () => {
   const { logoutUser,user,authTokens } = useContext(AuthContext);
@@ -61,33 +62,11 @@ const UserNav = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto navbar">
-              <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
+              <Nav.Link href={`/user/feed`}>
                 Feed
               </Nav.Link>
               <NavMyRestaurant/>
-
-              <NavDropdown title="Notifications" id="basic-nav-dropdown">
-                <div className="dropdown-text">
-                  <NavDropdown.Item href="#action/3.1">
-                    <b>Notification Title</b>
-                    <br />
-                    ejnfrkejgnrkgjnrekgnerkgjnkjk
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.1">
-                    <b>Notification Title</b>
-                    <br />
-                    ejnfrkejgnrkgjnre
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.1">
-                    <b>Notification Title</b>
-                    <br />
-                    ejnfrkejgnrkgjnrekgnerkgjnkjk
-                  </NavDropdown.Item>
-                </div>
-              </NavDropdown>
-
+              <Notifications/>
               <NavDropdown title="Account" id="basic-nav-dropdown">
                   <Card className="card p-2 d-flex flex-column profile_container">
                     <Card.Img
