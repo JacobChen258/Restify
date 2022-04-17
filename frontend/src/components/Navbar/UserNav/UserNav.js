@@ -64,7 +64,7 @@ const UserNav = () => {
                         <b>Email:</b> myemailmyemailmyemail@gmail.com
                       </Card.Text>
                     </Card.Body>
-                    <Button variant="primary">Edit Profile</Button>
+                    <Button variant="primary" href="/profile/edit">Edit Profile</Button>
                   </Card>
                 </NavDropdown.Item>
               </NavDropdown>

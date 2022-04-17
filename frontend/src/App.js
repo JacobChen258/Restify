@@ -14,6 +14,7 @@ import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
 import AddBlog from "./components/AddBlog/AddBlog";
 import Feed from "./components/Feed/Feed";
+import EditProfile from "./components/EditProfile/EditProfile";
 import { AuthProvider } from "./components/Context/AuthContext";
 import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
@@ -28,6 +29,10 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route index element={<SearchPage />}></Route>
+
+            <Route path="/profile/edit" element={<EditProfile />} />
+
+
 
             <Route
               path="/restaurant/:id/menu/add"
