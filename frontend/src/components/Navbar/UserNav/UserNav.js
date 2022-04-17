@@ -66,7 +66,10 @@ const UserNav = () => {
                         <b>Email:</b> myemailmyemailmyemail@gmail.com
                       </Card.Text>
                     </Card.Body>
-                    <Button variant="primary" href="/profile/edit">
+                    <Button
+                      variant="primary"
+                      href={`/profile/${user.user_id}/edit`}
+                    >
                       Edit Profile
                     </Button>
                   </Card>

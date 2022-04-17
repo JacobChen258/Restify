@@ -64,9 +64,12 @@ const AddEditMenu = () => {
       const editIds = getIdFromName(values.itemName);
 
       if (editIds.length > 0) {
-        axios
-          .patch(`/menu_item/${editIds[0]}/`, body, headers)
-          .then(() => showSuccessModal("Menu item Edited!", setSuccess));
+        editIds.forEach((id) => {
+          axios
+            .patch(`/menu_item/${id}/`, body, headers)
+            .then(() => showSuccessModal("Menu item Edited!", setSuccess));
+        });
+
         resetForm();
 
         setToggleMenu((prev) => !prev);

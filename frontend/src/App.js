@@ -30,9 +30,14 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route index element={<SearchPage />}></Route>
 
-            <Route path="/profile/edit" element={<EditProfile />} />
-
-
+            <Route
+              path="/profile/:user_id/edit"
+              element={
+                <PrivateRoute>
+                  <EditProfile />
+                </PrivateRoute>
+              }
+            />
 
             <Route
               path="/restaurant/:id/menu/add"
@@ -61,7 +66,6 @@ function App() {
             />
 
             <Route
-
               path="/search/:method/:field/"
               element={<SearchResult />}
             ></Route>
