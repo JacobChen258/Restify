@@ -35,12 +35,26 @@ function App() {
             {/* Components that need navbar go here */}
             {/* <Route path="/signup/test/2" element={<Signup />} /> */}
             {/* </Route> */}
-        
-            <Route path="/create/restaurant/" element={<PrivateRoute><CreateRestaurant/></PrivateRoute>}></Route>
-            <Route path="/edit/restaurant/" element={<PrivateRoute><EditRestaurant/></PrivateRoute>}></Route>
 
             <Route
-              path="/profile/:user_id/edit"
+              path="/create/restaurant/"
+              element={
+                <PrivateRoute>
+                  <CreateRestaurant />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/edit/restaurant/"
+              element={
+                <PrivateRoute>
+                  <EditRestaurant />
+                </PrivateRoute>
+              }
+            ></Route>
+
+            <Route
+              path="/profile/edit"
               element={
                 <PrivateRoute>
                   <EditProfile />
@@ -87,7 +101,7 @@ function App() {
               ></Route>
               <Route path="/restaurant/:id/menu/" element={<Menu />}></Route>
               <Route path="/restaurant/:id/image/" element={<Images />}></Route>
-              <Route path="/restaurant/:id/*" element={<PageNotFound />}/>
+              <Route path="/restaurant/:id/*" element={<PageNotFound />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Routes>
