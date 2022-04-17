@@ -197,8 +197,6 @@ const AddEditMenu = () => {
   };
 
   const getMenuItemsPaginate = async () => {
-    let i = 0;
-
     setLoading(true);
     if (next) {
       axios
@@ -256,7 +254,7 @@ const AddEditMenu = () => {
         }
       });
       if (node) observer.current.observe(node);
-    },
+    }, // eslint-disable-next-line
     [loading]
   );
 
@@ -347,7 +345,7 @@ const AddEditMenu = () => {
                 <Card
                   className="menu-item shadow"
                   style={{ width: "18rem" }}
-                  ref={index == menuItems.length - 1 ? infScrollRef : null}
+                  ref={index === menuItems.length - 1 ? infScrollRef : null}
                 >
                   <Card.Body>
                     <Card.Title>{mi.name}</Card.Title>
