@@ -13,6 +13,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import AuthContext from "../Context/AuthContext";
 import showSuccessModal from "../../utils/SuccessModal";
+
 var pages = 1;
 
 var done = false;
@@ -20,15 +21,15 @@ var done = false;
 const AddEditMenu = () => {
   const nav = useNavigate();
   const params = useParams();
-  var next = `/menu_item/restaurant/${params.id}`;
 
   const addMenuRef = useRef(null);
 
-  const { authTokens } = useContext(AuthContext);
+  const { authTokens, user } = useContext(AuthContext);
   const [menuItems, setMenuItems] = useState([]);
   const [toggleMenu, setToggleMenu] = useState([]);
   const [changed, setChanged] = useState(false);
   const [success, setSuccess] = useState("");
+  var next = `/menu_item/restaurant/${params.id}`;
 
   const priceRegex = /^(\d{1,8}|\d{0,5}\.\d{1,2})$/;
   const validation = Yup.object({
@@ -80,7 +81,6 @@ const AddEditMenu = () => {
           .post("/menu_item/add/", body, headers)
           .then((res) => {
             console.log(res);
-            // setTempMenuItems((prev) => [...prev, res.data]);
             setToggleMenu((prev) => !prev);
             showSuccessModal("Menu item added!", setSuccess);
             resetForm();
@@ -124,6 +124,15 @@ const AddEditMenu = () => {
     // eslint-disable-next-line
   }, [toggleMenu]);
 
+  // useEffect(() => {
+  //   console.log(user);
+  // if (!("restaurant" in user)) {
+  //   nav("/create/restaurant/");
+  // }
+
+  // eslint-disable-next-line
+  // }, []);
+
   const deleteMenuItem = (e) => {
     const deleteID = e.target.getAttribute("item-id");
     const headers = {
@@ -157,7 +166,6 @@ const AddEditMenu = () => {
     next = getInitItems;
     console.log("pages");
     console.log(pages);
-
 
     if (done) {
       while (next) {
@@ -202,7 +210,6 @@ const AddEditMenu = () => {
   };
 
   const getMenuItemsPaginate = async () => {
-
     setLoading(true);
     if (next) {
       axios
@@ -229,7 +236,6 @@ const AddEditMenu = () => {
         });
     } else {
       done = true;
-
     }
 
     setLoading(false);
@@ -267,16 +273,63 @@ const AddEditMenu = () => {
 
   return (
     <>
+      <h1 className="text-left">Your Menu</h1>
+      <hr />
+      {success && (
+        <div className="alert alert-success mt-3 mb-1" role="alert">
+          {success}
+        </div>
+      )}
+
+      <div className="container text-center">
+        <div className="row">
+          {menuItems.map((mi, index) => {
+            // console.log(menuItems);
+            return (
+              <div className="col" key={mi.id}>
+                <Card
+                  className="menu-item shadow"
+                  style={{ width: "18rem" }}
+                  ref={index === menuItems.length - 1 ? infScrollRef : null}
+                >
+                  <Card.Body>
+                    <Card.Title>{mi.name}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      ${mi.price}
+                    </Card.Subtitle>
+                    <Card.Text>{mi.description}</Card.Text>
+                    <Button
+                      className="ms-1"
+                      onClick={popEdit}
+                      variant="outline-secondary"
+                      item-name={mi.name}
+                      price={mi.price}
+                      description={mi.description}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      className="ms-1"
+                      onClick={deleteMenuItem}
+                      variant="outline-danger"
+                      item-id={mi.id}
+                    >
+                      Delete
+                    </Button>
+
+                    {/* <Card.Link href="#">Another Link</Card.Link> */}
+                  </Card.Body>
+                </Card>
+              </div>
+            );
+          })}
+        </div>
+      </div>
       <h1 className="text-left" ref={addMenuRef}>
         Add/Edit Menu Item
       </h1>
       <hr />
       <form className="menu-form" onSubmit={formik.handleSubmit}>
-        {success && (
-          <div className="alert alert-success mt-3 mb-1" role="alert">
-            {success}
-          </div>
-        )}
         <div className="form-group">
           {formik.errors.itemName && formik.touched.itemName ? (
             <div className="alert alert-danger mt-3 mb-1" role="alert">
@@ -340,55 +393,6 @@ const AddEditMenu = () => {
           </button>
         </div>
       </form>
-      <h1 className="text-left">Your Menu</h1>
-      <hr />
-
-      <div className="container text-center">
-        <div className="row">
-          {menuItems.map((mi, index) => {
-            // console.log(menuItems);
-            return (
-
-              <div className="col" key={mi.id}>
-                <Card
-                  className="menu-item shadow"
-                  style={{ width: "18rem" }}
-                  ref={index === menuItems.length - 1 ? infScrollRef : null}
-
-                >
-                  <Card.Body>
-                    <Card.Title>{mi.name}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      ${mi.price}
-                    </Card.Subtitle>
-                    <Card.Text>{mi.description}</Card.Text>
-                    <Button
-                      className="ms-1"
-                      onClick={popEdit}
-                      variant="outline-secondary"
-                      item-name={mi.name}
-                      price={mi.price}
-                      description={mi.description}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      className="ms-1"
-                      onClick={deleteMenuItem}
-                      variant="outline-danger"
-                      item-id={mi.id}
-                    >
-                      Delete
-                    </Button>
-
-                    {/* <Card.Link href="#">Another Link</Card.Link> */}
-                  </Card.Body>
-                </Card>
-              </div>
-            );
-          })}
-        </div>
-      </div>
     </>
   );
 };
