@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-
 import {
   Nav,
   Navbar,
@@ -23,7 +22,9 @@ const UserNav = () => {
     last_name: "",
     email:"",
   });
+
   useEffect(()=>{
+    
     if (user){
       if (user.restaurant !== null){
         setRes(user.restaurant)
@@ -50,7 +51,6 @@ const UserNav = () => {
       }
   }
 
-
   return (
     <>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" top="fixed">
@@ -65,6 +65,7 @@ const UserNav = () => {
                 Feed
               </Nav.Link>
               <NavMyRestaurant/>
+
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
                   <NavDropdown.Item href="#action/3.1">

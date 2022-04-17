@@ -31,13 +31,14 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route index element={<SearchPage />}></Route>
+
             {/* Components that need navbar go here */}
             {/* <Route path="/signup/test/2" element={<Signup />} /> */}
             {/* </Route> */}
-            <Route path="/feed" element={<Feed />} />
-            <Route path="/addblog" element={<AddBlog />}></Route>
+        
             <Route path="/create/restaurant/" element={<PrivateRoute><CreateRestaurant/></PrivateRoute>}></Route>
             <Route path="/edit/restaurant/" element={<PrivateRoute><EditRestaurant/></PrivateRoute>}></Route>
+
             <Route
               path="/profile/:user_id/edit"
               element={

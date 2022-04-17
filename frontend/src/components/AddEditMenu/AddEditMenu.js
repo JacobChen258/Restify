@@ -15,6 +15,8 @@ import AuthContext from "../Context/AuthContext";
 import showSuccessModal from "../../utils/SuccessModal";
 var pages = 1;
 
+var done = false;
+
 const AddEditMenu = () => {
   const nav = useNavigate();
   const params = useParams();
@@ -122,16 +124,6 @@ const AddEditMenu = () => {
     // eslint-disable-next-line
   }, [toggleMenu]);
 
-  // useEffect(() => {
-  //   getMenuItems();
-
-  //   // eslint-disable-next-line
-  // }, []);
-
-  // const addMenuItem = () => {};
-
-  // const editMenuItems = () => {};
-
   const deleteMenuItem = (e) => {
     const deleteID = e.target.getAttribute("item-id");
     const headers = {
@@ -154,14 +146,8 @@ const AddEditMenu = () => {
         console.log(err.response);
       });
 
-    // filterMenu(deleteID);
-
     setToggleMenu((prev) => !prev);
-    // setMenuItems((prev) =>
-    //   prev.filter((mi) => {
-    //     return mi.id !== deleteID;
-    //   })
-    // );
+
     console.log(menuItems);
   };
 
@@ -169,11 +155,11 @@ const AddEditMenu = () => {
   const getMenuItems = async () => {
     setMenuItems([]);
     next = getInitItems;
-
     console.log("pages");
     console.log(pages);
 
-    if (menuItems.length % 10 === 0 && changed) {
+
+    if (done) {
       while (next) {
         console.log("next");
         console.log(next);
@@ -213,24 +199,9 @@ const AddEditMenu = () => {
         i += 1;
       }
     }
-    // next = getInitItems;
   };
 
-  // const filterMenu = (deleteID) => {
-  //   setMenuItems((prev) =>
-  //     prev.filter((mi) => {
-  //       return mi.id !== deleteID;
-  //     })
-  //   );
-  //   console.log(menuItems);
-
-  // };
-
-  // const [next, setNext] = useState(`/menu_item/restaurant/${params.id}`);
-  // const [pages, setPages] = useState(1);
-
   const getMenuItemsPaginate = async () => {
-    let i = 0;
 
     setLoading(true);
     if (next) {
@@ -256,6 +227,9 @@ const AddEditMenu = () => {
             nav("/login");
           }
         });
+    } else {
+      done = true;
+
     }
 
     setLoading(false);
@@ -263,7 +237,6 @@ const AddEditMenu = () => {
 
   const popEdit = (e) => {
     console.log("hi");
-    // console.log(e.itemname);
     formik.setFieldValue("itemName", e.target.getAttribute("item-name"), false);
     formik.setFieldValue("price", e.target.getAttribute("price"), false);
     formik.setFieldValue(
@@ -288,7 +261,7 @@ const AddEditMenu = () => {
         }
       });
       if (node) observer.current.observe(node);
-    },
+    }, // eslint-disable-next-line
     [loading]
   );
 
@@ -374,48 +347,14 @@ const AddEditMenu = () => {
         <div className="row">
           {menuItems.map((mi, index) => {
             // console.log(menuItems);
-            return index == menuItems.length - 1 ? (
-              <div className="col" key={mi.id}>
-                <Card
-                  className="menu-item shadow"
-                  style={{ width: "18rem" }}
-                  ref={infScrollRef}
-                >
-                  <Card.Body>
-                    <Card.Title>{mi.name}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      ${mi.price}
-                    </Card.Subtitle>
-                    <Card.Text>{mi.description}</Card.Text>
-                    <Button
-                      className="ms-1"
-                      onClick={popEdit}
-                      variant="outline-secondary"
-                      item-name={mi.name}
-                      price={mi.price}
-                      description={mi.description}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      className="ms-1"
-                      onClick={deleteMenuItem}
-                      variant="outline-danger"
-                      item-id={mi.id}
-                    >
-                      Delete
-                    </Button>
+            return (
 
-                    {/* <Card.Link href="#">Another Link</Card.Link> */}
-                  </Card.Body>
-                </Card>
-              </div>
-            ) : (
               <div className="col" key={mi.id}>
                 <Card
                   className="menu-item shadow"
                   style={{ width: "18rem" }}
-                  ref={infScrollRef}
+                  ref={index === menuItems.length - 1 ? infScrollRef : null}
+
                 >
                   <Card.Body>
                     <Card.Title>{mi.name}</Card.Title>
