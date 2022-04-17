@@ -14,6 +14,11 @@ def liked_restaurant(request):
     if request.method=="POST":
         data = request.data.copy()
         data['user'] = request.user.id
+        if 'restaurant' not in data:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        liked = Restaurant_Like.objects.filter(user=data['user'],restaurant=data['restaurant'])
+        if len(liked) > 0:
+            return Response(status=status.HTTP_409_CONFLICT)
         serializer = LikedRestaurantSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

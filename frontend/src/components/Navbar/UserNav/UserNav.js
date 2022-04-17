@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+
 import {
   Nav,
   Navbar,
@@ -14,7 +15,27 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 
 const UserNav = () => {
-  const { logoutUser, user } = useContext(AuthContext);
+  const { logoutUser,user } = useContext(AuthContext);
+  const [res,setRes] = useState(null)
+  useEffect(()=>{
+    if (user){
+      if (user.restaurant !== null){
+        setRes(user.restaurant)
+      }
+    }
+  },[user])
+  
+  const NavMyRestaurant = ()=>{
+      if (user.restaurant){
+        return (
+            <Nav.Link href={`/restaurant/${res}/`}>My Restaruant</Nav.Link>
+        )
+      }
+      else{
+        return (<Nav.Link href={`/create/restaurant/`}>Create Restaurant</Nav.Link>)
+      }
+  }
+
   const [resInfo, setResInfo] = useState({});
 
   useEffect(() => {
@@ -41,9 +62,7 @@ const UserNav = () => {
               <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
                 Feed
               </Nav.Link>
-              <Nav.Link href={`/restaurant/${user.restaurant}/`}>
-                My Restaruant
-              </Nav.Link>
+              <NavMyRestaurant/>
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
                   <NavDropdown.Item href="#action/3.1">

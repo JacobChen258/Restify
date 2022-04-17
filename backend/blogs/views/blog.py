@@ -28,6 +28,8 @@ class Blogs(DestroyAPIView,RetrieveAPIView):
             return Response(status=HTTP_400_BAD_REQUEST)
         restaurant = get_object_or_404(Restaurant,owner = self.request.user.id)
         blog = get_object_or_404(Blog, id=self.kwargs['blog_id'])
+        print(blog.restaurant)
+        print(restaurant)
         if blog.restaurant == restaurant.id:
             self.perform_destroy(blog)
             return Response(status=status.HTTP_204_NO_CONTENT)

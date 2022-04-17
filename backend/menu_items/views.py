@@ -25,7 +25,6 @@ class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
 
         return menu
 
-
     def get_object(self):
         res = get_object_or_404(Restaurant,owner=self.request.user.id)
         item = get_object_or_404(MenuItem,id=self.kwargs["item_id"])
