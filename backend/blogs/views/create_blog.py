@@ -9,6 +9,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from notifications.serializers import NotificationsSerializer
 from accounts.models import FollowedRestaurant
+from blogs.models import Blog
 
 class AddBlog(CreateAPIView):
     serializer_class = BlogSerializer
@@ -24,6 +25,8 @@ class AddBlog(CreateAPIView):
         data['restaurant'] = self.object.id
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
+        if len(Blog.objects.filter(title=serializer.validated_data['title'],restaurant=serializer.validated_data['restaurant'])) >0:
+            return Response(status=status.HTTP_409_CONFLICT)
         self.perform_create(serializer)
         self.notify_users()
         headers = self.get_success_headers(serializer.data)
