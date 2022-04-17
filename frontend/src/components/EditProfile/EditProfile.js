@@ -1,87 +1,196 @@
-import { React, useState, useEffect } from "react";
+import { React, useContext } from "react";
 import "./EditProfile.css";
 import axios from "axios";
-import user from "../../images/profile-picture.png";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Form } from "react-bootstrap";
+import AuthContext from "../Context/AuthContext";
 
 const EditProfile = () => {
-    return (
-        <div>
-            <section className="bg-secondary text-light py-3">
-                <div className="container">
-                    <div className="row">
-                        <div className="col text-center">
-                            <h2>Edit Your Profile</h2>
-                            <br />
-                            <p className="lead">Here you can edit your personal profile</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            <section className="text-dark p-5">
-                <div className="container text-center">
-                    <div className="col">
-                        <p className="lead">Please update your information below</p>
-                        <div className="card px-4 bg-light">
-                            <div className="card-header bg-light">Choose a new profile picture!</div>
-                            <div className="card-body text-center text-light bg-light py-3">
-                                <img className="img-fluid text-center rounded-circle img-account-profile w-50" src={user} />
-                                
-                                <br /><br />
-                                <button type="button" className="btn btn-outline-info">Update Profile Picture</button>
-                            </div>
-                        </div>
-                        <br /><br />
-                        <div className="card px-4 bg-light">
-                            <div className="card-header bg-light">Edit your personal information!</div>
-                            <div className="card-body text-center bg-light">
-                                <form>
-                                    <div className="row mb-2">
-                                        <div className="col md-5">
-                                            <label className="small mb-2">
-                                                First Name
-                                            </label>
-                                            <input className="form-control" type="text" />
-                                        </div>
-                                        <div className="col md-5">
-                                            <label className="small mb-2">
-                                                Last Name
-                                            </label>
-                                            <input className="form-control" type="text" />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-2">
-                                        <div className="col md-5">
-                                            <label className="small mb-2">
-                                                Email Address
-                                            </label>
-                                            <input className="form-control" type="text" />
-                                        </div>
-                                        <div className="col md-5">
-                                            <label className="small mb-2">
-                                                Phone Number
-                                            </label>
-                                            <input className="form-control" type="text" />
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <br /><br />
-                        <div className="row mx-5">
-                            <div className="col">
-                                <button type="button" className="btn btn-outline-secondary">Cancel Changes</button>
-                            </div>
-                            <div className="col">
-                                <button type="button" className="btn btn-outline-secondary">Save Changes</button>
-                            </div>
-                        </div>
-                        <br /><br /><br />
+    const { authTokens } = useContext(AuthContext);
+    const nav = useNavigate();
+    const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+    const nameRegex = /^[a-zA-Z\s-]*$/;
+    const validation = Yup.object({
+      firstName: Yup.string().matches(
+        nameRegex,
+        "Name can only contain spaces, hyphens and alphabetical"
+      ),
+      lastName: Yup.string().matches(
+        nameRegex,
+        "Name can only contain spaces, hyphens and alphabetical"
+      ),
+      email: Yup.string().email("Invalid email address"),
+      phone: Yup.string().matches(phoneRegex, "Invalid phone format"),
+      avatar: Yup.mixed(),
+    });
+  
+    const formik = useFormik({
+      initialValues: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        avatar: "",
+      },
+
+      validationSchema: validation,
+  
+      onSubmit: (values) => {
+        var bodyFormData = new FormData();
+        if (values.firstName) {
+            bodyFormData.append("first_name", values.firstName);
+        }    
+
+        if (values.lastName) {
+            bodyFormData.append("last_name", values.lastName);
+        } 
+
+        if (values.email) {
+            bodyFormData.append("email", values.email);
+        } 
+
+        if (values.phone) {
+            bodyFormData.append("phone_num", values.phone);
+        } 
+
+        if (values.avatar) {
+          bodyFormData.append("avatar", values.avatar);
+        }
+  
+        const headers = {
+          headers: { 
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + authTokens?.access, 
+            },
+        };
+
+        axios.patch("/user/profile/", bodyFormData, headers)
+          .then(() => {
+            nav("/");
+          })
+        },
+    });
+
+    return (
+        <div className="vh-100">
+            <div className="signup-form">
+                <form className="form-signin" onSubmit={formik.handleSubmit}>
+                    <h1 className="h3 mb-3 font-weight-normal text-center">
+                    Edit Profile
+                    </h1>
+                    {formik.errors.firstName && formik.touched.firstName ? (
+                    <div className="alert alert-danger" role="alert">
+                        {formik.errors.firstName}
                     </div>
-                </div>
-            </section>
-        </div>
-    )
+                    ) : null}
+        
+                    <label htmlFor="firstName" className="">
+                    First Name
+                    </label>
+                    <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    className="form-control mb-3"
+                    placeholder="First Name"
+                    required=""
+                    {...formik.getFieldProps("firstName")}
+                    />
+                    {formik.errors.lastName && formik.touched.lastName ? (
+                    <div className="alert alert-danger" role="alert">
+                        {formik.errors.lastName}
+                    </div>
+                    ) : null}
+        
+                    <label htmlFor="firstName" className="">
+                    Last Name
+                    </label>
+                    <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    className="form-control mb-3"
+                    placeholder="Last Name"
+                    required=""
+                    {...formik.getFieldProps("lastName")}
+                    />
+                    {formik.errors.email && formik.touched.email ? (
+                    <div className="alert alert-danger" role="alert">
+                        {formik.errors.email}
+                    </div>
+                    ) : null}
+        
+                    <label htmlFor="signup-email" className="">
+                    Email
+                    </label>
+                    <input
+                    type="email"
+                    id="signup-email"
+                    name="email"
+                    className="form-control mb-3"
+                    placeholder="Email address"
+                    required=""
+                    autoFocus=""
+                    {...formik.getFieldProps("email")}
+                    />
+                    {formik.errors.phone && formik.touched.phone ? (
+                    <div className="alert alert-danger" role="alert">
+                        {formik.errors.phone}
+                    </div>
+                    ) : null}
+        
+                    <label htmlFor="signup-phone" className="">
+                    Phone (XXX-XXX-XXXX)
+                    </label>
+                    <input
+                    type="tel"
+                    id="signup-phone"
+                    name="phone"
+                    className="form-control mb-3"
+                    placeholder="Phone"
+                    required=""
+                    autoFocus=""
+                    {...formik.getFieldProps("phone")}
+                    />
+                    {formik.errors.avater && formik.touched.avatar ? (
+                    <div className="alert alert-danger" role="alert">
+                        {formik.errors.avater}
+                    </div>
+                    ) : null}
+        
+                    <Form.Group className="">
+                    <Form.Label style={{ marginBottom: "0" }}>Avatar</Form.Label>
+                    <Form.Control
+                        style={{ padding: "10" }}
+                        type="file"
+                        size="lg"
+                        id="avatar"
+                        name="avatar"
+                        className="form-control mb-3"
+                        required=""
+                        autoFocus=""
+                        accept="image/png, image/jpeg, image/jpg"
+                        onChange={(e) =>
+                        formik.setFieldValue("avatar", e.currentTarget.files[0])
+                        }
+                    />
+                    </Form.Group>
+                    <div className="text-center">
+                    <button
+                        className="btn btn-lg btn-dark btn-block text-center"
+                        type="submit"
+                    >
+                        Update Profile
+                    </button>
+                    <p className="mt-5 mb-3 text-muted">© 2022</p>
+                    </div>
+                </form>
+            </div>
+        </div>   
+    );
 }
 
 export default EditProfile;
