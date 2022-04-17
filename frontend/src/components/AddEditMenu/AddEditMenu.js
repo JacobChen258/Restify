@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./AddEditMenu.css";
 import { Card, Button } from "react-bootstrap";
@@ -11,7 +17,10 @@ import showSuccessModal from "../../utils/SuccessModal";
 const AddEditMenu = () => {
   const nav = useNavigate();
   const params = useParams();
+  var next = `/menu_item/restaurant/${params.id}`;
+
   const addMenuRef = useRef(null);
+
   const { authTokens } = useContext(AuthContext);
   const [menuItems, setMenuItems] = useState([]);
   const [toggleMenu, setToggleMenu] = useState([]);
@@ -147,18 +156,30 @@ const AddEditMenu = () => {
 
   // };
 
+  // const [next, setNext] = useState(`/menu_item/restaurant/${params.id}`);
   const getMenuItems = async () => {
-    axios
-      .get(`/menu_item/restaurant/${params.id}`)
-      .then((res) => {
-        console.log(res.data.results);
-        setMenuItems(res.data.results);
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          nav("/login");
-        }
-      });
+    setLoading(true);
+    console.log(next);
+    if (next) {
+      axios
+        .get(next)
+        .then((res) => {
+          console.log("test");
+          console.log(next);
+          console.log(res.data.results);
+
+          setMenuItems((prev) => [...prev, ...res.data.results]);
+
+          next = res.data.next ? res.data.next.replace("8000", "3000") : null;
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            nav("/login");
+          }
+        });
+    }
+
+    setLoading(false);
   };
 
   const popEdit = (e) => {
@@ -175,6 +196,23 @@ const AddEditMenu = () => {
     addMenuRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const [loading, setLoading] = useState(false);
+
+  const observer = useRef();
+  const infScrollRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          getMenuItems();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading]
+  );
+
   return (
     <>
       <h1 className="text-left">Your Menu</h1>
@@ -182,10 +220,51 @@ const AddEditMenu = () => {
 
       <div className="container text-center">
         <div className="row">
-          {menuItems.map((mi) => {
-            return (
+          {menuItems.map((mi, index) => {
+            console.log(menuItems);
+            return index == menuItems.length - 1 ? (
               <div className="col" key={mi.id}>
-                <Card className="menu-item shadow" style={{ width: "18rem" }}>
+                <Card
+                  className="menu-item shadow"
+                  style={{ width: "18rem" }}
+                  ref={infScrollRef}
+                >
+                  <Card.Body>
+                    <Card.Title>{mi.name}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      ${mi.price}
+                    </Card.Subtitle>
+                    <Card.Text>{mi.description}</Card.Text>
+                    <Button
+                      className="ms-1"
+                      onClick={popEdit}
+                      variant="outline-secondary"
+                      item-name={mi.name}
+                      price={mi.price}
+                      description={mi.description}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      className="ms-1"
+                      onClick={deleteMenuItem}
+                      variant="outline-danger"
+                      item-id={mi.id}
+                    >
+                      Delete
+                    </Button>
+
+                    {/* <Card.Link href="#">Another Link</Card.Link> */}
+                  </Card.Body>
+                </Card>
+              </div>
+            ) : (
+              <div className="col" key={mi.id}>
+                <Card
+                  className="menu-item shadow"
+                  style={{ width: "18rem" }}
+                  ref={infScrollRef}
+                >
                   <Card.Body>
                     <Card.Title>{mi.name}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
@@ -217,85 +296,6 @@ const AddEditMenu = () => {
               </div>
             );
           })}
-
-          <div className="col">
-            <Card className="menu-item shadow" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  Card Subtitle
-                </Card.Subtitle>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-                <Button
-                  className="ms-1"
-                  onClick={popEdit}
-                  variant="outline-secondary"
-                  item-name="hi"
-                  price="1.39"
-                  description="fi"
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="ms-1"
-                  onClick={deleteMenuItem}
-                  variant="outline-danger"
-                  item-id="1"
-                >
-                  Delete
-                </Button>
-
-                {/* <Card.Link href="#">Another Link</Card.Link> */}
-              </Card.Body>
-            </Card>
-          </div>
-          <div className="col">
-            <Card className="menu-item shadow" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  Card Subtitle
-                </Card.Subtitle>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-                <Button className="ms-1" variant="outline-secondary">
-                  Edit
-                </Button>
-                <Button className="ms-1" variant="outline-danger">
-                  Delete
-                </Button>
-
-                {/* <Card.Link href="#">Another Link</Card.Link> */}
-              </Card.Body>
-            </Card>
-          </div>
-          <div className="col">
-            <Card className="menu-item shadow" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  Card Subtitle
-                </Card.Subtitle>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-                <Button className="ms-1" variant="outline-secondary">
-                  Edit
-                </Button>
-                <Button className="ms-1" variant="outline-danger">
-                  Delete
-                </Button>
-
-                {/* <Card.Link href="#">Another Link</Card.Link> */}
-              </Card.Body>
-            </Card>
-          </div>
         </div>
       </div>
       <h1 className="text-left" ref={addMenuRef}>
