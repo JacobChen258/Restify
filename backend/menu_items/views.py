@@ -5,7 +5,7 @@ from menu_items.serializers import MenuItemSerializer
 from menu_items.models import MenuItem
 from rest_framework.generics import ListAPIView,DestroyAPIView,CreateAPIView,UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
-from pagination import SmallResultsSetPagination
+from pagination import ItemResultSetPagination
 from restaurants.models import Restaurant
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -16,7 +16,7 @@ from rest_framework.status import HTTP_200_OK
 
 class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
     serializer_class = MenuItemSerializer
-    pagination_class = SmallResultsSetPagination
+    pagination_class = ItemResultSetPagination
 
     def get_queryset(self):
         self.permission_classes = []
@@ -33,6 +33,7 @@ class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
         return item
 
     def update(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated,]
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data,partial=partial)
@@ -50,6 +51,7 @@ class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated,]
         data = self.request.data.copy()
         self.restaurant = get_object_or_404(Restaurant,owner=self.request.user.id)
         data['restaurant'] = get_object_or_404(Restaurant,owner=self.request.user.id).id

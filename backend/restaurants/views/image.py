@@ -3,14 +3,14 @@ from rest_framework.generics import ListAPIView, DestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from restaurants.models import Images, Restaurant
 from restaurants.serializers import GetImageSerializer, AddImageSerializer
-from pagination import SmallResultsSetPagination
+from pagination import ImageResultSetPagination
 from rest_framework.exceptions import  PermissionDenied
 from restaurants.models import Restaurant,Images
 from rest_framework import status
 from rest_framework.response import Response
 
 class ImageView(ListAPIView, DestroyAPIView,CreateAPIView):
-    pagination_class = SmallResultsSetPagination
+    pagination_class = ImageResultSetPagination
 
     def get(self, request, *args, **kwargs):
         self.permission_classes = []
