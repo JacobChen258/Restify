@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddBlog.css";
 import AuthContext from "../Context/AuthContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import showSuccessModal from "../../utils/SuccessModal";
 
 const AddBlog = () => {
   const { authTokens } = useContext(AuthContext);
   const nav = useNavigate();
+  const [success, setSuccess] = useState("");
   const validation = Yup.object({
     name: Yup.string()
       .required("Post name is required")
@@ -24,7 +26,7 @@ const AddBlog = () => {
       body: "",
     },
     validationSchema: validation,
-    onSubmit: (values, e) => {
+    onSubmit: async (values) => {
       const body = { title: values.name, content: values.body };
       const headers = {
         headers: {
@@ -33,7 +35,12 @@ const AddBlog = () => {
       };
       axios
         .post("/blog/create/", body, headers)
-        .then((res) => console.log(res))
+        .then((res) => {
+          showSuccessModal("Blog created!", setSuccess);
+          formik.setFieldValue("name", "", false);
+          formik.setFieldValue("body", "", false);
+          console.log(res);
+        })
         .catch((err) => {
           if (err.response.status === 401) {
             nav("/login");
@@ -52,6 +59,11 @@ const AddBlog = () => {
       <hr />
 
       <form className="menu-form" onSubmit={formik.handleSubmit}>
+        {success && (
+          <div className="alert alert-success mt-3 mb-1" role="alert">
+            {success}
+          </div>
+        )}
         <div className="form-group mt-3">
           {formik.errors.name && formik.touched.name ? (
             <div className="alert alert-danger mt-3 mb-1" role="alert">
