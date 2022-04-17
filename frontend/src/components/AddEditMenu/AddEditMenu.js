@@ -14,7 +14,9 @@ import * as Yup from "yup";
 import AuthContext from "../Context/AuthContext";
 import showSuccessModal from "../../utils/SuccessModal";
 var pages = 1;
+
 var done = false;
+
 const AddEditMenu = () => {
   const nav = useNavigate();
   const params = useParams();
@@ -25,6 +27,7 @@ const AddEditMenu = () => {
   const { authTokens } = useContext(AuthContext);
   const [menuItems, setMenuItems] = useState([]);
   const [toggleMenu, setToggleMenu] = useState([]);
+  const [changed, setChanged] = useState(false);
   const [success, setSuccess] = useState("");
 
   const priceRegex = /^(\d{1,8}|\d{0,5}\.\d{1,2})$/;
@@ -90,6 +93,8 @@ const AddEditMenu = () => {
               formik.setErrors({ itemName: "You do not own a restaurant" });
             }
           });
+
+        setChanged(true);
       }
     },
   });
@@ -150,9 +155,9 @@ const AddEditMenu = () => {
   const getMenuItems = async () => {
     setMenuItems([]);
     next = getInitItems;
-
     console.log("pages");
     console.log(pages);
+
 
     if (done) {
       while (next) {
@@ -197,6 +202,7 @@ const AddEditMenu = () => {
   };
 
   const getMenuItemsPaginate = async () => {
+
     setLoading(true);
     if (next) {
       axios
@@ -223,6 +229,7 @@ const AddEditMenu = () => {
         });
     } else {
       done = true;
+
     }
 
     setLoading(false);
@@ -341,11 +348,13 @@ const AddEditMenu = () => {
           {menuItems.map((mi, index) => {
             // console.log(menuItems);
             return (
+
               <div className="col" key={mi.id}>
                 <Card
                   className="menu-item shadow"
                   style={{ width: "18rem" }}
                   ref={index === menuItems.length - 1 ? infScrollRef : null}
+
                 >
                   <Card.Body>
                     <Card.Title>{mi.name}</Card.Title>

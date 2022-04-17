@@ -10,7 +10,13 @@ const SearchResult = ()=>{
     const [hasResult,setHasResult] = useState(false);
     const [restaurants,setRestaurants] = useState({});
     useEffect(()=>{
-        axios.get(`/restaurant/search/${params.method}/${params.field}/`)
+        var url;
+        if ('field' in params){
+            url = `/restaurant/search/${params.method}/${params.field}/`;
+        }else{
+            url = `/restaurant/search/${params.method}/`;
+        }
+        axios.get(url)
         .then((res)=>{
             console.log(res);
             if (res.data.count > 0){
@@ -21,7 +27,7 @@ const SearchResult = ()=>{
         .catch((e)=>{
             alert(e);
         })
-    },[params.method,params.field])
+    },[params.method,params.field,params])
     return (
         <div className="justify-content-center index_container bg_color">
             <div className = "pt-5 mb-5">

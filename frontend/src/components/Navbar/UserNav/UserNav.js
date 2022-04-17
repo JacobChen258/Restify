@@ -14,19 +14,49 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 
 const UserNav = () => {
+
   const { logoutUser, user, authTokens } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState({});
-
-  useEffect(() => {
+  const getUserInfo = () => {
     const headers = {
       headers: {
         Authorization: "Bearer " + authTokens?.access,
       },
-    };
     axios
       .get(`/user/profile/`, headers)
       .then((res) => {
         setUserInfo(res.data);
+  }
+  
+  const [res,setRes] = useState(null)
+  useEffect(()=>{
+    
+    if (user){
+      if (user.restaurant !== null){
+        setRes(user.restaurant)
+      }
+    }
+  },[user])
+  
+  const NavMyRestaurant = ()=>{
+      if (user.restaurant){
+        return (
+            <Nav.Link href={`/restaurant/${res}/`}>My Restaruant</Nav.Link>
+        )
+      }
+      else{
+        return (<Nav.Link href={`/create/restaurant/`}>Create Restaurant</Nav.Link>)
+      }
+  }
+
+  const [resInfo, setResInfo] = useState({});
+
+  useEffect(() => {
+    getUserInfo()
+    axios
+      .get(`/restaurant/${user.restaurant}`)
+      .then((res) => {
+        setResInfo(res.data);
       })
       .catch((e) => {
         alert(e);
@@ -46,9 +76,8 @@ const UserNav = () => {
               <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
                 Feed
               </Nav.Link>
-              <Nav.Link href={`/restaurant/${user.restaurant}/`}>
-                My Restaruant
-              </Nav.Link>
+              <NavMyRestaurant/>
+
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
                   <NavDropdown.Item href="#action/3.1">
@@ -76,7 +105,9 @@ const UserNav = () => {
                   <Card className="card p-2">
                     <Card.Img
                       variant="top"
+
                       src={userInfo.avatar}
+
                       className="img_fit"
                     />
                     <Card.Body className="dropdown-text">
@@ -94,6 +125,7 @@ const UserNav = () => {
                           <>
                             <b>Email: </b>
                             {userInfo.email}
+
                           </>
                         )}
                       </Card.Text>

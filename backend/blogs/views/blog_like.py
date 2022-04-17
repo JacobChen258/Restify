@@ -18,7 +18,8 @@ def liked_blog(request):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         data['user'] = request.user.id
-
+        if (len(Blog_Likes.objects.filter(blog=blog.id,user=request.user.id))>0):
+            return Response(status = status.HTTP_409_CONFLICT)
         serializer = LikedBlogSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -35,6 +36,8 @@ def liked_blog(request):
             notif_serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)   
     elif request.method == 'DELETE':
+        if id not in request.data:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         blog = get_object_or_404(Blog,id=request.data['id'])
         likes = Blog_Likes.objects.filter(blog=blog.id,user=request.user.id)
         for like in likes:
