@@ -39,6 +39,8 @@ const AddBlog = () => {
           showSuccessModal("Blog created!", setSuccess);
           formik.setFieldValue("name", "", false);
           formik.setFieldValue("body", "", false);
+          formik.setFieldTouched("name", false, false);
+          formik.setFieldTouched("body", false, false);
           console.log(res);
         })
         .catch((err) => {
