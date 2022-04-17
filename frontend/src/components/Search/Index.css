@@ -35,6 +35,10 @@
   margin-left: 2rem;
 }
 
+.search-logo {
+  width: 20%;
+}
+
 .bg_color {
   background-color: antiquewhite;
   min-height: 100vh !important;
