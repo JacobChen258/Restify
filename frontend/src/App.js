@@ -13,6 +13,7 @@ import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
 import AddBlog from "./components/AddBlog/AddBlog";
+import Feed from "./components/Feed/Feed";
 import { AuthProvider } from "./components/Context/AuthContext";
 import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
@@ -36,10 +37,15 @@ function App() {
 
             <Route path="/:id/menu" element={<AddEditMenu />} />
             <Route path="/restaurant/:id/blog/add" element={<AddBlog />} />
+
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/addblog" element={<AddBlog />}></Route>
+
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}
             ></Route>
+            <Route path="/search/:method/" element={<SearchResult />}></Route>
             <Route path="/restaurant/:id/" element={<Restaurant />}>
               <Route index element={<Menu />}></Route>
               <Route path="/restaurant/:id/blog/" element={<Blogs />}></Route>
