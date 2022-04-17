@@ -14,7 +14,7 @@ import { Outlet } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
 
 const UserNav = () => {
-  const { logoutUser } = useContext(AuthContext);
+  const { logoutUser, user } = useContext(AuthContext);
 
   return (
     <>
@@ -26,7 +26,9 @@ const UserNav = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto navbar">
-              <Nav.Link href="/feed">Feed</Nav.Link>
+              <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
+                Feed
+              </Nav.Link>
               <Nav.Link href="/restaruant">My Restaruant</Nav.Link>
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">

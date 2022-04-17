@@ -25,27 +25,35 @@ function App() {
         <Router>
           <RestifyNavbar />
           <Routes>
-            {/* <Route index element={<SearchPage />}></Route> */}
-
-            {/* <Route path="/user" element={<Navbar />}> */}
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route index element={<SearchPage />}></Route>
-            {/* Components that need navbar go here */}
-            {/* <Route path="/signup/test/2" element={<Signup />} /> */}
-            {/* </Route> */}
 
             <Route
-              path="/:id/menu"
+              path="/restaurant/:id/menu/add"
               element={
                 <PrivateRoute>
                   <AddEditMenu />
                 </PrivateRoute>
               }
             />
-            <Route path="/blog" element={<AddBlog />} />
+            <Route
+              path="/restaurant/:id/blog/add"
+              element={
+                <PrivateRoute>
+                  <AddBlog />
+                </PrivateRoute>
+              }
+            />
 
-            <Route path="/feed" element={<Feed />} />
+            <Route
+              path="/restaurant/:id/feed"
+              element={
+                <PrivateRoute>
+                  <Feed />
+                </PrivateRoute>
+              }
+            />
 
             <Route
               path="/search/:method/:field/"
