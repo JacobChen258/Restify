@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Nav,
   Navbar,
@@ -9,12 +9,48 @@ import {
 } from "react-bootstrap";
 import logo from "../../../images/logo.svg";
 import "./UserNav.css";
-import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
+import axios from "axios";
+import Notifications from "./Notification/Notification";
 
 const UserNav = () => {
-  const { logoutUser, user } = useContext(AuthContext);
+  const { logoutUser,user,authTokens } = useContext(AuthContext);
+  const [res,setRes] = useState(null);
+  const [userInfo,setUserInfo] = useState({
+    avatar: null,
+    first_name:"",
+    last_name: "",
+    email:"",
+  });
+
+  useEffect(()=>{
+    
+    if (user){
+      if (user.restaurant !== null){
+        setRes(user.restaurant)
+      }
+      let header = {Authorization: "Bearer " + String(authTokens.access)}
+      axios.get("/user/profile/",{headers:header})
+      .then((res)=>{
+        setUserInfo(res.data);
+      })
+      .catch((e)=>{
+        alert(e);
+      })
+    }
+  },[user])
+
+  const NavMyRestaurant = ()=>{
+      if (user.restaurant){
+        return (
+            <Nav.Link href={`/restaurant/${res}/`}>My Restaruant</Nav.Link>
+        )
+      }
+      else{
+        return (<Nav.Link href={`/create/restaurant/`}>Create Restaurant</Nav.Link>)
+      }
+  }
 
   return (
     <>
@@ -26,47 +62,45 @@ const UserNav = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto navbar">
-              <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
+              <Nav.Link href={`/user/feed`}>
                 Feed
               </Nav.Link>
-              <Nav.Link href="/restaruant">My Restaruant</Nav.Link>
-              <NavDropdown title="Notifications" id="basic-nav-dropdown">
-                <div className="dropdown-text">
-                  <NavDropdown.Item href="#action/3.1">
-                    <b>Notification Title</b>
-                    <br />
-                    ejnfrkejgnrkgjnrekgnerkgjnkjk
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.1">
-                    <b>Notification Title</b>
-                    <br />
-                    ejnfrkejgnrkgjnre
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.1">
-                    <b>Notification Title</b>
-                    <br />
-                    ejnfrkejgnrkgjnrekgnerkgjnkjk
-                  </NavDropdown.Item>
-                </div>
-              </NavDropdown>
-
+              <NavMyRestaurant/>
+              <Notifications/>
               <NavDropdown title="Account" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  <Card className="card p-2">
-                    <Card.Img variant="top" src={profilePicture} />
+                  <Card className="card p-2 d-flex flex-column profile_container">
+                    <Card.Img
+                      variant="top"
+                      src={userInfo.avatar}
+                      className="img_fit"
+                    />
                     <Card.Body className="dropdown-text">
-                      <Card.Title>FirstName LastName</Card.Title>
+                      <Card.Title>
+                        {userInfo.first_name} {userInfo.last_name}
+                      </Card.Title>
                       <Card.Text className="card-text">
-                        <b>Phone Number:</b> 647-123-4567
-                        <br />
-                        <b>Email:</b> myemailmyemailmyemail@gmail.com
+                        {userInfo.phone_num && (
+                          <>
+                            <b>Phone Number:</b> {userInfo.phone_num}
+                            <br />
+                          </>
+                        )}
+                        {userInfo.email && (
+                          <>
+                            <b>Email: </b>
+                            {userInfo.email}
+                          </>
+                        )}
                       </Card.Text>
                     </Card.Body>
-                    <Button variant="primary" href="/profile/edit">Edit Profile</Button>
+                    <Button
+                      variant="primary"
+                      href={`/profile/${user.user_id}/edit`}
+                      className="edit-profile mt-2"
+                    >
+                      Edit Profile
+                    </Button>
                   </Card>
-                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>

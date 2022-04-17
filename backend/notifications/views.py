@@ -1,18 +1,17 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import DestroyAPIView
+from rest_framework.generics import DestroyAPIView,ListAPIView
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from notifications.models import Notification
-from rest_framework.generics import ListAPIView
 from notifications.serializers import GetNotificationsSerializer
-from pagination import SmallResultsSetPagination
+from pagination import TinyResultsSetPagination
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework import status
 
 class NotificationView(DestroyAPIView,ListAPIView):
     serializer_class = GetNotificationsSerializer
     permission_classes = [IsAuthenticated,]
-    pagination_class = SmallResultsSetPagination
+    pagination_class = TinyResultsSetPagination
     
     def get_queryset(self):
         user = self.request.user
@@ -20,7 +19,7 @@ class NotificationView(DestroyAPIView,ListAPIView):
 
     def delete(self, request, *args, **kwargs):
         if 'notif_id' not in self.request.data:
-            return Response(status=HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         return super().delete(request, *args, **kwargs)
 
     def get_object(self):
@@ -29,4 +28,19 @@ class NotificationView(DestroyAPIView,ListAPIView):
             raise PermissionDenied
         return notif
 
+class DeleteAllNotifView(DestroyAPIView):
+    permission_classes = [IsAuthenticated,]
+
+    def destroy(self, request, *args, **kwargs):
+        instances = self.get_queryset()
+        for instance in instances:
+            self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_queryset(self):
+        user=self.request.user
+        return Notification.objects.filter(viewer=user.id)
+
+    def perform_destroy(self, instance):
+        instance.delete()
     
