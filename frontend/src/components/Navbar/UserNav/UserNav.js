@@ -15,16 +15,30 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 
 const UserNav = () => {
-  const { logoutUser,user } = useContext(AuthContext);
-  const [res,setRes] = useState(null)
+  const { logoutUser,user,authTokens } = useContext(AuthContext);
+  const [res,setRes] = useState(null);
+  const [userInfo,setUserInfo] = useState({
+    avatar: null,
+    first_name:"",
+    last_name: "",
+    email:"",
+  });
   useEffect(()=>{
     if (user){
       if (user.restaurant !== null){
         setRes(user.restaurant)
       }
+      let header = {Authorization: "Bearer " + String(authTokens.access)}
+      axios.get("/user/profile/",{headers:header})
+      .then((res)=>{
+        setUserInfo(res.data);
+      })
+      .catch((e)=>{
+        alert(e);
+      })
     }
   },[user])
-  
+
   const NavMyRestaurant = ()=>{
       if (user.restaurant){
         return (
@@ -36,18 +50,6 @@ const UserNav = () => {
       }
   }
 
-  const [resInfo, setResInfo] = useState({});
-
-  useEffect(() => {
-    axios
-      .get(`/restaurant/${user.restaurant}`)
-      .then((res) => {
-        setResInfo(res.data);
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  }, []);
 
   return (
     <>
@@ -86,28 +88,27 @@ const UserNav = () => {
               </NavDropdown>
 
               <NavDropdown title="Account" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  <Card className="card p-2">
+                  <Card className="card p-2 d-flex flex-column profile_container">
                     <Card.Img
                       variant="top"
-                      src={resInfo.logo}
+                      src={userInfo.avatar}
                       className="img_fit"
                     />
                     <Card.Body className="dropdown-text">
                       <Card.Title>
-                        {resInfo.first_name} {resInfo.last_name}
+                        {userInfo.first_name} {userInfo.last_name}
                       </Card.Title>
                       <Card.Text className="card-text">
-                        {resInfo.phone_num && (
+                        {userInfo.phone_num && (
                           <>
-                            <b>Phone Number:</b> {resInfo.phone_num}
+                            <b>Phone Number:</b> {userInfo.phone_num}
                             <br />
                           </>
                         )}
-                        {resInfo.email && (
+                        {userInfo.email && (
                           <>
                             <b>Email: </b>
-                            {resInfo.email}
+                            {userInfo.email}
                           </>
                         )}
                       </Card.Text>
@@ -120,7 +121,6 @@ const UserNav = () => {
                       Edit Profile
                     </Button>
                   </Card>
-                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>

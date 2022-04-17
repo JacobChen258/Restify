@@ -5,14 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from notifications.models import Notification
 from rest_framework.generics import ListAPIView
 from notifications.serializers import GetNotificationsSerializer
-from pagination import SmallResultsSetPagination
+from pagination import TinyResultsSetPagination
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 class NotificationView(DestroyAPIView,ListAPIView):
     serializer_class = GetNotificationsSerializer
     permission_classes = [IsAuthenticated,]
-    pagination_class = SmallResultsSetPagination
+    pagination_class = TinyResultsSetPagination
     
     def get_queryset(self):
         user = self.request.user

@@ -3,13 +3,13 @@ from restaurants.serializers import RestaurantSearchSerializer
 from rest_framework.permissions import IsAuthenticated
 from restaurants.models import Restaurant
 from menu_items.models import MenuItem
-from pagination import SmallResultsSetPagination
+from pagination import SearchResultsSetPagination
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 class RestaurantSearch(ListAPIView):
     serializer_class = RestaurantSearchSerializer
-    pagination_class = SmallResultsSetPagination
+    pagination_class = SearchResultsSetPagination
     
     def get(self, request, *args, **kwargs):
         if self.kwargs['method'] not in ["name","address","item"]:
