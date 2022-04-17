@@ -23,7 +23,7 @@ const Login = () => {
       password: "",
     },
     validationSchema: validation,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
 
       console.log(values);
@@ -40,10 +40,10 @@ const Login = () => {
           nav("/");
         })
         .catch((err) => {
-          if (err.response.status == 401) {
+          if (err.response.status === 401) {
             formik.setErrors({ username: "Invalid username or password" });
           } else {
-            formik.setErrors({ username: "An unexpected error occurred" });
+            formik.setErrors({ username: "Pleade fix form errors" });
           }
           formik.setFieldValue("password", "", false);
           formik.setFieldTouched("password", false, false);

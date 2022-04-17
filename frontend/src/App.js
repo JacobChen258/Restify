@@ -12,9 +12,10 @@ import Blogs from "./components/Restaurant/Blog/Blogs";
 import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
-import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
 import AddBlog from "./components/AddBlog/AddBlog";
 import { AuthProvider } from "./components/Context/AuthContext";
+import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
             {/* <Route path="/signup/test/2" element={<Signup />} /> */}
             {/* </Route> */}
 
-
+            <Route path="/:id/menu" element={<AddEditMenu />} />
+            <Route path="/restaurant/:id/blog/add" element={<AddBlog />} />
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}

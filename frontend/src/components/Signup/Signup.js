@@ -69,7 +69,7 @@ const Signup = () => {
     },
     validationSchema: validation,
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       var bodyFormData = new FormData();
       bodyFormData.append("username", values.username);
       bodyFormData.append("password", values.password);
@@ -99,11 +99,11 @@ const Signup = () => {
         })
         .catch((err) => {
           console.log(err.response.status);
-          if (err.response.status == 400) {
+          if (err.response.status === 400) {
             console.log("here");
             formik.setErrors({ username: "This username is already in use" });
           } else {
-            formik.setErrors({ username: "An unexpected error occurred" });
+            formik.setErrors({ username: "Please fix form errors" });
           }
           formik.setFieldValue("password", "", false);
           formik.setFieldValue("confirmPassword", "", false);
