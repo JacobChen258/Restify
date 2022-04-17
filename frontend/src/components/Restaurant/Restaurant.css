@@ -1,10 +1,10 @@
-.bg_color{
-    background-image: linear-gradient(rgb(170, 167, 167), rgb(152, 226, 220));
-    min-height: 100vh !important;
-    height: 100% !important;
+.bg_color {
+  background-color: antiquewhite;
+  min-height: 100vh !important;
+  height: 100% !important;
 }
 
-.vl{
-    height: 100%;
-    border-left: 2px solid black !important;
+.vl {
+  height: 100%;
+  border-left: 2px solid black !important;
 }

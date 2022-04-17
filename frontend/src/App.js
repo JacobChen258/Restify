@@ -80,7 +80,7 @@ function App() {
             />
 
             <Route
-              path="/restaurant/:id/feed"
+              path="/restaurant/feed"
               element={
                 <PrivateRoute>
                   <Feed />

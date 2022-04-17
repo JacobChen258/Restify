@@ -177,6 +177,8 @@ const AddEditMenu = () => {
         } catch (err) {
           if (err.response.status === 401) {
             nav("/login");
+          } else if (err.response.status === 404) {
+            nav("/");
           }
         }
         setMenuItems((prev) => [...prev, ...res.data.results]);
@@ -196,6 +198,9 @@ const AddEditMenu = () => {
         } catch (err) {
           if (err.response.status === 401) {
             nav("/login");
+          } else if (err.response.status === 404) {
+            console.log("hi");
+            nav("/");
           }
         }
         setMenuItems((prev) => [...prev, ...res.data.results]);

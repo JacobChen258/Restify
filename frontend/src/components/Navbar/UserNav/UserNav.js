@@ -61,9 +61,7 @@ const UserNav = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto navbar">
-              <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
-                Feed
-              </Nav.Link>
+              <Nav.Link href={`/restaurant/feed`}>Feed</Nav.Link>
               <NavMyRestaurant />
 
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
