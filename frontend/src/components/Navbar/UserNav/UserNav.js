@@ -14,7 +14,6 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 
 const UserNav = () => {
-
   const { logoutUser, user, authTokens } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState({});
   const getUserInfo = () => {
@@ -22,45 +21,43 @@ const UserNav = () => {
       headers: {
         Authorization: "Bearer " + authTokens?.access,
       },
-    axios
-      .get(`/user/profile/`, headers)
-      .then((res) => {
-        setUserInfo(res.data);
-  }
-  
-  const [res,setRes] = useState(null)
-  useEffect(()=>{
-    
-    if (user){
-      if (user.restaurant !== null){
-        setRes(user.restaurant)
+    };
+    axios.get(`/user/profile/`, headers).then((res) => {
+      setUserInfo(res.data);
+    });
+  };
+
+  const [res, setRes] = useState(null);
+  useEffect(() => {
+    if (user) {
+      if (user.restaurant !== null) {
+        setRes(user.restaurant);
       }
     }
-  },[user])
-  
-  const NavMyRestaurant = ()=>{
-      if (user.restaurant){
-        return (
-            <Nav.Link href={`/restaurant/${res}/`}>My Restaruant</Nav.Link>
-        )
-      }
-      else{
-        return (<Nav.Link href={`/create/restaurant/`}>Create Restaurant</Nav.Link>)
-      }
-  }
+  }, [user]);
 
-  const [resInfo, setResInfo] = useState({});
+  const NavMyRestaurant = () => {
+    if (user.restaurant) {
+      return <Nav.Link href={`/restaurant/${res}/`}>My Restaruant</Nav.Link>;
+    } else {
+      return (
+        <Nav.Link href={`/create/restaurant/`}>Create Restaurant</Nav.Link>
+      );
+    }
+  };
+
+  // const [resInfo, setResInfo] = useState({});
 
   useEffect(() => {
-    getUserInfo()
-    axios
-      .get(`/restaurant/${user.restaurant}`)
-      .then((res) => {
-        setResInfo(res.data);
-      })
-      .catch((e) => {
-        alert(e);
-      });
+    getUserInfo();
+    // axios
+    //   .get(`/restaurant/${user.restaurant}`)
+    //   .then((res) => {
+    //     setResInfo(res.data);
+    //   })
+    //   .catch((e) => {
+    //     alert(e);
+    //   });
   }, []);
 
   return (
@@ -73,10 +70,8 @@ const UserNav = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto navbar">
-              <Nav.Link href={`/restaurant/${user.restaurant}/feed`}>
-                Feed
-              </Nav.Link>
-              <NavMyRestaurant/>
+              <Nav.Link href={`/restaurant/feed`}>Feed</Nav.Link>
+              <NavMyRestaurant />
 
               <NavDropdown title="Notifications" id="basic-nav-dropdown">
                 <div className="dropdown-text">
@@ -105,9 +100,7 @@ const UserNav = () => {
                   <Card className="card p-2">
                     <Card.Img
                       variant="top"
-
                       src={userInfo.avatar}
-
                       className="img_fit"
                     />
                     <Card.Body className="dropdown-text">
@@ -125,14 +118,13 @@ const UserNav = () => {
                           <>
                             <b>Email: </b>
                             {userInfo.email}
-
                           </>
                         )}
                       </Card.Text>
                     </Card.Body>
                     <Button
                       variant="primary"
-                      href={`/profile/${user.user_id}/edit`}
+                      href={`/profile/edit`}
                       className="edit-profile mt-2"
                     >
                       Edit Profile
