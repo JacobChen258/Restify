@@ -78,6 +78,7 @@ const EditProfile = () => {
       //   const body = {...};
       const headers = {
         headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + authTokens?.access,
         },
       };
