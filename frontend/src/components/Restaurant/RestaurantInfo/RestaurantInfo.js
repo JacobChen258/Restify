@@ -5,6 +5,8 @@ import axios from 'axios';
 import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai';
 import AuthContext from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+
 const RestaurantInfo = ()=>{
     const params = useParams();
     const nav = useNavigate()
@@ -15,7 +17,7 @@ const RestaurantInfo = ()=>{
     useEffect(()=>{
         axios.get(`/restaurant/${params.id}`)
         .then((res)=>{
-            setResInfo(res.data)
+            setResInfo(res.data);
         })
         .catch((e)=>{
             alert('Restaurant does not exist');
@@ -46,13 +48,30 @@ const RestaurantInfo = ()=>{
     },[params.id])
 
     const LikeIcon = ()=>{
-        useEffect(()=>{
-
-        },[liked])
         if (liked){
             return <button className='btn_bg btn_border me-5 d-flex p-1' onClick={handleUnlike}><div><AiFillHeart/></div> <span className='ms-2 text-center me-1'>{resInfo.num_likes}</span></button>
         }
         return <button className='btn_bg btn_border me-5 d-flex p-1' onClick={handleLike}><div><AiOutlineHeart/></div> <span className='ms-2 text-center me-1'>{resInfo.num_likes}</span></button>
+    }
+    const FollowBtn = ()=>{
+        if (following){
+            return (<button className='btn_bg btn_border p-1' onClick={handleUnfollow}> Unfollow </button>)
+        }
+        return (<button className='btn_bg btn_border p-1' onClick={handleFollow}> Follow </button>)
+    }
+    const EditBtn = ()=>{
+        if (user !== null && user.restaurant !== null){
+            if (params.id === String(user.restaurant)){
+                return (
+                <Button className="ms-auto mb-auto me-5" onClick={()=>{
+                    nav("/edit/restaurant/");
+                }}>
+                Edit Information
+                </Button>
+                )
+            }
+        }
+        return (<></>)
     }
     const handleLike = ()=>{
         if (user !== null){
@@ -133,13 +152,6 @@ const RestaurantInfo = ()=>{
             alert("please log in")
         }
     }
-    const FollowBtn = ()=>{
-        if (following){
-            return (<button className='btn_bg btn_border p-1' onClick={handleUnfollow}> Unfollow </button>)
-        }
-        return (<button className='btn_bg btn_border p-1' onClick={handleFollow}> Follow </button>)
-    }
-    //['id','name', 'address', 'logo', 'email', 'postal_code', 'phone_num', 'num_followers', 'num_likes']
     return (
         <div className='d-flex flex-row'>
             <img src={resInfo.logo} alt='' className=" img_size img_border img_fit"></img>
@@ -162,6 +174,7 @@ const RestaurantInfo = ()=>{
                     <FollowBtn/>
                 </div>
             </div>
+            <EditBtn/>
         </div>
     )
 }

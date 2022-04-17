@@ -17,7 +17,8 @@ import AddBlog from "./components/AddBlog/AddBlog";
 import Feed from "./components/Feed/Feed";
 import CreateRestaurant from "./components/CreateRestaurant/CreateRestaurant";
 import { AuthProvider } from "./components/Context/AuthContext";
-
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import EditRestaurant from "./components/Restaurant/RestaurantInfo/EditRestaurant/EditRestaurant";
 function App() {
   return (
     <div>
@@ -36,7 +37,8 @@ function App() {
             {/* </Route> */}
             <Route path="/feed" element={<Feed />} />
             <Route path="/addblog" element={<AddBlog />}></Route>
-            <Route path="/create/restaurant/" element={<CreateRestaurant/>}></Route>
+            <Route path="/create/restaurant/" element={<PrivateRoute><CreateRestaurant/></PrivateRoute>}></Route>
+            <Route path="/edit/restaurant/" element={<PrivateRoute><EditRestaurant/></PrivateRoute>}></Route>
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}

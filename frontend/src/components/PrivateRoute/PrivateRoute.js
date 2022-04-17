@@ -5,12 +5,11 @@ import AuthContext from "../Context/AuthContext";
 // const useAuth = () => {
 //   return authenticated;
 // };
-function PrivateRoute({ children }) {
+export default function PrivateRoute({ children }) {
   console.log("hello");
   console.log(useContext(AuthContext));
   const { user } = useContext(AuthContext);
 
-  return user ? { children } : <Navigate to="/login" />;
+  return user ? [ children ] : <Navigate to="/login" />;
 }
 
-export default PrivateRoute;
