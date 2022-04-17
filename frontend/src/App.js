@@ -12,10 +12,11 @@ import Blogs from "./components/Restaurant/Blog/Blogs";
 import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
-import AnonNavbar from "./components/Navbar/AnonNav/AnonNav";
 import AddBlog from "./components/AddBlog/AddBlog";
 import Feed from "./components/Feed/Feed";
 import { AuthProvider } from "./components/Context/AuthContext";
+import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 function App() {
   return (
@@ -33,16 +34,24 @@ function App() {
             {/* Components that need navbar go here */}
             {/* <Route path="/signup/test/2" element={<Signup />} /> */}
             {/* </Route> */}
+
+            <Route
+              path="/:id/menu"
+              element={
+                <PrivateRoute>
+                  <AddEditMenu />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/blog" element={<AddBlog />} />
+
             <Route path="/feed" element={<Feed />} />
-            <Route path="/addblog" element={<AddBlog />}></Route>
+
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}
             ></Route>
-            <Route
-              path="/search/:method/"
-              element={<SearchResult />}
-            ></Route>
+            <Route path="/search/:method/" element={<SearchResult />}></Route>
             <Route path="/restaurant/:id/" element={<Restaurant />}>
               <Route index element={<Menu />}></Route>
               <Route path="/restaurant/:id/blog/" element={<Blogs />}></Route>
