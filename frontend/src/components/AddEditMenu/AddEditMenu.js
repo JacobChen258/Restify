@@ -14,6 +14,7 @@ const AddEditMenu = () => {
   const addMenuRef = useRef(null);
   const { authTokens } = useContext(AuthContext);
   const [menuItems, setMenuItems] = useState([]);
+  const [tempMenuItems, setTempMenuItems] = useState([]);
   const [success, setSuccess] = useState("");
 
   const priceRegex = /^(\d{1,8}|\d{0,5}\.\d{1,2})$/;
@@ -52,17 +53,20 @@ const AddEditMenu = () => {
         .post("/menu_item/add/", body, headers)
         .then((res) => {
           console.log(res);
-          setMenuItems((prev) => [...prev, res.data]);
+          setTempMenuItems((prev) => [...prev, res.data]);
           showSuccessModal("Menu item added!", setSuccess);
           formik.setFieldValue("itemName", "", false);
           formik.setFieldValue("description", "", false);
           formik.setFieldValue("price", "", false);
+          formik.setFieldTouched("itemName", false, false);
+          formik.setFieldTouched("description", false, false);
+          formik.setFieldTouched("price", false, false);
         })
         .catch((err) => {
-          console.log(err);
-          if (err.status === 401) {
+          if (err.response.status === 401) {
             nav("/login");
-          } else if (err.status === 404) {
+          } else if (err.response.status === 404) {
+            console.log("hi");
             formik.setErrors({ itemName: "You do not own a restaurant" });
           }
         });
@@ -71,8 +75,10 @@ const AddEditMenu = () => {
 
   useEffect(() => {
     getMenuItems();
+    console.log("temp menu");
+    console.log(tempMenuItems);
     // eslint-disable-next-line
-  }, []);
+  }, [tempMenuItems]);
 
   // const addMenuItem = () => {};
 
@@ -100,7 +106,8 @@ const AddEditMenu = () => {
       });
 
     // filterMenu(deleteID);
-    setMenuItems((prev) =>
+    console.log(tempMenuItems);
+    setTempMenuItems((prev) =>
       prev.filter((mi) => {
         return mi.id !== deleteID;
       })
@@ -270,7 +277,7 @@ const AddEditMenu = () => {
         </div>
       </div>
       <h1 className="text-left" ref={addMenuRef}>
-        Add Menu Item
+        Add/Edit Menu Item
       </h1>
       <hr />
       <form className="menu-form" onSubmit={formik.handleSubmit}>
