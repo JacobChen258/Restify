@@ -56,6 +56,7 @@ function App() {
             />
 
             <Route
+
               path="/search/:method/:field/"
               element={<SearchResult />}
             ></Route>
