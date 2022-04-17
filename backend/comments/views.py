@@ -3,7 +3,7 @@ from rest_framework.generics import ListAPIView,CreateAPIView
 from comments.serializers import RestaurantCommentSerializer,AddCommentSerializer
 from rest_framework.permissions import IsAuthenticated
 from comments.models import Comment
-from pagination import SmallResultsSetPagination
+from pagination import CommentResultSetPagination
 from restaurants.models import Restaurant
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
@@ -11,7 +11,7 @@ from notifications.serializers import NotificationsSerializer
 from accounts.models import User
 
 class CommentView(ListAPIView,CreateAPIView):
-    pagination_class = SmallResultsSetPagination
+    pagination_class = CommentResultSetPagination
     
     def get(self, request, *args, **kwargs):
         self.permission_classes = []

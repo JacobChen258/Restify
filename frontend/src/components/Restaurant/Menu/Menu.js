@@ -2,6 +2,8 @@ import React,{useState,useEffect} from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Item from "./Item/Item";
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 const Menu = (props) =>{
     const params = useParams();
     const [items,setItems] = useState([]);
@@ -9,21 +11,41 @@ const Menu = (props) =>{
         axios.get(`/menu_item/restaurant/${params.id}/`)
         .then((res)=>{
             setItems(res.data.results);
+            setNext(res.data.next);
         })
         .catch((e)=>{
             alert(e);
         })
     },[params.id])
+    const [next,setNext] = useState(null);
+    const fetchData = ()=>{
+        if (next != null){
+            axios.get(next)
+            .then((res)=>{
+                console.log(res)
+                setItems(items.concat(res.data.results));
+                setNext(res.data.next);
+            })
+            .catch((e)=>{
+                alert(e);
+            })
+        }
+    }
     return (
         <div>
             <h1>Menu</h1>
-            <div className="d-flex flex-wrap w-100 ps-5">
+            <InfiniteScroll
+                dataLength={items.length} //This is important field to render the next data
+                next={fetchData}
+                hasMore={(next !== null)}
+                className="d-flex flex-wrap w-100 ps-5"
+                >
                 {
                     items.map((item)=>(
                         <Item key={item.id} Item={item}></Item>
                     ))
                 }
-            </div>
+            </InfiniteScroll>
         </div>
     )
 }

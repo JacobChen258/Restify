@@ -14,30 +14,32 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 
 const UserNav = () => {
+  const { logoutUser,user,authTokens } = useContext(AuthContext);
+  const [res,setRes] = useState(null);
+  const [userInfo,setUserInfo] = useState({
+    avatar: null,
+    first_name:"",
+    last_name: "",
+    email:"",
+  });
 
-  const { logoutUser, user, authTokens } = useContext(AuthContext);
-  const [userInfo, setUserInfo] = useState({});
-  const getUserInfo = () => {
-    const headers = {
-      headers: {
-        Authorization: "Bearer " + authTokens?.access,
-      },
-    axios
-      .get(`/user/profile/`, headers)
-      .then((res) => {
-        setUserInfo(res.data);
-  }
-  
-  const [res,setRes] = useState(null)
   useEffect(()=>{
     
     if (user){
       if (user.restaurant !== null){
         setRes(user.restaurant)
       }
+      let header = {Authorization: "Bearer " + String(authTokens.access)}
+      axios.get("/user/profile/",{headers:header})
+      .then((res)=>{
+        setUserInfo(res.data);
+      })
+      .catch((e)=>{
+        alert(e);
+      })
     }
   },[user])
-  
+
   const NavMyRestaurant = ()=>{
       if (user.restaurant){
         return (
@@ -48,20 +50,6 @@ const UserNav = () => {
         return (<Nav.Link href={`/create/restaurant/`}>Create Restaurant</Nav.Link>)
       }
   }
-
-  const [resInfo, setResInfo] = useState({});
-
-  useEffect(() => {
-    getUserInfo()
-    axios
-      .get(`/restaurant/${user.restaurant}`)
-      .then((res) => {
-        setResInfo(res.data);
-      })
-      .catch((e) => {
-        alert(e);
-      });
-  }, []);
 
   return (
     <>
@@ -101,13 +89,10 @@ const UserNav = () => {
               </NavDropdown>
 
               <NavDropdown title="Account" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">
-                  <Card className="card p-2">
+                  <Card className="card p-2 d-flex flex-column profile_container">
                     <Card.Img
                       variant="top"
-
                       src={userInfo.avatar}
-
                       className="img_fit"
                     />
                     <Card.Body className="dropdown-text">
@@ -125,7 +110,6 @@ const UserNav = () => {
                           <>
                             <b>Email: </b>
                             {userInfo.email}
-
                           </>
                         )}
                       </Card.Text>
@@ -138,7 +122,6 @@ const UserNav = () => {
                       Edit Profile
                     </Button>
                   </Card>
-                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
             <Nav>
