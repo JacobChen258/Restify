@@ -9,11 +9,9 @@ import {
 } from "react-bootstrap";
 import logo from "../../../images/logo.svg";
 import "./UserNav.css";
-import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
-import RestaurantInfo from "../../Restaurant/RestaurantInfo/RestaurantInfo";
 
 const UserNav = () => {
   const { logoutUser, user } = useContext(AuthContext);
@@ -77,16 +75,28 @@ const UserNav = () => {
                       className="img_fit"
                     />
                     <Card.Body className="dropdown-text">
-                      <Card.Title>FirstName LastName</Card.Title>
+                      <Card.Title>
+                        {resInfo.first_name} {resInfo.last_name}
+                      </Card.Title>
                       <Card.Text className="card-text">
-                        <b>Phone Number:</b> 647-123-4567
-                        <br />
-                        <b>Email:</b> myemailmyemailmyemail@gmail.com
+                        {resInfo.phone_num && (
+                          <>
+                            <b>Phone Number:</b> {resInfo.phone_num}
+                            <br />
+                          </>
+                        )}
+                        {resInfo.email && (
+                          <>
+                            <b>Email: </b>
+                            {resInfo.email}
+                          </>
+                        )}
                       </Card.Text>
                     </Card.Body>
                     <Button
                       variant="primary"
                       href={`/profile/${user.user_id}/edit`}
+                      className="edit-profile mt-2"
                     >
                       Edit Profile
                     </Button>
