@@ -41,6 +41,11 @@ const Feed = () => {
                         {feed.map(post => (
                             <div key={post.id} className="row">
                                 <p className="lead">{post.title}</p>
+                                <br />
+                                <p className="lead">{post.content}</p>
+                                <br />
+                                <p className="lead">Likes: {post.num_likes}</p>
+                                <br />
                             </div>
                         ))}
                     </div>
