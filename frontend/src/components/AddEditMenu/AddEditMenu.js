@@ -14,7 +14,7 @@ const AddEditMenu = () => {
   const addMenuRef = useRef(null);
   const { authTokens } = useContext(AuthContext);
   const [menuItems, setMenuItems] = useState([]);
-  const [tempMenuItems, setTempMenuItems] = useState([]);
+  const [toggleMenu, setToggleMenu] = useState([]);
   const [success, setSuccess] = useState("");
 
   const priceRegex = /^(\d{1,8}|\d{0,5}\.\d{1,2})$/;
@@ -49,36 +49,57 @@ const AddEditMenu = () => {
           Authorization: "Bearer " + authTokens?.access,
         },
       };
-      axios
-        .post("/menu_item/add/", body, headers)
-        .then((res) => {
-          console.log(res);
-          setTempMenuItems((prev) => [...prev, res.data]);
-          showSuccessModal("Menu item added!", setSuccess);
-          formik.setFieldValue("itemName", "", false);
-          formik.setFieldValue("description", "", false);
-          formik.setFieldValue("price", "", false);
-          formik.setFieldTouched("itemName", false, false);
-          formik.setFieldTouched("description", false, false);
-          formik.setFieldTouched("price", false, false);
-        })
-        .catch((err) => {
-          if (err.response.status === 401) {
-            nav("/login");
-          } else if (err.response.status === 404) {
-            console.log("hi");
-            formik.setErrors({ itemName: "You do not own a restaurant" });
-          }
-        });
+
+      const editIds = getIdFromName(values.itemName);
+
+      if (editIds.length > 0) {
+        axios
+          .patch(`/menu_item/${editIds[0]}/`, body, headers)
+          .then(() => showSuccessModal("Menu item Edited!", setSuccess));
+
+        setToggleMenu((prev) => !prev);
+      } else {
+        axios
+          .post("/menu_item/add/", body, headers)
+          .then((res) => {
+            console.log(res);
+            // setTempMenuItems((prev) => [...prev, res.data]);
+            setToggleMenu((prev) => !prev);
+            showSuccessModal("Menu item added!", setSuccess);
+            formik.setFieldValue("itemName", "", false);
+            formik.setFieldValue("description", "", false);
+            formik.setFieldValue("price", "", false);
+            formik.setFieldTouched("itemName", false, false);
+            formik.setFieldTouched("description", false, false);
+            formik.setFieldTouched("price", false, false);
+          })
+          .catch((err) => {
+            if (err.response.status === 401) {
+              nav("/login");
+            } else if (err.response.status === 404) {
+              console.log("hi");
+              formik.setErrors({ itemName: "You do not own a restaurant" });
+            }
+          });
+      }
     },
   });
 
+  const getIdFromName = (name) => {
+    return menuItems
+      .filter((x) => {
+        return x.name === name;
+      })
+      .map((i) => {
+        return i.id;
+      });
+  };
+
   useEffect(() => {
     getMenuItems();
-    console.log("temp menu");
-    console.log(tempMenuItems);
+
     // eslint-disable-next-line
-  }, [tempMenuItems]);
+  }, [toggleMenu]);
 
   // const addMenuItem = () => {};
 
@@ -106,12 +127,13 @@ const AddEditMenu = () => {
       });
 
     // filterMenu(deleteID);
-    console.log(tempMenuItems);
-    setTempMenuItems((prev) =>
-      prev.filter((mi) => {
-        return mi.id !== deleteID;
-      })
-    );
+
+    setToggleMenu((prev) => !prev);
+    // setTempMenuItems((prev) =>
+    //   prev.filter((mi) => {
+    //     return mi.id !== deleteID;
+    //   })
+    // );
     console.log(menuItems);
   };
 
