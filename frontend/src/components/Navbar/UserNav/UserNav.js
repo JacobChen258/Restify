@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Nav,
   Navbar,
@@ -12,9 +12,23 @@ import "./UserNav.css";
 import profilePicture from "../../../images/profile-picture.png";
 import { Outlet } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
+import axios from "axios";
+import RestaurantInfo from "../../Restaurant/RestaurantInfo/RestaurantInfo";
 
 const UserNav = () => {
   const { logoutUser, user } = useContext(AuthContext);
+  const [resInfo, setResInfo] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(`/restaurant/${user.restaurant}`)
+      .then((res) => {
+        setResInfo(res.data);
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  }, []);
 
   return (
     <>
@@ -57,7 +71,11 @@ const UserNav = () => {
               <NavDropdown title="Account" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">
                   <Card className="card p-2">
-                    <Card.Img variant="top" src={profilePicture} />
+                    <Card.Img
+                      variant="top"
+                      src={resInfo.logo}
+                      className="img_fit"
+                    />
                     <Card.Body className="dropdown-text">
                       <Card.Title>FirstName LastName</Card.Title>
                       <Card.Text className="card-text">
