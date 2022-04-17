@@ -4,9 +4,9 @@ from django.db.models.deletion import CASCADE
 from accounts.models import User
 # Create your models here.
 class Blog(models.Model):
-    title = models.CharField(max_length=20,null=False, blank=False)
+    title = models.CharField(max_length=100,null=False, blank=False)
     creation_time = models.DateTimeField(auto_now_add=True)
-    content = models.TextField(max_length=500)
+    content = models.TextField(max_length=2000)
     restaurant = models.ForeignKey(to=Restaurant, on_delete=CASCADE,null=False, blank=False)
     num_likes = models.IntegerField(default=0)
 

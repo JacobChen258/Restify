@@ -23,10 +23,8 @@ class MenuItemView(DestroyAPIView,UpdateAPIView,CreateAPIView,ListAPIView):
         res = get_object_or_404(Restaurant,id=self.kwargs['res_id'])
         menu = MenuItem.objects.filter(restaurant=res.id).order_by('id')
 
-        if menu.exists():
-            return menu
+        return menu
 
-        raise Http404
 
     def get_object(self):
         res = get_object_or_404(Restaurant,owner=self.request.user.id)

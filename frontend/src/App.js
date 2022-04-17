@@ -1,5 +1,5 @@
 import "./App.css";
-import RestifyNavbar from "./components/Navbar/UserNav/Navbar";
+import RestifyNavbar from "./components/Navbar/RestifyNav/RestifyNav";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchPage from "./components/Search/Index";
 import SearchResult from "./components/SearchResult/Index";
@@ -12,47 +12,54 @@ import Blogs from "./components/Restaurant/Blog/Blogs";
 import Images from "./components/Restaurant/ImagesComponent/Images";
 import Comments from "./components/Restaurant/Comments/Comments";
 import Menu from "./components/Restaurant/Menu/Menu";
-import AnonNavbar from "./components/Navbar/AnonNav/Navbar";
+import AnonNavbar from "./components/Navbar/AnonNav/AnonNav";
 import AddBlog from "./components/AddBlog/AddBlog";
 import Feed from "./components/Feed/Feed";
 import EditProfile from "./components/EditProfile/EditProfile";
+import { AuthProvider } from "./components/Context/AuthContext";
 
 function App() {
   return (
     <div>
-      <Router>
-        <RestifyNavbar />
-        <Routes>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/profile/edit" element={<EditProfile />} />
-          <Route index element={<SearchPage />}></Route>
-          <Route path="/addblog" element={<AddBlog />}></Route>
-          <Route path="/signup/test" element={<RestifyNavbar />}>
-            {/* Components that need navbar go here */}
-            <Route path="/signup/test/2" element={<Signup />} />
-          </Route>
-          <Route index element={<SearchPage />}></Route>
-          <Route
-            path="/search/:method/:field/"
-            element={<SearchResult />}
-          ></Route>
-          <Route path="/restaurant/:id/" element={<Restaurant />}>
-            <Route index element={<Menu />}></Route>
-            <Route path="/restaurant/:id/blog/" element={<Blogs />}></Route>
+      <AuthProvider>
+        <Router>
+          <RestifyNavbar />
+          <Routes>
+            {/* <Route index element={<SearchPage />}></Route> */}
 
+            {/* <Route path="/user" element={<Navbar />}> */}
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route index element={<SearchPage />}></Route>
+            {/* Components that need navbar go here */}
+            {/* <Route path="/signup/test/2" element={<Signup />} /> */}
+            {/* </Route> */}
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/addblog" element={<AddBlog />}></Route>
             <Route
-              path="/restaurant/:id/comment/"
-              element={<Comments />}
+              path="/search/:method/:field/"
+              element={<SearchResult />}
             ></Route>
-            <Route path="/restaurant/:id/menu/" element={<Menu />}></Route>
-            <Route path="/restaurant/:id/image/" element={<Images />}></Route>
-            <Route path="/restaurant/:id/*" element={<PageNotFound />} />
-          </Route>
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Router>
+            <Route
+              path="/search/:method/"
+              element={<SearchResult />}
+            ></Route>
+            <Route path="/restaurant/:id/" element={<Restaurant />}>
+              <Route index element={<Menu />}></Route>
+              <Route path="/restaurant/:id/blog/" element={<Blogs />}></Route>
+              <Route
+                path="/restaurant/:id/comment/"
+                element={<Comments />}
+              ></Route>
+              <Route path="/restaurant/:id/menu/" element={<Menu />}></Route>
+              <Route path="/restaurant/:id/image/" element={<Images />}></Route>
+              <Route path="/restaurant/:id/*" element={<PageNotFound />} />
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }
