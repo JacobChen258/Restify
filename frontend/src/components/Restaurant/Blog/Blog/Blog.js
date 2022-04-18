@@ -15,7 +15,6 @@ const Blog = (props) => {
       </Card.Subtitle>
       <Card.Body className="preview_text m-1">
         {props.Blog.content}
-        asnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfsasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfs
       </Card.Body>
       <div className="d-flex">
         <AiFillLike size={20} />{" "}
@@ -25,10 +24,9 @@ const Blog = (props) => {
             size="sm"
             className="ms-2"
             variant="danger"
-            blog-id={props.Blog.id}
+            id={props.Blog.id}
             onClick={(e) => {
-              console.log(e.target);
-              props.onChange(e.target.getAttribute("blog-id"));
+              props.onChange(e.target.id);
             }}
           >
             Delete

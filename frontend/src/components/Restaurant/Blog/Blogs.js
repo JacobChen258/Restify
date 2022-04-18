@@ -63,7 +63,7 @@ const Blogs = (props) => {
     };
 
     axios
-      .delete(`/blog/${id}`, headers)
+      .delete(`/blog/${id}/`, headers)
       .then(() => {
         setChange((prev) => !prev);
       })
