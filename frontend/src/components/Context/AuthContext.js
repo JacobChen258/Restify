@@ -18,13 +18,13 @@ export const AuthProvider = ({ children }) => {
       : null
   );
   const [loading, setloading] = useState(true);
-
   const updateToken = async () => {
     console.log("updated token");
     axios
       .post("/user/token/refresh", { refresh: authTokens?.refresh })
       .then((res) => {
         localStorage.setItem("authTokens", JSON.stringify(res.data));
+        console.log(jwt_decode(res.data.access))
         setAuthTokens(res.data);
         setUser(jwt_decode(res.data.access));
       })

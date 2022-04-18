@@ -1,24 +1,48 @@
-
-
-.dropdown_title{
-    max-width: 11rem;
-    text-align: start;
+.dropdown_title {
+  max-width: 11rem;
+  text-align: start;
 }
 
-.form_border{
-    border-radius: 0;
+.form_border {
+  border-radius: 0;
 }
 
-.form_width{
-    width: 20rem;
+.form_width {
+  width: 20rem;
 }
 
-.dropdown-menu{
-    margin-left:2rem;
+.dropdown-menu {
+  margin-left: 2rem;
 }
 
-.bg_color{
-    background-image: linear-gradient(rgb(170, 167, 167), rgb(152, 226, 220));
-    min-height: 100vh !important;
-    height: 100% !important;
+.bg_color {
+  background-color: antiquewhite;
+  min-height: 100vh !important;
+  height: 100% !important;
+}
+
+.feed-like {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+.res-link {
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+}
+.res-link:hover {
+  color: rgb(0, 0, 0);
+}
+
+.toast-container {
+  top: 250px;
+}
+
+.blog-title {
+  font-size: 20px;
 }

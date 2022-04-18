@@ -9,8 +9,9 @@ from restaurants.models import Restaurant
 from notifications.serializers import NotificationsSerializer
 from rest_framework.generics import get_object_or_404
 @api_view(['POST','DELETE'])
-@permission_classes((IsAuthenticated, ))
+# @permission_classes((IsAuthenticated, ))
 def liked_blog(request):
+    print(request.method)
     if request.method=="POST":
         data = request.data.copy()
         if "blog" in request.data:
@@ -18,7 +19,8 @@ def liked_blog(request):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         data['user'] = request.user.id
-
+        if (len(Blog_Likes.objects.filter(blog=blog.id,user=request.user.id))>0):
+            return Response(status = status.HTTP_409_CONFLICT)
         serializer = LikedBlogSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -35,8 +37,15 @@ def liked_blog(request):
             notif_serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)   
     elif request.method == 'DELETE':
+        print(request.data)
+        if "id" not in request.data:
+            print("HERE")
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
         blog = get_object_or_404(Blog,id=request.data['id'])
         likes = Blog_Likes.objects.filter(blog=blog.id,user=request.user.id)
+        if (len(Blog_Likes.objects.filter(blog=blog.id,user=request.user.id))==0):
+            return Response(status = status.HTTP_409_CONFLICT)
         for like in likes:
             like.delete()
             blog.num_likes -= 1

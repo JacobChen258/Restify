@@ -6,8 +6,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Form } from "react-bootstrap";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../Context/AuthContext";
 
 const Signup = () => {
+  const { user, logoutUser } = useContext(AuthContext);
+
   const nav = useNavigate();
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
   const usernameRegex = /^[a-zA-Z0-9_@+.-]*$/;
@@ -21,11 +25,11 @@ const Signup = () => {
       ),
     firstName: Yup.string().matches(
       nameRegex,
-      "Name can only contain spaces, hyphens and alphabetical"
+      "Name can only contain spaces, hyphens and alphabetical characters"
     ),
     lastName: Yup.string().matches(
       nameRegex,
-      "Name can only contain spaces, hyphens and alphabetical"
+      "Name can only contain spaces, hyphens and alphabetical characters"
     ),
     email: Yup.string().email("Invalid email address"),
     phone: Yup.string().matches(phoneRegex, "Invalid phone format"),
@@ -65,7 +69,7 @@ const Signup = () => {
     },
     validationSchema: validation,
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       var bodyFormData = new FormData();
       bodyFormData.append("username", values.username);
       bodyFormData.append("password", values.password);
@@ -95,11 +99,11 @@ const Signup = () => {
         })
         .catch((err) => {
           console.log(err.response.status);
-          if (err.response.status == 400) {
+          if (err.response.status === 400) {
             console.log("here");
             formik.setErrors({ username: "This username is already in use" });
           } else {
-            formik.setErrors({ username: "An unexpected error occurred" });
+            formik.setErrors({ username: "Please fix form errors" });
           }
           formik.setFieldValue("password", "", false);
           formik.setFieldValue("confirmPassword", "", false);
@@ -109,7 +113,7 @@ const Signup = () => {
     },
   });
 
-  return (
+  return !user ? (
     <div className="vh-100">
       <div className="signup-form">
         <form className="form-signin" onSubmit={formik.handleSubmit}>
@@ -289,6 +293,8 @@ const Signup = () => {
         </form>
       </div>
     </div>
+  ) : (
+    logoutUser()
   );
 };
 
