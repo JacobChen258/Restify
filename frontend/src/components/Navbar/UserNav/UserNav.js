@@ -15,9 +15,9 @@ import axios from "axios";
 import Notifications from "./Notification/Notification";
 
 const UserNav = (props) => {
-  const { logoutUser,user,authTokens } = useContext(AuthContext);
-  const [res,setRes] = useState(null);
-  const [userInfo,setUserInfo] = useState({
+  const { logoutUser, user, authTokens } = useContext(AuthContext);
+  const [res, setRes] = useState(null);
+  const [userInfo, setUserInfo] = useState({
     avatar: null,
     first_name: "",
     last_name: "",
@@ -40,6 +40,7 @@ const UserNav = (props) => {
           alert(e);
         });
     }
+    // eslint-disable-next-line
   }, [user]);
 
   const NavMyRestaurant = () => {

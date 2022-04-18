@@ -32,6 +32,7 @@ const Feed = () => {
       setFeed(res.data.results);
       next = res.data.next ? res.data.next.replace("8000", "3000") : null;
     });
+    // eslint-disable-next-line
   }, []);
 
   const likeBlog = async (e) => {
@@ -128,14 +129,7 @@ const Feed = () => {
     axios.delete("/blog/like/", headers).then((res) => {
       e.target.parentElement.parentElement.nextSibling.lastChild.innerHTML =
         likes -= 1;
-      // setFeed((prev) => {
-      //   return prev.map((b) => {
-      //     if (b.id === bid) {
-      //       return { ...b, num_likes: b.num_likes - 1 };
-      //     }
-      //     return b;
-      //   });
-      // });
+
       console.log(feed);
     });
 

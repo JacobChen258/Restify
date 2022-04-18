@@ -1,16 +1,13 @@
 import { React, useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import "./EditProfile.css";
 import axios from "axios";
-import user from "../../images/profile-picture.png";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import AuthContext from "../Context/AuthContext";
 import showSuccessModal from "../../utils/SuccessModal";
 
-var userInfo = {};
 const EditProfile = (props) => {
-  const { user, authTokens } = useContext(AuthContext);
+  const { authTokens } = useContext(AuthContext);
   const [success, setSuccess] = useState("");
   const [userInfo, setUserInfo] = useState({});
   const nameRegex = /^[a-zA-Z\s-]*$/;
@@ -26,7 +23,7 @@ const EditProfile = (props) => {
       .get(`/user/profile/`, headers)
       .then((res) => {
         setUserInfo(res.data);
-        props.SetAvatar(res.data.avatar)
+        props.SetAvatar(res.data.avatar);
         // userInfo = res.data;
       })
       .catch((e) => {
@@ -36,6 +33,7 @@ const EditProfile = (props) => {
   useEffect(() => {
     getUserInfo();
     console.log(userInfo);
+    // eslint-disable-next-line
   }, []);
 
   const validation = Yup.object({
@@ -90,7 +88,6 @@ const EditProfile = (props) => {
         .then((res) => {
           getUserInfo();
           showSuccessModal("Profile updated!", setSuccess);
-
         })
         .catch((err) => {
           formik.setErrors({ error: "Please fix form errors" });
@@ -139,6 +136,7 @@ const EditProfile = (props) => {
               </div>
               <div className="card-body text-center text-light bg-light py-3">
                 <img
+                  alt=""
                   id="edit-profile-avatar"
                   className="img-thumbnail p-3 text-center rounded img-account-profile w-50"
                   src={userInfo.avatar}

@@ -37,6 +37,7 @@ const Blogs = (props) => {
         alert(e);
       });
     console.log(blogs);
+    // eslint-disable-next-line
   }, [params.id, change]);
 
   const fetchData = () => {
