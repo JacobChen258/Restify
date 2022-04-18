@@ -11,9 +11,7 @@ const Blogs = (props) =>{
         axios.get(`/blog/restaurant/${params.id}/`)
         .then((res)=>{
             setBlogs(res.data.results);
-            let next_url = res.data.next;
-            next_url = next_url.split('http://127.0.0.1:8000')[1];
-            setNext(next_url);
+            setNext(res.data.next);
         })
         .catch((e)=>{
             alert(e);

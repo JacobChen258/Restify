@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import "./CreateRestaurant.css";
+import React, {useContext, useEffect, useState} from "react";
+import './CreateRestaurant.css'
 import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useFormik, Form } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
+
 const CreateRestaurant = () => {
-  const { user, authTokens, setUser, updateToken } = useContext(AuthContext);
+  const { user, authTokens, logoutUser } = useContext(AuthContext);
   const nav = useNavigate();
   const [img, setImg] = useState(null);
   useEffect(() => {
-    console.log(user);
     if (user === null) {
       nav("/login");
     } else if (user.restaurant) {
@@ -52,73 +52,56 @@ const CreateRestaurant = () => {
       phone: "",
       logo: null,
     },
-    validationSchema: validation,
-    onSubmit: async (values) => {
-      var bodyFormData = new FormData();
-      bodyFormData.append("name", values.name);
-      bodyFormData.append("address", values.address);
-      bodyFormData.append("postal_code", values.postal_code);
-      bodyFormData.append("email", values.email);
-      bodyFormData.append("phone_num", values.phone);
-      if (values.logo) {
-        bodyFormData.append("logo", values.logo);
-      }
-      const options = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + String(authTokens.access),
-        },
-      };
-      for (var pair of bodyFormData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
-      console.log(bodyFormData);
-      axios
-        .post("/restaurant/", bodyFormData, options)
-        .then((res) => {
-          alert("Restaurant Created!");
-          let id = res.data.id;
-          setUser({ ...user, restaurant: id });
-          updateToken();
-          nav(`/restaurant/${id}/`);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          if (err.response.status == 400) {
-            alert(
-              "You have a restaurant already. Navigate to your restaurant."
-            );
-            nav(`/restaurant/${user.restaurant}/`);
-          }
-        });
-    },
-  });
-
-  return (
-    <div className="d-flex flex-column justify-content-center align-content-center">
-      <h1 className="mt-5 mb-5 text-center">Create Your Restauraunt</h1>
-      <form
-        className="d-flex flex-column justify-content-center align-content-center"
-        onSubmit={formik.handleSubmit}
-      >
-        <div className="align-self-center d-flex flex-column">
-          <img
-            src={img}
-            className="rounded-3 border border-2 border-dark align-self-center logo_container"
-            alt=""
-          ></img>
-          {formik.errors.logo && formik.touched.logo ? (
-            <div className="alert alert-danger " role="alert">
-              {formik.errors.logo}
-            </div>
-          ) : null}
-          <div className="align-self-center mt-2 mb-2">
-            <label htmlFor="imageFile">Upload logo: </label>
-            <input
-              type="file"
-              id="imageFile"
-              accept="image/png, image/jpeg, image/jpg"
-              onChange={(e) => {
+        validationSchema: validation,
+        onSubmit: (values)=>{
+            var bodyFormData = new FormData();
+            bodyFormData.append("name", values.name);
+            bodyFormData.append("address", values.address);
+            bodyFormData.append("postal_code", values.postal_code);
+            bodyFormData.append("email", values.email);
+            bodyFormData.append("phone_num", values.phone);
+            if (values.logo) {
+                bodyFormData.append("logo", values.logo);
+            }
+            const options = {
+                headers: { "Content-Type": "multipart/form-data" ,
+                "Authorization": "Bearer " + String(authTokens.access)},
+            };
+            for (var pair of bodyFormData.entries()) {
+                console.log(pair[0] + ", " + pair[1]);
+            }
+            console.log(bodyFormData)
+            axios
+            .post("/restaurant/", bodyFormData, options)
+            .then((res) => {
+                alert("Restaurant Created! Please Login Again");
+                logoutUser();
+            })
+            .catch((err) => {
+            console.log(err.response);
+            if (err.response.status == 400){
+                alert("You have a restaurant already. Navigate to your restaurant.")
+                nav(`/restaurant/${user.restaurant}/`);
+            }
+            });
+        }
+    })
+        
+    return (
+        <div className="d-flex flex-column justify-content-center align-content-center">
+            <h1 className="mt-5 mb-5 text-center">Create Your Restauraunt</h1>
+            <form className="d-flex flex-column justify-content-center align-content-center" onSubmit={formik.handleSubmit}>
+            <div className="align-self-center d-flex flex-column">
+                <img src={img} className = "rounded-3 border border-2 border-dark align-self-center logo_container" alt="" ></img>
+                {formik.errors.logo && formik.touched.logo ? (
+                    <div className="alert alert-danger " role="alert">
+                    {formik.errors.logo}
+                    </div>
+                ) : null}
+                <div className="align-self-center mt-2 mb-2">
+                    <label htmlFor ="imageFile">Upload logo: </label>
+                    <input type="file" id="imageFile" accept="image/png, image/jpeg, image/jpg"
+              onChange={(e) =>{
                 handleUploadImage(e);
                 formik.setFieldValue("logo", e.currentTarget.files[0]);
               }}

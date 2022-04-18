@@ -30,18 +30,13 @@ const EditRestaurant = (props)=>{
         axios.get(`/restaurant/${user.restaurant}/`)
         .then((res)=>{
             setInfo(res.data);
+            setImg(res.data.logo);
         })
         .catch((e)=>{
             alert('Restaurant does not exist');
             nav("/");
         })
     },[])
-    useEffect(()=>{
-        if (Object.keys(info).length > 0){
-            setImg(info.logo);
-            formik.resetForm({values:info})
-        }
-    },[info])
     const validation = Yup.object({
         name: Yup.string()
           .matches(
@@ -75,10 +70,10 @@ const EditRestaurant = (props)=>{
         },
         validationSchema: validation,
         onSubmit: (values)=>{
-            console.log(values)
             var bodyFormData = new FormData();
             if (values.name && values.name !== ""){
                 bodyFormData.append("name", values.name);
+                console.log(bodyFormData)
             }
             if (values.address && values.address !== ""){
                 bodyFormData.append("address", values.address);
@@ -99,8 +94,7 @@ const EditRestaurant = (props)=>{
                 headers: { "Content-Type": "multipart/form-data" ,
                 "Authorization": "Bearer " + String(authTokens.access)},
             };
-            console.log(bodyFormData)
-            if (Object.keys(bodyFormData).length === 0){
+            if (bodyFormData.entries().length === 0){
                 nav(`/restaurant/${user.restaurant}`);
                 return;
             }
@@ -143,7 +137,7 @@ const EditRestaurant = (props)=>{
                 ) : null}
                 <div className="input-group mb-3 modal_container">
                     <span className="input-group-text w-100" id="restaurant_name">Restaurant Name</span>
-                    <input type="text" className="form-control w-100" id="name" aria-describedby="restaurant_name" required="" {...formik.getFieldProps("name")}></input>
+                    <input type="text" className="form-control w-100" id="name" placeholder={info.name} aria-describedby="restaurant_name" required="" {...formik.getFieldProps("name")}></input>
                 </div>
                 {formik.errors.address && formik.touched.address ? (
                     <div className="alert alert-danger " role="alert">
@@ -152,7 +146,7 @@ const EditRestaurant = (props)=>{
                 ) : null}
                 <div className="input-group mb-3 modal_container">
                     <span className="input-group-text w-100" id="restaurant_address">Address</span>
-                    <input type="text" className="form-control w-100" aria-describedby="restaurant_address" required=""  {...formik.getFieldProps("address")}></input>
+                    <input type="text" className="form-control w-100" placeholder={info.address} aria-describedby="restaurant_address" required=""  {...formik.getFieldProps("address")}></input>
                 </div>
                 {formik.errors.postal_code && formik.touched.postal_code ? (
                     <div className="alert alert-danger " role="alert">
@@ -161,7 +155,7 @@ const EditRestaurant = (props)=>{
                 ) : null}
                 <div className="input-group mb-3 modal_container">
                     <span className="input-group-text w-100" id="postal_code">Postal Code</span>
-                    <input type="text" pattern="[A-Za-z]\d[A-Za-z]\s\d[A-Za-z]\d" className="form-control w-100" aria-describedby="postal_code" required=""  {...formik.getFieldProps("postal_code")}></input>
+                    <input type="text" pattern="[A-Za-z]\d[A-Za-z]\s\d[A-Za-z]\d" placeholder={info.postal_code} className="form-control w-100" aria-describedby="postal_code" required=""  {...formik.getFieldProps("postal_code")}></input>
                 </div>
                 {formik.errors.email && formik.touched.email ? (
                     <div className="alert alert-danger " role="alert">
@@ -170,7 +164,7 @@ const EditRestaurant = (props)=>{
                 ) : null}
                 <div className="input-group mb-3 modal_container">
                     <span className="input-group-text w-100" id="email_address">Email Address</span>
-                    <input type="email" className="form-control w-100" aria-describedby="email_address" required=""  {...formik.getFieldProps("email")}></input>
+                    <input type="email" className="form-control w-100" placeholder={info.email} aria-describedby="email_address" required=""  {...formik.getFieldProps("email")}></input>
                 </div>
                 {formik.errors.phone_num && formik.touched.phone_num ? (
                     <div className="alert alert-danger " role="alert">
@@ -179,7 +173,7 @@ const EditRestaurant = (props)=>{
                 ) : null}
                 <div className="input-group mb-3 modal_container">
                     <span className="input-group-text w-100" id="email_address">Phone Number</span>
-                    <input type="text" className="form-control w-100" aria-describedby="phone_number" required=""  {...formik.getFieldProps("phone_num")}></input>
+                    <input type="text" className="form-control w-100" placeholder={info.phone_num} aria-describedby="phone_number" required=""  {...formik.getFieldProps("phone_num")}></input>
                 </div>
             </div>
             <button className="btn btn-primary mt-3 align-self-center mb-3" type="submit">Edit</button>
