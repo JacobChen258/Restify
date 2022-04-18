@@ -12,6 +12,8 @@ class FollowedRestaurant(models.Model):
     restaurant = models.ForeignKey(to='restaurants.Restaurant', on_delete=CASCADE)
     user = models.ForeignKey(to=User, on_delete=CASCADE)
 
+    class Meta:
+        unique_together = ('user', 'restaurant',)
 
     def __str__(self):
         return self.user.username +'_'+self.restaurant.name

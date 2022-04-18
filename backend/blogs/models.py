@@ -17,5 +17,8 @@ class Blog_Likes(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.DO_NOTHING,null=False, blank=False)
     blog = models.ForeignKey(to=Blog, on_delete=models.CASCADE,null=False, blank=False)
     
+    class Meta:
+        unique_together = ('user', 'blog',)
+
     def __str__(self):
         return self.user.username + "_"+self.blog.title

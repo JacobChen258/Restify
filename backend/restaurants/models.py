@@ -19,6 +19,9 @@ class Restaurant_Like(models.Model):
     user = models.ForeignKey(to='accounts.User', on_delete=models.DO_NOTHING,null=False, blank=False)
     restaurant = models.ForeignKey(to=Restaurant, on_delete=models.CASCADE,null=False, blank=False)
 
+    class Meta:
+        unique_together = ('user', 'restaurant',)
+
     def __str__(self):
         return self.user.username +"_"+ self.restaurant.name
         
