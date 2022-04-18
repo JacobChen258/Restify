@@ -20,7 +20,9 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import EditRestaurant from "./components/Restaurant/RestaurantInfo/EditRestaurant/EditRestaurant";
 import EditProfile from "./components/EditProfile/EditProfile";
 import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
+import BlogInfo from "./components/BlogInfo/BlogInfo";
 import {useState} from "react";
+
 function App() {
   const [avatar,setAvatar] = useState(null); 
   return (
@@ -88,7 +90,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-
+            <Route path="/blog/:id/" element={<BlogInfo />} />
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}
