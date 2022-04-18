@@ -63,11 +63,30 @@ const RestaurantInfo = ()=>{
         if (user !== null && user.restaurant !== null){
             if (params.id === String(user.restaurant)){
                 return (
-                <Button className="ms-auto mb-auto me-5" onClick={()=>{
+                
+                <div className="ms-auto me-3 d-flex flex-column">
+                <div>
+                <Button className = "btn_width mb-3" onClick={()=>{
                     nav("/edit/restaurant/");
                 }}>
                 Edit Information
                 </Button>
+                </div>
+                <div>
+                <Button className = "btn_width mb-3" onClick={()=>{
+                    nav(`/restaurant/${params.id}/menu/add/`);
+                }}>
+                Edit/Add Menu
+                </Button>
+                </div>
+                <div>
+                <Button className = "btn_width"  onClick={()=>{
+                    nav(`/restaurant/${params.id}/blog/add/`);
+                }}>
+                Add Blog
+                </Button>
+                </div>
+                </div>
                 )
             }
         }

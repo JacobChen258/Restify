@@ -20,4 +20,3 @@ class Feed(ListAPIView):
             item['res_name'] = item['restaurant'].name
         return feed
 
-
