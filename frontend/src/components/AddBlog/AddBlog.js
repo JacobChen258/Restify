@@ -50,6 +50,8 @@ const AddBlog = () => {
             formik.setErrors({ name: "Please fix form errors" });
           } else if (err.response.status === 404) {
             formik.setErrors({ name: "You do not own a restaurant" });
+          } else if (err.response.status === 409) {
+            formik.setErrors({ name: "A post with this name exists" });
           }
         });
     },
