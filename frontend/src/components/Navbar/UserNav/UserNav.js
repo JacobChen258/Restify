@@ -14,11 +14,10 @@ import AuthContext from "../../Context/AuthContext";
 import axios from "axios";
 import Notifications from "./Notification/Notification";
 
-const UserNav = () => {
-  const { logoutUser, user, authTokens } = useContext(AuthContext);
-
-  const [res, setRes] = useState(null);
-  const [userInfo, setUserInfo] = useState({
+const UserNav = (props) => {
+  const { logoutUser,user,authTokens } = useContext(AuthContext);
+  const [res,setRes] = useState(null);
+  const [userInfo,setUserInfo] = useState({
     avatar: null,
     first_name: "",
     last_name: "",
