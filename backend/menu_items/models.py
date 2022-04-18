@@ -8,8 +8,5 @@ class MenuItem(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2,null=False, blank=False)
     restaurant = models.ForeignKey(to=Restaurant, on_delete=CASCADE,null=False, blank=False)
 
-    class Meta:
-        unique_together = ('name', 'restaurant',)
-
     def __str__(self):
         return self.name
