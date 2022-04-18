@@ -136,14 +136,14 @@ const Feed = () => {
         </div>
       </section>
       <section className="text-dark p-5">
-        <div className="container text-center toast-container">
-          <ToastContainer className="mt-5 text-center" position="bottom-center">
+        <div className="container toast-container">
+          <ToastContainer className="mt-5">
             {feed.map((post, index) => {
               return (
                 <Toast
-                  style={{ width: "50%", margin: "auto" }}
+                  style={{ width: "700px", margin: "auto" }}
                   key={post.id}
-                  className="mt-5 text-center"
+                  className="mt-5"
                   ref={index === feed.length - 1 ? infScrollRef : null}
                 >
                   <Toast.Header closeButton={false}>
@@ -174,7 +174,7 @@ const Feed = () => {
                     >
                       <IoMdHeartDislike size={20} />
                     </button>
-                    <small>
+                    <small className="text-center">
                       Likes <b>{post.num_likes}</b>
                     </small>
                   </Toast.Header>
