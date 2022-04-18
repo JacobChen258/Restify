@@ -34,6 +34,7 @@ const UserNav = (props) => {
         .get("/user/profile/", { headers: header })
         .then((res) => {
           setUserInfo(res.data);
+          props.SetAvatar(res.data.avatar);
         })
         .catch((e) => {
           alert(e);
@@ -69,7 +70,7 @@ const UserNav = (props) => {
                 <Card className="card p-2 d-flex flex-column profile_container">
                   <Card.Img
                     variant="top"
-                    src={userInfo.avatar}
+                    src={props.Avatar}
                     className="img_fit"
                   />
                   <Card.Body className="dropdown-text">

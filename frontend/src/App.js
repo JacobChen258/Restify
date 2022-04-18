@@ -20,13 +20,14 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import EditRestaurant from "./components/Restaurant/RestaurantInfo/EditRestaurant/EditRestaurant";
 import EditProfile from "./components/EditProfile/EditProfile";
 import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
-
+import {useState} from "react";
 function App() {
+  const [avatar,setAvatar] = useState(null); 
   return (
     <div>
       <AuthProvider>
         <Router>
-          <RestifyNavbar />
+          <RestifyNavbar SetAvatar={setAvatar} Avatar={avatar}/>
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
@@ -57,7 +58,7 @@ function App() {
               path="/profile/edit"
               element={
                 <PrivateRoute>
-                  <EditProfile />
+                  <EditProfile SetAvatar={setAvatar}/>
                 </PrivateRoute>
               }
             />
