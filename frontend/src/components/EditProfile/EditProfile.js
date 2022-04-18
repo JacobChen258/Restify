@@ -9,7 +9,7 @@ import AuthContext from "../Context/AuthContext";
 import showSuccessModal from "../../utils/SuccessModal";
 
 var userInfo = {};
-const EditProfile = () => {
+const EditProfile = (props) => {
   const { user, authTokens } = useContext(AuthContext);
   const [success, setSuccess] = useState("");
   const [userInfo, setUserInfo] = useState({});
@@ -26,6 +26,7 @@ const EditProfile = () => {
       .get(`/user/profile/`, headers)
       .then((res) => {
         setUserInfo(res.data);
+        props.SetAvatar(res.data.avatar)
         // userInfo = res.data;
       })
       .catch((e) => {
@@ -89,6 +90,7 @@ const EditProfile = () => {
         .then((res) => {
           getUserInfo();
           showSuccessModal("Profile updated!", setSuccess);
+
         })
         .catch((err) => {
           formik.setErrors({ error: "Please fix form errors" });
