@@ -12,20 +12,7 @@ const Blogs = (props) => {
   const [next, setNext] = useState(null);
   const [change, setChange] = useState(false);
 
-  //   useEffect(() => {
-  //     axios
-  //       .get(`/blog/restaurant/${params.id}/`)
-  //       .then((res) => {
-  //         setBlogs(res.data.results);
-  //         setNext(res.data.next);
-  //       })
-  //       .catch((e) => {
-  //         alert(e);
-  //       });
-  //   }, [deleted]);
-
   useEffect(() => {
-    console.log("use effect");
     setNext(null);
     axios
       .get(`/blog/restaurant/${params.id}/`)
@@ -45,7 +32,6 @@ const Blogs = (props) => {
       axios
         .get(next)
         .then((res) => {
-          console.log(res);
           setBlogs(blogs.concat(res.data.results));
           setNext(res.data.next);
         })

@@ -69,10 +69,7 @@ const CreateRestaurant = () => {
           Authorization: "Bearer " + String(authTokens.access),
         },
       };
-      for (var pair of bodyFormData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
-      console.log(bodyFormData);
+
       axios
         .post("/restaurant/", bodyFormData, options)
         .then((res) => {
@@ -82,7 +79,6 @@ const CreateRestaurant = () => {
           logoutUser();
         })
         .catch((err) => {
-          console.log(err.response);
           if (err.response.status === 400) {
             alert(
               "You have a restaurant already. Navigate to your restaurant."

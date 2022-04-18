@@ -41,7 +41,6 @@ const AddBlog = () => {
           formik.setFieldValue("body", "", false);
           formik.setFieldTouched("name", false, false);
           formik.setFieldTouched("body", false, false);
-          console.log(res);
         })
         .catch((err) => {
           if (err.response.status === 401) {

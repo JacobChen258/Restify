@@ -25,7 +25,6 @@ const RestaurantInfo = () => {
         nav("/");
       });
     if (user !== null) {
-      console.log(authTokens);
       let header = { Authorization: "Bearer " + String(authTokens.access) };
       axios
         .get(`/restaurant/liked/${params.id}/`, { headers: header })
@@ -46,8 +45,6 @@ const RestaurantInfo = () => {
           nav("/");
         });
     }
-    console.log(liked);
-    console.log(following);
   }, [params.id]);
 
   const LikeIcon = () => {
