@@ -9,7 +9,7 @@ const Comment = (props)=>{
         <Card className="p-2 content_width mb-2 blog_bg justify-content-center" id="res_cmt">
             <Card.Title>{props.Comment.full_name}</Card.Title>
             <Card.Body className="preview_text m-1">
-                {props.Comment.content}asnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfsasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfasnfdddvdfvdfvdfs
+                {props.Comment.content}
             </Card.Body>
             <div className="d-flex flex-row">
                 <p className='time_text_color mt-auto mb-auto'>{props.Comment.creation_time.slice(0,10)}</p>
