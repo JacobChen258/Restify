@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { useFormik, Form } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-
+import avatar from "../../images/user-default.jpeg";
 
 const CreateRestaurant = () => {
   const { user, authTokens, logoutUser } = useContext(AuthContext);
   const nav = useNavigate();
-  const [img, setImg] = useState(null);
+  const [img, setImg] = useState(avatar);
   useEffect(() => {
     if (user === null) {
       nav("/login");
