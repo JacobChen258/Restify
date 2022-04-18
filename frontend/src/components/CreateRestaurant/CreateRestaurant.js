@@ -1,4 +1,4 @@
-import React, {useContext, useEffect,useRef, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import './CreateRestaurant.css'
 import AuthContext from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +7,10 @@ import * as Yup from "yup";
 import axios from "axios";
 
 const CreateRestaurant = ()=>{
-    const {user,authTokens,setUser} = useContext(AuthContext);
+    const {user,authTokens,logoutUser} = useContext(AuthContext);
     const nav = useNavigate();
     const [img,setImg] = useState(null);
     useEffect(()=>{
-        console.log(user)
         if (user === null){
             nav("/login");
         }else if (user.restaurant){
@@ -83,10 +82,8 @@ const CreateRestaurant = ()=>{
             axios
             .post("/restaurant/", bodyFormData, options)
             .then((res) => {
-                alert("Restaurant Created!");
-                let id = res.data.id;
-                setUser({...user,restaurant:id});
-                nav(`/restaurant/${id}/`);
+                alert("Restaurant Created! Please Login Again");
+                logoutUser();
             })
             .catch((err) => {
             console.log(err.response);
