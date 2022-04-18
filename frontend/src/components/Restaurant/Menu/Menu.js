@@ -1,9 +1,8 @@
 import React,{useState,useEffect} from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Item from "./Item/Item";
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 const Menu = (props) =>{
     const params = useParams();
     const [items,setItems] = useState([]);
