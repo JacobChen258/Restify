@@ -1,4 +1,11 @@
-import { React, useState, useEffect, useContext } from "react";
+import {
+  React,
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
 import "./Feed.css";
 import axios from "axios";
 import AuthContext from "../Context/AuthContext";
@@ -6,9 +13,11 @@ import { Toast, ToastContainer } from "react-bootstrap";
 // import { FcLike, IoMdHeartDislike } from "react-icons/ai";
 import { FcLike } from "react-icons/fc";
 import { IoMdHeartDislike } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+var next = null;
 
 const Feed = () => {
+  const nav = useNavigate();
   const { authTokens } = useContext(AuthContext);
   const [feed, setFeed] = useState([]);
 
@@ -19,8 +28,9 @@ const Feed = () => {
       },
     };
 
-    axios.get("/user/feed/", headers).then((response) => {
-      setFeed(response.data.results);
+    axios.get("/user/feed/", headers).then((res) => {
+      setFeed(res.data.results);
+      next = res.data.next ? res.data.next.replace("8000", "3000") : null;
     });
   }, []);
 
@@ -55,6 +65,47 @@ const Feed = () => {
       // console.log(feed);
     });
   };
+
+  const [loading, setLoading] = useState(false);
+
+  const getBlogItems = () => {
+    setLoading(true);
+
+    if (next) {
+      const headers = {
+        headers: {
+          Authorization: "Bearer " + authTokens?.access,
+        },
+      };
+      axios
+        .get(next, headers)
+        .then((res) => {
+          setFeed((prev) => [...prev, ...res.data.results]);
+          next = res.data.next ? res.data.next.replace("8000", "3000") : null;
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            nav("/login");
+          }
+        });
+    }
+    setLoading(false);
+  };
+
+  const observer = useRef();
+  const infScrollRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          getBlogItems();
+        }
+      });
+      if (node) observer.current.observe(node);
+    }, // eslint-disable-next-line
+    [loading]
+  );
 
   const unlikeBlog = async (e) => {
     let likes = parseInt(
@@ -110,12 +161,17 @@ const Feed = () => {
       <section className="text-dark p-5">
         <div className="container text-center toast-container">
           <ToastContainer className="mt-5" position="bottom-center">
-            {feed.map((post) => {
+            {feed.map((post, index) => {
               console.log(post.num_likes);
               return (
-                <Toast key={post.id}>
+                <Toast
+                  style={{ width: "100%" }}
+                  key={post.id}
+                  className="mt-5"
+                  ref={index === feed.length - 1 ? infScrollRef : null}
+                >
                   <Toast.Header closeButton={false}>
-                    <strong className="me-auto">
+                    <strong className="me-auto blog-title">
                       {post.title}
                       <span>
                         <Link

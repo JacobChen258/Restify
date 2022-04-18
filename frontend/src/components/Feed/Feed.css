@@ -33,11 +33,16 @@
 
 .res-link {
   color: rgb(0, 0, 0);
+  font-size: 12px;
 }
 .res-link:hover {
   color: rgb(0, 0, 0);
 }
 
 .toast-container {
-  top: 300px;
+  top: 250px;
+}
+
+.blog-title {
+  font-size: 20px;
 }
