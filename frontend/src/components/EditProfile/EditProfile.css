@@ -1,9 +1,73 @@
 .form-control {
-    padding: 1 rem;
+  padding: 1 rem;
 }
 
-.bg_color{
-    background-image: linear-gradient(rgb(170, 167, 167), rgb(152, 226, 220));
-    min-height: 100vh !important;
-    height: 100% !important;
+.bg_color {
+  background-color: antiquewhite;
+  min-height: 100vh !important;
+  height: 100% !important;
 }
+
+.signup-form {
+    background-color: antiquewhite;
+    min-height: 100vh;
+    top: 0;
+  }
+  
+  label {
+    left: 0 !important;
+  }
+  
+  .form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+  }
+  
+  .form-signin {
+    font-weight: 400;
+  }
+
+  .form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .form-signin .form-control:focus {
+    z-index: 2;
+  }
+  
+  .signup-error {
+    color: red;
+  }
+  
+  .alert {
+    text-align: center;
+  }
+  
+  #signup-confirm-pass {
+    margin-bottom: 10px;
+  }
+
+  .form-login input[id="confirmPassword"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  span {
+    display: block;
+  }
+
+  .account {
+    color: rgb(131, 130, 130);
+  }
+  
+  .signup-req::after {
+    content: " *";
+    color: red;
+  }
