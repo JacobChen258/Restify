@@ -20,6 +20,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import EditRestaurant from "./components/Restaurant/RestaurantInfo/EditRestaurant/EditRestaurant";
 import EditProfile from "./components/EditProfile/EditProfile";
 import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
+import BlogInfo from "./components/BlogInfo/BlogInfo";
 
 function App() {
   return (
@@ -87,7 +88,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-
+            <Route path="/blog/:id/" element={<BlogInfo />} />
             <Route
               path="/search/:method/:field/"
               element={<SearchResult />}
