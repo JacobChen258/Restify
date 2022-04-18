@@ -31,17 +31,16 @@ const AddEditMenu = () => {
   const [success, setSuccess] = useState("");
   var next = `/menu_item/restaurant/${params.id}`;
 
-  const priceRegex = /^(\d{1,8}|\d{0,5}\.\d{1,2})$/;
+  const priceRegex = /^(([1-9]\d{0,7})|(\d{0,8}\.\d{1,2}))$/;
   const validation = Yup.object({
     itemName: Yup.string()
       .required("Item name is required")
-      .max(100, "Item name is too long"),
+      .max(100, "Maximum 100 character"),
     price: Yup.string()
-      .matches(priceRegex, "Please enter a valid price")
-      .required("Price is required"),
-
+      .required("Price is invalid")
+      .matches(priceRegex, "Price must be postive, max 2 decimal point and 8 digits"),
     description: Yup.string()
-      .max(500, "description is too long")
+      .max(500, "Maximum 500 characters")
       .required("Description is required"),
   });
 
@@ -133,6 +132,7 @@ const AddEditMenu = () => {
     axios
       .delete(`/menu_item/${deleteID}/`, headers)
       .then((res) => {
+        setToggleMenu((prev) => !prev);
         showSuccessModal("Menu item deleted!", setSuccess);
       })
       .catch((err) => {
@@ -324,7 +324,7 @@ const AddEditMenu = () => {
           </label>
           <input
             name="price"
-            type="number"
+            type="text"
             className="form-control"
             id="menu-price"
             placeholder="Price"

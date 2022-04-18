@@ -19,12 +19,12 @@ class RestaurantSearch(ListAPIView):
     def get_queryset(self):
         if 'field' in self.kwargs:
             if self.kwargs['method'] == "name":
-                return Restaurant.objects.filter(name__icontains = self.kwargs['field']).order_by('num_followers')
+                return Restaurant.objects.filter(name__icontains = self.kwargs['field']).order_by('-num_followers')
             elif self.kwargs['method'] == 'address':
-                return Restaurant.objects.filter(address__icontains = self.kwargs['field']).order_by('num_followers')
+                return Restaurant.objects.filter(address__icontains = self.kwargs['field']).order_by('-num_followers')
             else:
                 items =  MenuItem.objects.filter(name__icontains=self.kwargs['field'])
                 res = list(set([item.restaurant for item in items]))
                 return sorted(res, key=lambda item: item.num_followers)
         else:
-            return Restaurant.objects.all().order_by('num_followers')
+            return Restaurant.objects.all().order_by('-num_followers')

@@ -36,7 +36,7 @@ const RestaurantInfo = () => {
           nav("/");
         });
       axios
-        .get(`/user/followed/${params.id}`, { headers: header })
+        .get(`/user/followed/${params.id}/`, { headers: header })
         .then((res) => {
           setFollowing(res.data.followed);
         })

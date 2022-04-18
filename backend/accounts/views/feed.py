@@ -14,7 +14,7 @@ class Feed(ListAPIView):
     pagination_class = TinyResultsSetPagination
 
     def get_queryset(self):
-        feed = Blog.objects.filter(restaurant__in=FollowedRestaurant.objects.filter(user=self.request.user).values_list('restaurant', flat=True)).order_by('creation_time').values('title', 'id','restaurant','num_likes','content')
+        feed = Blog.objects.filter(restaurant__in=FollowedRestaurant.objects.filter(user=self.request.user).values_list('restaurant', flat=True)).order_by('-num_likes').values('title', 'id','restaurant','num_likes','content')
         for item in feed:
             item['restaurant'] = Restaurant.objects.filter(id=item['restaurant'])[0]
             item['res_name'] = item['restaurant'].name

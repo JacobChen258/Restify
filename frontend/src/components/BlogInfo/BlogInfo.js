@@ -43,6 +43,10 @@ const BlogInfo = () => {
     axios.post("/blog/like/", body, headers).then((res) => {
       e.target.parentElement.parentElement.nextSibling.nextSibling.lastChild.innerHTML =
         likes + 1;
+    }).catch((e)=>{
+      if (e.status===409){
+        return;
+      }
     });
   };
 
@@ -61,6 +65,11 @@ const BlogInfo = () => {
     axios.delete("/blog/like/", headers).then((res) => {
       e.target.parentElement.parentElement.nextSibling.lastChild.innerHTML =
         likes -= 1;
+    })
+    .catch((e)=>{
+      if (e.status === 404){
+        return;
+      }
     });
   };
 

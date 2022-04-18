@@ -95,11 +95,11 @@ const EditProfile = (props) => {
       formik.setFieldValue("first_name", "", false);
       formik.setFieldValue("last_name", "", false);
       formik.setFieldValue("email", "", false);
-      formik.setFieldValue("phone", "", false);
-      formik.setFieldTouched("first_nname", false, false);
+      formik.setFieldValue("phone_num", "", false);
+      formik.setFieldTouched("first_name", false, false);
       formik.setFieldTouched("last_name", false, false);
       formik.setFieldTouched("email", false, false);
-      formik.setFieldTouched("phone", false, false);
+      formik.setFieldTouched("phone_num", false, false);
     },
   });
 
@@ -232,7 +232,7 @@ const EditProfile = (props) => {
                       <label className="small mb-2 mt-2">Phone Number</label>
                       <input
                         name="phone_num"
-                        placeholder={userInfo.phone}
+                        placeholder={userInfo.phone_num}
                         className="form-control"
                         type="text"
                         {...formik.getFieldProps("phone_num")}
