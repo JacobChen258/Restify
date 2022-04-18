@@ -48,7 +48,9 @@ class CommentView(ListAPIView,CreateAPIView):
         self.perform_create(serializer)
         self.notify_owner()
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
+        data = serializer.data
+        data['full_name'] = request.user.first_name +" "+ request.user.last_name
+        return Response(data, status=HTTP_201_CREATED, headers=headers)
 
     def notify_owner(self):
         owner = User.objects.filter(id=self.object.owner.id)[0]
