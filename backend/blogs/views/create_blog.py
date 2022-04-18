@@ -26,7 +26,7 @@ class AddBlog(CreateAPIView):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         if len(Blog.objects.filter(title=serializer.validated_data['title'],restaurant=serializer.validated_data['restaurant'])) >0:
-            return Response(status=status.HTTP_409_CONFLICT)
+            return Response(status=status.HTTP_409_CONFLICT,data={'detail':"cannot create two blogs with same title"})
         self.perform_create(serializer)
         self.notify_users()
         headers = self.get_success_headers(serializer.data)

@@ -15,11 +15,11 @@ class NotificationView(DestroyAPIView,ListAPIView):
     
     def get_queryset(self):
         user = self.request.user
-        return Notification.objects.filter(viewer=user.id).order_by('creation_time')
+        return Notification.objects.filter(viewer=user.id).order_by('-creation_time')
 
     def delete(self, request, *args, **kwargs):
         if 'notif_id' not in self.request.data:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST,data={'detail':'missing notification id'})
         return super().delete(request, *args, **kwargs)
 
     def get_object(self):
