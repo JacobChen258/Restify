@@ -33,7 +33,6 @@ const AddImage = (props) => {
       axios
         .get(next)
         .then((res) => {
-          console.log(res);
           setImages(images.concat(res.data.results));
           setNext(res.data.next);
         })
@@ -55,7 +54,6 @@ const AddImage = (props) => {
     onSubmit: async (values) => {
       var bodyFormData = new FormData();
       bodyFormData.append("image", values.image);
-      console.log(values.image);
 
       const options = {
         headers: {
@@ -63,9 +61,6 @@ const AddImage = (props) => {
           Authorization: "Bearer " + authTokens?.access,
         },
       };
-      for (var pair of bodyFormData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
 
       axios
         .post("/restaurant/image/", bodyFormData, options)
@@ -80,7 +75,6 @@ const AddImage = (props) => {
           } else if (err.response.status === 500) {
             formik.setErrors({ image: "Image is too large" });
           }
-          console.log(err.response);
         });
     },
   });
@@ -102,7 +96,7 @@ const AddImage = (props) => {
         setChange((prev) => !prev);
       })
       .catch((err) => {
-        console.log(err.response);
+        console.log(err);
       });
   };
   return (
@@ -137,7 +131,6 @@ const AddImage = (props) => {
               accept="image/png, image/jpeg, image/jpg"
               onChange={(e) => {
                 formik.setFieldValue("image", e.currentTarget.files[0]);
-                console.log(e.currentTarget.files[0]);
               }}
             />
           </div>

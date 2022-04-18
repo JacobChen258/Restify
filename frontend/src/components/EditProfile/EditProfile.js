@@ -32,7 +32,7 @@ const EditProfile = (props) => {
   };
   useEffect(() => {
     getUserInfo();
-    console.log(userInfo);
+
     // eslint-disable-next-line
   }, []);
 
@@ -82,7 +82,6 @@ const EditProfile = (props) => {
         },
       };
 
-      console.log(values);
       axios
         .patch("/user/profile/", bodyFormData, headers)
         .then((res) => {

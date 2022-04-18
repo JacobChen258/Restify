@@ -36,14 +36,13 @@ const Feed = () => {
   }, []);
 
   const likeBlog = async (e) => {
-    // console.log(e);
     let likes = parseInt(
       e.target.parentElement.parentElement.nextSibling.nextSibling.lastChild
         .innerHTML
     );
 
     const bid = e.target.parentElement.parentElement.getAttribute("blog-id");
-    // console.log(likes);
+
     const body = {
       blog: bid,
     };
@@ -55,15 +54,6 @@ const Feed = () => {
     axios.post("/blog/like/", body, headers).then((res) => {
       e.target.parentElement.parentElement.nextSibling.nextSibling.lastChild.innerHTML =
         likes + 1;
-      // setFeed((prev) => {
-      //   return prev.map((b) => {
-      //     if (b.id === bid) {
-      //       return { ...b, num_likes: b.num_likes + 1 };
-      //     }
-      //     return b;
-      //   });
-      // });
-      // console.log(feed);
     });
   };
 
@@ -112,14 +102,9 @@ const Feed = () => {
     let likes = parseInt(
       e.target.parentElement.parentElement.nextSibling.lastChild.innerHTML
     );
-    console.log(e);
-    console.log(likes);
+
     const bid = e.target.parentElement.parentElement.getAttribute("blog-id");
-    console.log(bid);
-    const body = {
-      id: bid,
-    };
-    console.log(body);
+
     const headers = {
       headers: {
         Authorization: "Bearer " + authTokens?.access,
@@ -129,8 +114,6 @@ const Feed = () => {
     axios.delete("/blog/like/", headers).then((res) => {
       e.target.parentElement.parentElement.nextSibling.lastChild.innerHTML =
         likes -= 1;
-
-      console.log(feed);
     });
 
     console.log(feed);
@@ -156,7 +139,6 @@ const Feed = () => {
         <div className="container text-center toast-container">
           <ToastContainer className="mt-5 text-center" position="bottom-center">
             {feed.map((post, index) => {
-              console.log(post.num_likes);
               return (
                 <Toast
                   style={{ width: "50%", margin: "auto" }}

@@ -21,7 +21,6 @@ const BlogInfo = () => {
 
     axios.get(`/blog/${params.id}/`, headers).then((response) => {
       setBlog(response.data);
-      console.log(blog);
     });
     // eslint-disable-next-line
   }, [params.id]);

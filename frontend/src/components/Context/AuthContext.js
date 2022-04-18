@@ -24,12 +24,11 @@ export const AuthProvider = ({ children }) => {
       .post("/user/token/refresh", { refresh: authTokens?.refresh })
       .then((res) => {
         localStorage.setItem("authTokens", JSON.stringify(res.data));
-        console.log(jwt_decode(res.data.access))
+
         setAuthTokens(res.data);
         setUser(jwt_decode(res.data.access));
       })
       .catch((err) => {
-        console.log("hello");
         logoutUser();
       });
 

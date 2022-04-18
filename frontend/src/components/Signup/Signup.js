@@ -34,20 +34,6 @@ const Signup = () => {
     email: Yup.string().email("Invalid email address"),
     phone: Yup.string().matches(phoneRegex, "Invalid phone format"),
     avatar: Yup.mixed(),
-    // .test("fileSize", "File Size is too large", (value) => {
-    //   console.log(value.size);
-    //   return !value || (value && value.size <= 1000000);
-    // })
-    // .test("fileType", "Unsupported File Format", (value) => {
-    //   console.log(value.type);
-    //   return (
-    //     !value ||
-    //     ((value) =>
-    //       !value ||
-    //       (value &&
-    //         ["image/jpg", "image/jpeg", "image/png"].includes(value.type)))
-    //   );
-    // }),
     password: Yup.string()
       .required("Password is required")
       .min(5, "Password must be atleast 5 characters"),
@@ -86,9 +72,6 @@ const Signup = () => {
       const options = {
         headers: { "Content-Type": "multipart/form-data" },
       };
-      for (var pair of bodyFormData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
 
       axios
         .post("/user/register/", bodyFormData, options)
@@ -96,9 +79,7 @@ const Signup = () => {
           nav("/login");
         })
         .catch((err) => {
-          console.log(err.response.status);
           if (err.response.status === 400) {
-            console.log("here");
             formik.setErrors({ username: "This username is already in use" });
           } else {
             formik.setErrors({ username: "Please fix form errors" });

@@ -19,7 +19,6 @@ const SearchResult = ()=>{
         }
         axios.get(url)
         .then((res)=>{
-            console.log(res);
             if (res.data.count > 0){
                 setHasResult(true);
                 setRestaurants(res.data.results);
@@ -35,7 +34,6 @@ const SearchResult = ()=>{
         if (next != null){
             axios.get(next)
             .then((res)=>{
-                console.log(res)
                 setRestaurants(restaurants.concat(res.data.results));
                 setNext(res.data.next);
             })

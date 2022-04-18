@@ -80,7 +80,6 @@ const AddEditMenu = () => {
         axios
           .post("/menu_item/add/", body, headers)
           .then((res) => {
-            console.log(res);
             setToggleMenu((prev) => !prev);
             showSuccessModal("Menu item added!", setSuccess);
             resetForm();
@@ -89,7 +88,6 @@ const AddEditMenu = () => {
             if (err.response.status === 401 || err.response.status === 403) {
               nav("/login");
             } else if (err.response.status === 404) {
-              console.log("hi");
               formik.setErrors({ itemName: "You do not own a restaurant" });
             }
           });
@@ -124,15 +122,6 @@ const AddEditMenu = () => {
     // eslint-disable-next-line
   }, [toggleMenu]);
 
-  // useEffect(() => {
-  //   console.log(user);
-  // if (!("restaurant" in user)) {
-  //   nav("/create/restaurant/");
-  // }
-
-  // eslint-disable-next-line
-  // }, []);
-
   const deleteMenuItem = (e) => {
     const deleteID = e.target.getAttribute("item-id");
     const headers = {
@@ -141,36 +130,25 @@ const AddEditMenu = () => {
       },
     };
 
-    console.log(`/menu_item/${deleteID}/`);
-
     axios
       .delete(`/menu_item/${deleteID}/`, headers)
       .then((res) => {
-        console.log(res);
-        console.log(res.data.id);
         showSuccessModal("Menu item deleted!", setSuccess);
       })
       .catch((err) => {
         console.log(err);
-        console.log(err.response);
       });
 
     setToggleMenu((prev) => !prev);
-
-    console.log(menuItems);
   };
 
   const getInitItems = `/menu_item/restaurant/${params.id}`;
   const getMenuItems = async () => {
     setMenuItems([]);
     next = getInitItems;
-    console.log("pages");
-    console.log(pages);
 
     if (done) {
       while (next) {
-        console.log("next");
-        console.log(next);
         let res;
         try {
           res = await axios.get(next);
@@ -183,15 +161,10 @@ const AddEditMenu = () => {
         }
         setMenuItems((prev) => [...prev, ...res.data.results]);
         next = res.data.next ? res.data.next.replace("8000", "3000") : null;
-        console.log("test");
-        console.log(menuItems);
-        console.log(next);
       }
     } else {
       let i = 0;
       while (i < pages) {
-        console.log("PAGINATE");
-        console.log(next);
         let res;
         try {
           res = await axios.get(next);
@@ -199,15 +172,11 @@ const AddEditMenu = () => {
           if (err.response.status === 401) {
             nav("/login");
           } else if (err.response.status === 404) {
-            console.log("hi");
             nav("/");
           }
         }
         setMenuItems((prev) => [...prev, ...res.data.results]);
         next = res.data.next ? res.data.next.replace("8000", "3000") : null;
-        console.log("test");
-        console.log(menuItems);
-        console.log(next);
 
         i += 1;
       }
@@ -220,19 +189,11 @@ const AddEditMenu = () => {
       axios
         .get(next)
         .then((res) => {
-          // console.log(next);
-          console.log(res.data.results);
-
           setMenuItems((prev) => [...prev, ...res.data.results]);
 
           next = res.data.next ? res.data.next.replace("8000", "3000") : null;
-          console.log("test");
-          console.log(menuItems);
-          console.log(next);
+
           pages += 1;
-          // setPages((prev) => prev + 1);
-          console.log("P");
-          console.log(pages);
         })
         .catch((err) => {
           if (err.response.status === 401) {
@@ -247,7 +208,6 @@ const AddEditMenu = () => {
   };
 
   const popEdit = (e) => {
-    console.log("hi");
     formik.setFieldValue("itemName", e.target.getAttribute("item-name"), false);
     formik.setFieldValue("price", e.target.getAttribute("price"), false);
     formik.setFieldValue(
@@ -289,7 +249,6 @@ const AddEditMenu = () => {
       <div className="container text-center">
         <div className="row">
           {menuItems.map((mi, index) => {
-            // console.log(menuItems);
             return (
               <div className="col" key={mi.id}>
                 <Card

@@ -10,7 +10,7 @@ import jwt_decode from "jwt-decode";
 
 const Login = () => {
   const { setUser, user, setAuthTokens, logoutUser } = useContext(AuthContext);
-  console.log(setUser);
+
   const nav = useNavigate();
   const validation = Yup.object({
     username: Yup.string().required("Username is required"),
@@ -24,18 +24,13 @@ const Login = () => {
     },
     validationSchema: validation,
     onSubmit: async (values) => {
-      console.log(values);
-
-      console.log(values);
       axios
         .post("/user/login/", values)
         .then((res) => {
-          console.log(res.data.access);
           localStorage.setItem("authTokens", JSON.stringify(res.data));
           setAuthTokens(res.data);
-          console.log(jwt_decode(res.data.access));
+
           setUser(jwt_decode(res.data.access));
-          console.log(user);
 
           nav("/");
         })
