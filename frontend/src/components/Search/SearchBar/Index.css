@@ -1,0 +1,40 @@
+.category_container{
+    width: 12rem ;
+}
+
+.dropdown_title{
+    max-width: 11rem;
+    text-align: start;
+}
+.dd_border{
+    border-radius: 10rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.search_bar{
+    max-height: 3rem;
+}
+
+.form_border{
+    border-radius: 0;
+}
+
+.form_width{
+    width: 20rem;
+}
+
+.search_btn{
+    border-radius: 10rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 7rem;
+}
+
+.dropdown-menu{
+    margin-left:2rem;
+}
+
+#method > span{
+    display: inline-block;
+}

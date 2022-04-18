@@ -1,0 +1,35 @@
+.time_text_color {
+  color: grey;
+}
+.blog_bg {
+  background-color: antiquewhite;
+}
+
+.preview_text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.content_width {
+  width: 70vw;
+}
+
+#res_blog > a:link,
+#res_blog > a:active,
+#res_blog > a:focus,
+#res_blog > a:visited,
+#res_blog > a:hover {
+  color: black !important;
+}
+
+#res_blog > a:hover > div:first-child {
+  color: darkgrey !important;
+}
+
+#res_blog > a {
+  text-decoration: none;
+}

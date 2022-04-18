@@ -1,0 +1,16 @@
+.item_bg{
+    background-color: rgba(198, 233, 230, 0.5) !important;
+}
+
+.res_title{
+    min-width: 8rem;
+    max-width: 12rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.item_container{
+    height: 10rem;
+    width:12rem;
+    overflow: scroll;
+}

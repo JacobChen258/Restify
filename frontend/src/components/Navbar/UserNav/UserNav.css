@@ -1,0 +1,23 @@
+.navbar * {
+  color: rgb(218, 218, 218) !important;
+}
+.card {
+  max-width: 100%;
+}
+
+.card-text {
+  word-wrap: break-word;
+  font: 200px;
+}
+
+.edit-profile {
+  color: white !important;
+}
+
+/* .notif {
+  max-width: 400px;
+} */
+
+.profile_container{
+  width:20rem;
+}

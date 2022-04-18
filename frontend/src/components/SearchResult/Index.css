@@ -1,0 +1,9 @@
+.index_container {
+  min-width: 80%;
+}
+
+.bg_color {
+  background-color: antiquewhite;
+  min-height: 100vh !important;
+  height: 100% !important;
+}

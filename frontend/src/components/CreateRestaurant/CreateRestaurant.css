@@ -1,0 +1,10 @@
+.modal_container{
+    display: grid !important;
+    grid-template-columns: 5fr 7fr;
+    grid-row: auto;
+}
+
+.logo_container{
+    width: 15rem;
+    height: 15rem;
+}

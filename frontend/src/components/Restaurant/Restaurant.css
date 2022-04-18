@@ -1,0 +1,10 @@
+.bg_color {
+  background-color: antiquewhite;
+  min-height: 100vh !important;
+  height: 100% !important;
+}
+
+.vl {
+  height: 100%;
+  border-left: 2px solid black !important;
+}

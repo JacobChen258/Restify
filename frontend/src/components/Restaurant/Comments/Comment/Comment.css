@@ -1,0 +1,18 @@
+
+#res_cmt > .preview_text{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+            line-clamp: 2; 
+    -webkit-box-orient: vertical;
+}
+
+#res_cmt .content_width{
+    width:70vw;
+}
+
+#res_cmt > .time_text_color{
+    color: grey;
+}
+
