@@ -16,7 +16,7 @@ class Blogs(DestroyAPIView,RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         self.permission_classes = []
         if "blog_id" not in self.kwargs:
-            return Response(status = HTTP_400_BAD_REQUEST)
+            return Response(status = HTTP_400_BAD_REQUEST,data={'detail':"missing blog id"})
         return super().get(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
@@ -33,12 +33,15 @@ class Blogs(DestroyAPIView,RetrieveAPIView):
     def delete(self, request, *args, **kwargs):
         self.permission_classes = [IsAuthenticated,]
         if "blog_id" not in self.kwargs:
-            return Response(status=HTTP_400_BAD_REQUEST)
+            return Response(status=HTTP_400_BAD_REQUEST,data={'detail':"missing blog id"})
         if not (self.request.user.id):
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        restaurant = get_object_or_404(Restaurant,owner = self.request.user.id)
+            return Response(status=status.HTTP_401_UNAUTHORIZED,data={'detail':"please login"})
         blog = get_object_or_404(Blog, id=self.kwargs['blog_id'])
+        restaurant = Restaurant.objects.filter(owner=self.request.user.id)
+        if len(Restaurant.objects.filter(owner=self.request.user.id)) == 0:
+            return Response(status=status.HTTP_403_FORBIDDEN,data={'detail':"you cannot delete this blog"})
+        restaurant = restaurant[0]
         if blog.restaurant.id == restaurant.id:
             self.perform_destroy(blog)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        raise PermissionDenied
+        return Response(stauts=status.HTTP_403_FORBIDDEN,data={'detail':"you cannot delete this blog"})

@@ -16,16 +16,15 @@ class Follow(CreateAPIView,DestroyAPIView,RetrieveAPIView):
     permission_classes = [IsAuthenticated,]
 
     def post(self, request, *args, **kwargs):
-
         if "restaurant" in request.data:
             self.object = get_object_or_404(Restaurant,id=request.data["restaurant"])
 
             follow = FollowedRestaurant.objects.filter(user=request.user.id, restaurant=request.data['restaurant'])
             if follow.exists():
-                return Response(status=status.HTTP_409_CONFLICT)
+                return Response(data={'detail':"you can't follow a restaurant twice"},status=status.HTTP_409_CONFLICT)
             return self.create(request, args, kwargs)
 
-        return Response(status=HTTP_400_BAD_REQUEST)
+        return Response(data={'detail':"missing restaurant"},status=HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
@@ -62,6 +61,6 @@ class Follow(CreateAPIView,DestroyAPIView,RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         if "res_id" not in kwargs:
-            return Response(status=HTTP_400_BAD_REQUEST)
+            return Response(data={"detail":"missing restaurant id"},status=HTTP_400_BAD_REQUEST)
         followed = len(FollowedRestaurant.objects.filter(user=request.user.id,restaurant=kwargs['res_id']))
         return Response(status=HTTP_200_OK,data={"followed":followed>0})
