@@ -21,15 +21,16 @@ import EditRestaurant from "./components/Restaurant/RestaurantInfo/EditRestauran
 import EditProfile from "./components/EditProfile/EditProfile";
 import AddEditMenu from "./components/AddEditMenu/AddEditMenu";
 import BlogInfo from "./components/BlogInfo/BlogInfo";
-import {useState} from "react";
+import AddImage from "./components/AddImage/AddImage";
+import { useState } from "react";
 
 function App() {
-  const [avatar,setAvatar] = useState(null); 
+  const [avatar, setAvatar] = useState(null);
   return (
     <div>
       <AuthProvider>
         <Router>
-          <RestifyNavbar SetAvatar={setAvatar} Avatar={avatar}/>
+          <RestifyNavbar SetAvatar={setAvatar} Avatar={avatar} />
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
@@ -60,7 +61,7 @@ function App() {
               path="/profile/edit"
               element={
                 <PrivateRoute>
-                  <EditProfile SetAvatar={setAvatar}/>
+                  <EditProfile SetAvatar={setAvatar} />
                 </PrivateRoute>
               }
             />
@@ -83,6 +84,15 @@ function App() {
             />
 
             <Route
+              path="/restaurant/:id/image/add"
+              element={
+                <PrivateRoute>
+                  <AddImage />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
               path="/user/feed"
               element={
                 <PrivateRoute>
@@ -90,6 +100,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+
             <Route path="/blog/:id/" element={<BlogInfo />} />
             <Route
               path="/search/:method/:field/"

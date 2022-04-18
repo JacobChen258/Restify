@@ -1,0 +1,8 @@
+.image-form {
+  margin-bottom: 20px;
+}
+
+.add-image-req::after {
+  content: " *";
+  color: red;
+}
