@@ -93,8 +93,6 @@ const Signup = () => {
       axios
         .post("/user/register/", bodyFormData, options)
         .then((res) => {
-          alert("you signed up!");
-
           nav("/login");
         })
         .catch((err) => {
